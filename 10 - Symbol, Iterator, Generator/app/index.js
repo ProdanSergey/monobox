@@ -52,10 +52,9 @@ const counter = mutableCount();
 console.log(counter.next());
 console.log(counter.next());
 console.log(counter.next());
-console.log(counter.next());
 console.log(counter.next(10));
 console.log(counter.next());
-console.log(counter.next());
+console.log(counter.next(100));
 console.log(counter.next());
 
 function getRandomIntInclusive(min, max) {
@@ -64,20 +63,25 @@ function getRandomIntInclusive(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
 }
 
-const evens = function* (to = 10) {
-	for (let index = 2; index < to; index += 2) {
-		yield index;
+const evens = function* (start = 2, to = start + 20) {
+	for (let index = start; index < to; index++) {
+		if (index % 2 === 0) {
+			yield index;
+		}
 	}
 };
 
 const randomRanges = function* () {
 	while (Infinity) {
-		yield [...evens(getRandomIntInclusive(10, 20))];
+		const start = getRandomIntInclusive(2, 20);
+		const end = getRandomIntInclusive(start + 2, start + 20);
+
+		yield [...evens(start, end)];
 	}
 };
 
 const randomEvens = randomRanges();
 
-console.log(randomEvens.next());
-console.log(randomEvens.next());
-console.log(randomEvens.next());
+// console.log(randomEvens.next());
+// console.log(randomEvens.next());
+// console.log(randomEvens.next());
