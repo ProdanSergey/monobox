@@ -1,0 +1,7 @@
+.list__item {
+	display: none;
+}
+
+.list__item--ready {
+	display: list-item;
+}
