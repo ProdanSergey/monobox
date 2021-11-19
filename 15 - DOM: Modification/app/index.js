@@ -87,12 +87,10 @@ const ListItem = ({ text }) => {
 	});
 };
 
-const List = withState([], (items, setState, props) => {	
+const List = DOMRender.withState([], (items, setState, props) => {	
 	const addItem = () => {
 		setState(items => items.concat({ text: 'Hello World'}));
 	};
-
-	console.log(props);
 
 	return DOM.create('section')({
 		children: [
@@ -128,7 +126,6 @@ const App = () => {
 		{ to: '/about', title: 'About Us' }
 	];
 	
-
 	return DOM.create('div')({
 		children: [
 			Title({ title: 'User Archive' }),

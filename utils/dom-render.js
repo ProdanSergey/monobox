@@ -51,27 +51,27 @@ const DOMRender = (() => {
 		render(target) {
 			return render(target);
 		}
+
+		static withState(initial, component) {	
+			let node, props, render;
+		
+			let state = initial;
+		
+			const setState = (update) => {		
+				node.replaceWith(
+					render(
+						state = typeof update === 'function' ? update(state) : update,
+						setState, 
+						props
+					)
+				);
+			};
+		
+			return render = (...args) => {	
+				return node = component.call(null, state, setState, props = args.at(-1));
+			};
+		};
 	}
 
 	return DOMRender;
 })();
-
-const withState = (initial, component) => {	
-	let node, props, render;
-
-	let state = initial;
-
-	const setState = (update) => {		
-		node.replaceWith(
-			render(
-				state = typeof update === 'function' ? update(state) : update,
-				setState, 
-				props
-			)
-		);
-	};
-
-	return render = (...args) => {	
-		return node = component.call(null, state, setState, props = args.at(-1));
-	};
-};
