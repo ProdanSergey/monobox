@@ -1,0 +1,85 @@
+:root {
+	box-sizing: border-box;
+}
+
+*, *::before, *::after {
+	box-sizing: inherit;
+}
+
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	width: 100%;
+	height: 100vh;
+	background-image: url('../media/texture.gif');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+body, button {
+	font-family: 'Press Start 2P', cursive;
+}
+
+.field {
+	display: grid;
+	grid-template-columns: repeat(5, 2.5rem);
+	grid-template-rows: repeat(5, 2.5rem);
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	background-color: #fff;
+}
+
+.field__item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	user-select: none;
+}
+
+.field__item::before {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: lightcoral;
+	cursor: pointer;
+}
+
+.field__item[data-type="0"]::before,
+.field__item[data-type="1"]::before {
+	content: "";
+}
+
+.field__item[data-type="2"]::after {
+	content: "✅";
+}
+
+.field__item[data-type="1"]::after,
+.field__item[data-type="3"]::after {
+	content: "💣";
+}
+
+.info, .message {
+	text-transform: uppercase;
+	text-shadow: 2px 2px white;
+}
+
+.message.message--success {
+	color: greenyellow;
+}
+
+.message.message--failed {
+	color: crimson;
+}
+
+.restart {
+	padding: 12px;
+	cursor: pointer;
+}

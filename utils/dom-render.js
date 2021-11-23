@@ -1,7 +1,27 @@
 const DOMRender = (() => {
+	const isObject = (v) => typeof v === 'object' && !Array.isArray(v) && v !== null;
+	
 	const setProps = (element, props) => {
 		for (const key of Object.getOwnPropertyNames(props)) {
 			element[key] = props[key];
+		}	
+	};
+
+	const classnames = (element, classNames) => {
+		for (const cn of classNames) {
+			if (isObject(cn)) {
+				for (const key of Object.getOwnPropertyNames(cn).filter(k => Boolean(cn[k]))) {
+					element.classList.add(key);
+				}
+			} else {
+				element.classList.add(cn);
+			}
+		}
+	};
+
+	const setAttrs = (element, attrs) => {
+		for (const key of Object.getOwnPropertyNames(attrs)) {
+			element.setAttribute(key, attrs[key]);
 		}	
 	};
 
@@ -12,7 +32,7 @@ const DOMRender = (() => {
 	};
 	
 	const setChildren = (element, children) => {
-		for (const child of children) {
+		for (const child of children.filter(Boolean)) {
 			if (child instanceof Node) {
 				element.append(child);
 			} else {
@@ -22,9 +42,11 @@ const DOMRender = (() => {
 	};
 	
 	const render = (element) => (options = {}) => {
-		const { props = {}, handlers = {}, children = [] } = options;
+		const { classNames = [], props = {}, attrs = {}, handlers = {}, children = [] } = options;
 	
+		classnames(element, classNames);
 		setProps(element, props);
+		setAttrs(element, attrs);
 		setListeners(element, handlers);
 		setChildren(element, children);
 		
