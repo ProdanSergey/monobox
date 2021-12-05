@@ -2,8 +2,6 @@ const oddOfTen = {
 	values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 
 	next() {
-		const value = this.values[this.current];
-
 		if (this.current < this.values.length) {
 			const value = this.values[this.current];
 
