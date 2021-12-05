@@ -79,14 +79,18 @@ const DOMRender = (() => {
 		
 			let state = initial;
 		
-			const setState = (update) => {		
-				node.replaceWith(
-					render(
-						state = typeof update === 'function' ? update(state) : update,
-						setState, 
-						props
-					)
+			const setState = (update) => {	
+				const predecessor = node;
+				
+				const successor = render(
+					state = typeof update === 'function' ? update(state) : update,
+					setState, 
+					props
 				);
+
+				requestAnimationFrame(() => {
+					predecessor.replaceWith(successor);
+				});
 			};
 		
 			return render = (...args) => {	
