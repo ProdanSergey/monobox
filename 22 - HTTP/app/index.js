@@ -1,14 +1,19 @@
 const DOM = new DOMRender(document.querySelector('#root'));
 
 const ACTIONS = {
-	async createTodo(data) {
+	async createTodo(title) {
 		return await XHR.post('https://jsonplaceholder.typicode.com/todos', { 
-			data,
-			dataId: new Date().valueOf()
+			fakeId: new Date().valueOf(),
+			title,
+			completed: false,
+			userId: 1
 		});
 	},
 	async removeTodo(id) {
 		return await XHR.remove(`https://jsonplaceholder.typicode.com/todos/${id}`);
+	},
+	async getTodos() {
+		return await XHR.get('https://jsonplaceholder.typicode.com/todos');
 	}
 };
 
@@ -39,13 +44,13 @@ const AddTodo = DOMRender.withState('', (value, setValue, { onClick }) => {
 	});
 });
 
-const Todo = ({ dataId, data, onRemove }) => {
+const Todo = ({ id, fakeId, title, onRemove }) => {
 	return DOM.create('li')({
 		attrs: {
-			'data-id': dataId
+			'data-id': fakeId ?? id
 		},
 		children: [
-			data,
+			title,
 			DOM.create('button')({
 				children: ['x'],
 				handlers: {
@@ -62,33 +67,37 @@ const Todos = ({ items, onRemove }) => {
 	});
 };
 
-const App = DOMRender.withState([], (items, setItems) => {
-	const create = (data) => async () => {
-		try {
-			const { response } = await ACTIONS.createTodo(data);
 
-			setItems(items => [...items, response]);
-		} catch (err) {
-			console.error(err);
-		}
-	};
-
-	const remove = ({ id, dataId }) => async () => {
-		try {
-			await ACTIONS.removeTodo(id);
-
-			setItems(items => items.filter((item) => item.dataId !== dataId));
-		} catch (err) {
-			console.error(err);
-		}
-	};
+ACTIONS.getTodos().then(({ response }) => {
+	const App = DOMRender.withState(response.slice(0, 10), (items, setItems) => {
+		const create = (data) => async () => {
+			try {
+				const { response } = await ACTIONS.createTodo(data);
 	
-	return DOM.create('section')({
-		children: [
-			AddTodo({ onClick: create }),
-			Todos({ items, onRemove: remove })
-		]
+				setItems(items => [...items, response]);
+			} catch (err) {
+				console.error(err);
+			}
+		};
+	
+		const remove = ({ id, fakeId }) => async () => {
+			try {
+				await ACTIONS.removeTodo(id);
+	
+				setItems(items => items.filter((item) => (item.fakeId ?? item.id) !== (fakeId ?? id)));
+			} catch (err) {
+				console.error(err);
+			}
+		};
+		
+		return DOM.create('section')({
+			children: [
+				AddTodo({ onClick: create }),
+				Todos({ items, onRemove: remove })
+			]
+		});
 	});
+
+	DOM.mount(App());
 });
 
-DOM.mount(App());
