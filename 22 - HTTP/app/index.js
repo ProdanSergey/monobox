@@ -2,18 +2,20 @@ const DOM = new DOMRender(document.querySelector('#root'));
 
 const ACTIONS = {
 	async createTodo(title) {
-		return await XHR.post('https://jsonplaceholder.typicode.com/todos', { 
+		return await XHR.post('https://jsonplaceholder.typicode.com/users/1/todos', { 
 			fakeId: new Date().valueOf(),
 			title,
 			completed: false,
-			userId: 1
 		});
 	},
 	async removeTodo(id) {
 		return await XHR.remove(`https://jsonplaceholder.typicode.com/todos/${id}`);
 	},
 	async getTodos() {
-		return await XHR.get('https://jsonplaceholder.typicode.com/todos');
+		return await XHR.get('https://jsonplaceholder.typicode.com/users/1/todos');
+	},
+	async getTodo(id) {
+		return await XHR.get(`https://jsonplaceholder.typicode.com/todos/${id}`);
 	}
 };
 
@@ -100,4 +102,6 @@ ACTIONS.getTodos().then(({ response }) => {
 
 	DOM.mount(App());
 });
+
+ACTIONS.getTodo(1).then(console.log);
 

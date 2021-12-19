@@ -1,0 +1,13 @@
+#time, #control {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#time span {
+	font-size: 4rem;
+}
+
+#time span:not(:last-child)::after {
+	content: ":";
+}
