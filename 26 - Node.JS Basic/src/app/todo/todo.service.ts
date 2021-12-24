@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { v4 as uuid } from 'uuid';
+import { BadRequestError, InternalError, NoContentError, NotFoundError } from '../../utils/error.util';
 
 const filePath = './todos.json';
 
@@ -15,13 +16,23 @@ class Todo {
 type State = Todo[]
 
 const getState = async (): Promise<State> => {
-	const file = await fs.promises.readFile(filePath, 'utf-8');
-
-	return JSON.parse(file);
+	let data = '[]';
+	
+	try {
+		data = await fs.promises.readFile(filePath, 'utf-8');
+	} catch (error) {
+		await fs.promises.writeFile(filePath, data);
+	} finally {
+		return JSON.parse(data);
+	}
 };
 
 const setState = async (state: State): Promise<void> => {
-	await fs.promises.writeFile(filePath, JSON.stringify(state));
+	try {
+		await fs.promises.writeFile(filePath, JSON.stringify(state));
+	} catch (error) {
+		throw new InternalError();
+	}
 };
 
 export const TodoService = class TodoService {
@@ -39,7 +50,7 @@ export const TodoService = class TodoService {
 		const index = state.findIndex(todo => todo.id === id);
 
 		if (index < 0) {
-			throw new Error('no item with given id');
+			throw new BadRequestError();
 		}
 
 		switch (typeof update) {
@@ -57,13 +68,13 @@ export const TodoService = class TodoService {
 	async get(id: string): Promise<Todo> {
 		const state = await getState();
 
-		const todo = state.find(todo => todo.id === id);
+		const match = state.find(todo => todo.id === id);
 
-		if (!todo) {
-			throw new Error('no item with given id');
+		if (!match) {
+			throw new NotFoundError();
 		}
 
-		return todo;
+		return match;
 	}
 
 	async remove(id: string): Promise<void> {
@@ -72,7 +83,7 @@ export const TodoService = class TodoService {
 		const filtered = state.filter(todo => todo.id !== id);
 
 		if (state.length === filtered.length) {
-			throw new Error('no item with given id');
+			throw new NotFoundError();
 		}
 
 		await setState(filtered);
@@ -81,20 +92,36 @@ export const TodoService = class TodoService {
 	async getAll(completed?: boolean): Promise<State> {
 		const state = await getState();
 
+		let all;
+
 		switch (completed) {
 		case false:
-			return state.filter(todo => todo.completed === false);
+			all = state.filter(todo => todo.completed === false);
+			break;
 		case true:
-			return state.filter(todo => todo.completed === true);
+			all =  state.filter(todo => todo.completed === true);
+			break;
 		default:
-			return state;
+			all = state;
 		}
+
+		if (all.length < 1) {
+			throw new NoContentError();
+		}
+
+		return state;
 	}
 
 	async search(substring: string): Promise<State> {
 		const state = await getState();
 
-		return state.filter(todo => todo.text.includes(substring));
+		const found = state.filter(todo => todo.text.includes(substring));
+
+		if (found.length < 1) {
+			throw new NotFoundError();
+		}
+
+		return found;
 	}
 
 	async clear(): Promise<void> {

@@ -1,23 +1,26 @@
+import { InternalError } from '../utils/error.util';
+import { Logger } from '../utils/logger.util';
 import { TodoController } from './todo/todo.controller';
 
 export const App = class App {
-	constructor() {
-		this.handleExceptions();
+	constructor(
+		private readonly logger = new Logger()
+	) {
+		this.catch();
 	}
 
 	listen(argv: string): void {
-		new TodoController(argv).handle();
+		new TodoController(argv);
 	}
 
-	handleExceptions(): void {
-		process.on('uncaughtException', ({ message }) => {
-			console.log(`[${new Date().toTimeString()}]`, message);
+	catch(): void {
+		process.on('uncaughtException', (e) => this.handleError(e));
+		process.on('unhandledRejection', () => this.handleError());
+	}
 
-			process.exit(1);
-		});
+	handleError(err: Error = new InternalError()) {
+		this.logger.throw(err);
 
-		process.on('unhandledRejection', (reason: string) => {
-			throw new Error(reason);
-		});
+		process.exit(1);
 	}
 }

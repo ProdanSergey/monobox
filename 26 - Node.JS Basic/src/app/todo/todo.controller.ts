@@ -1,34 +1,43 @@
+import { BadRequestError, InternalError } from '../../utils/error.util';
+import { Logger } from '../../utils/logger.util';
 import { TodoService } from './todo.service';
 
 export const TodoController = class TodoController {
 	constructor(
 		private readonly arg: string,
-		private readonly todoService = new TodoService() 
-	) {}
+		private readonly logger = new Logger(),
+		private readonly todoService = new TodoService()
+	) {
+		this.handle();
+	}
 
 	async handle(): Promise<void> {
-		if (!this.arg) {
-			throw new Error('no command provided');
-		}
+		try {
+			if (!this.arg) {
+				throw new InternalError();
+			}
+	
+			const [type, value] = this.arg.split('=');
+			const [method, option] = type.split(':');
 
-		const [type, value] = this.arg.split('=');
-		const [method, option] = type.split(':');
-
-		switch (method) {
-		case 'set':
-			await this.handleSet(option, value);
-			break;
-		case 'get': 
-			await this.handleGet(option, value);
-			break;
-		case 'add': 
-			await this.handleAdd(value);
-			break;
-		case 'delete':
-			await this.handleDelete(option);
-			break;
-		default:
-			throw new Error('wrong command');
+			switch (method) {
+			case 'set':
+				await this.handleSet(option, value);
+				break;
+			case 'get': 
+				await this.handleGet(option, value);
+				break;
+			case 'add': 
+				await this.handleAdd(value);
+				break;
+			case 'delete':
+				await this.handleDelete(option);
+				break;
+			default:
+				throw new BadRequestError();
+			}
+		} catch (error) {
+			this.logger.throw(error as Error)
 		}
 	}
 
@@ -37,19 +46,19 @@ export const TodoController = class TodoController {
 		case 'true': {
 			await this.todoService.set(option, true);
 
-			console.log('todo item is now completed');
+			this.logger.notify('Todo item is now completed');
 			break;
 		}
 		case 'false': {
 			await this.todoService.set(option, false);
 
-			console.log('todo item is now uncompleted');
+			this.logger.notify('Todo item is now uncompleted');
 			break;
 		}
 		default: {
 			await this.todoService.set(option, value);
 
-			console.log('todo item is successfully updated');
+			this.logger.notify('Todo item is successfully updated');
 			break;
 		}}
 	}
@@ -59,31 +68,31 @@ export const TodoController = class TodoController {
 		case '!': {
 			const todos = await this.todoService.getAll();
 
-			console.log(todos);
+			this.logger.notify('All todo items:', todos);
 			break;
 		}
 		case '+': {
 			const todos = await this.todoService.getAll(true);
 
-			console.log(todos);
+			this.logger.notify('Completed todo items:', todos);
 			break;
 		}
 		case '-': {
 			const todos = await this.todoService.getAll(false);
 
-			console.log(todos);
+			this.logger.notify('Uncompleted todo items', todos);
 			break;
 		}
 		case '^': {
 			const todos = await this.todoService.search(value);
 
-			console.log(todos);
+			this.logger.notify('Search result', todos)
 			break;
 		}
 		default: {
 			const todo = await this.todoService.get(option);
 		
-			console.log(todo);
+			this.logger.notify('Result:', todo)
 			break;
 		}}
 	}
@@ -91,7 +100,7 @@ export const TodoController = class TodoController {
 	async handleAdd(value: string): Promise<void> {
 		await this.todoService.add(value);
 
-		console.log('todo item is successfully added');
+		this.logger.notify('Todo item is successfully added');
 	}
 
 	async handleDelete(option: string): Promise<void> {
@@ -99,12 +108,12 @@ export const TodoController = class TodoController {
 		case '!':
 			await this.todoService.clear();
 
-			console.log('todo list is successfully cleared');
+			this.logger.notify('Todo list is successfully cleared');
 			break;
 		default: {
 			await this.todoService.remove(option);
 
-			console.log('todo item is successfully removed');
+			this.logger.notify('Todo item is successfully removed');
 			break;
 		}}
 	}
