@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+    "target": "es2015",
+		"lib": ["es2021"],
+		"module": "CommonJS",
+		"moduleResolution": "node",
+    "strict": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"sourceMap": true,
+		"outDir": "./dist"
+  },
+	"watchOptions": {
+    "excludeDirectories": [
+			"node_modules", 
+			"dist"
+		]
+  },
+	"ts-node": {
+		"files": true
+	},
+	"include": [
+    "./src/**/*.ts"
+  ],
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
+}
