@@ -7,14 +7,14 @@ class User {
 			month: null,
 			day: null,
 		};
-	
+
 		for (const key of Object.keys(props)) {
 			this[key] = data[key] ?? props[key];
 		}
 	}
 
 	get fullName() {
-		return [this.firstName, this.lastName].filter(Boolean).join(' ');
+		return [this.firstName, this.lastName].filter(Boolean).join(" ");
 	}
 
 	get age() {
@@ -36,4 +36,4 @@ class User {
 
 		return null;
 	}
-};
+}
