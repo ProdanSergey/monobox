@@ -2,13 +2,10 @@ import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
 
 import { readdir } from "fs/promises";
-import path from "path";
 
 import { utils } from "./utils/rollup";
 
-const BASE_PATH = path.resolve(__dirname, "./src/rollup");
-
-const { digest, plugins, mapDist, mapSrc } = utils(BASE_PATH);
+const { digest, plugins, mapDist, mapSrc } = utils();
 
 const bootstrap = async () => {
 	const PACKAGE = process.env.PACKAGE;
@@ -24,9 +21,14 @@ const bootstrap = async () => {
 		plugins: [
 			...plugins(PACKAGE),
 			serve({
+				port: 8000,
 				contentBase: mapDist(PACKAGE),
+				historyApiFallback: true,
+				open: true,
 			}),
-			livereload(),
+			livereload({
+				delay: 500,
+			}),
 		],
 	};
 };

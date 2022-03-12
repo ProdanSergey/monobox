@@ -1,6 +1,6 @@
 import { RANDOM } from "./random";
 
-export const EMOJIE = (() => {
+export const EMOJI = (() => {
 	const list = [
 		"😀",
 		"😃",

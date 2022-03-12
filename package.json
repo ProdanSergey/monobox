@@ -19,5 +19,8 @@
 		"rollup-plugin-scss": "^3.0.0",
 		"rollup-plugin-serve": "^1.1.0",
 		"sass": "^1.49.8"
+	},
+	"_moduleAliases": {
+		"@utils": "./src/utils"
 	}
 }

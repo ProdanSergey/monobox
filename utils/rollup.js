@@ -7,8 +7,9 @@ import { extname, resolve } from "path";
 
 const DIGESTIVE = [".js"];
 
-export const utils = (BASE_PATH) => {
-	const UTILS_PATH = resolve(BASE_PATH, "./src/utils");
+export const utils = () => {
+	const BASE_PATH = resolve(__dirname, "./src/rollup");
+	const UTILS_PATH = resolve(__dirname, "./src/utils");
 
 	const digest = (entry) => DIGESTIVE.some((ext) => extname(entry) === ext);
 	const directory = (entry) => !extname(entry);
@@ -26,7 +27,7 @@ export const utils = (BASE_PATH) => {
 			targets: [mapDist(dir)],
 		}),
 		alias({
-			entries: [{ find: "utils", replacement: UTILS_PATH }],
+			entries: [{ find: "@utils", replacement: UTILS_PATH }],
 		}),
 		postcss({
 			extract: mapDist(dir, "bundle.css"),
