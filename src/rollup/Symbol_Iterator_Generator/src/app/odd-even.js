@@ -33,22 +33,18 @@ export const even = {
 	},
 };
 
-export const evens = function* (start = 2, to = start + 20) {
-	start = new Numeric(start).isOdd() ? ++start : start;
+export const evens = function* (from = 2, to = 20) {
+	let even = new Numeric(from).isOdd() ? from + 1 : from;
 
-	for (let index = start; index < to; index += 2) {
-		yield index;
-	}
+	do yield even;
+	while ((even += 2) <= to);
 };
 
-export const evenSequence = function* (maxLength = 20) {
-	if (maxLength < 2) {
-		throw new Error("Min length is 2");
-	}
+export const evenSequence = function* (maxCount = 20, maxFrom = 2000) {
 	while (Infinity) {
-		const start = RANDOM.integer(2, maxLength);
-		const end = RANDOM.integer(start + 2, start + maxLength);
+		const from = RANDOM.integer(2, maxFrom);
+		const to = RANDOM.integer(from, from + 2 * maxCount - 2);
 
-		yield [...evens(start, end)];
+		yield [...evens(from, to)];
 	}
 };
