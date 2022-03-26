@@ -13,9 +13,7 @@ const App = (() => {
 		constructor: App,
 
 		interact() {
-			const list = this.getPermittedCommands().map(
-				([name], index) => `${index} - ${name}`
-			);
+			const list = this.getPermittedCommands().map(([name], index) => `${index} - ${name}`);
 
 			const WELCOME_MESSAGE = `Hello dear gest! You can choose one of the available operations from the list:\n\n${list.join(
 				"\n"
@@ -126,10 +124,7 @@ const App = (() => {
 				return value < MIN_YEAR || value > MAX_YEAR;
 			};
 
-			user.year = STDIN.number(
-				`Enter user's birth year pls, min: ${MIN_YEAR}, max: ${MAX_YEAR}`,
-				yearValidator
-			);
+			user.year = STDIN.number(`Enter user's birth year pls, min: ${MIN_YEAR}, max: ${MAX_YEAR}`, yearValidator);
 
 			const MIN_MONTH = 1;
 			const MAX_MONTH = 12;
@@ -138,10 +133,7 @@ const App = (() => {
 				return value < MIN_MONTH || value > MAX_MONTH;
 			};
 
-			user.month = STDIN.number(
-				`Enter user's birth month pls, min: ${MIN_MONTH}, max: ${MAX_MONTH}`,
-				monthValidator
-			);
+			user.month = STDIN.number(`Enter user's birth month pls, min: ${MIN_MONTH}, max: ${MAX_MONTH}`, monthValidator);
 
 			const MIN_DAY = 1;
 			const MAX_DAY = DATE.getMaxDay(user.year, user.month);
@@ -150,19 +142,14 @@ const App = (() => {
 				return value < MIN_DAY || value > MAX_DAY;
 			};
 
-			user.day = STDIN.number(
-				`Enter user's birth day pls, min: ${MIN_DAY}, max: ${MAX_DAY}`,
-				dayValidator
-			);
+			user.day = STDIN.number(`Enter user's birth day pls, min: ${MIN_DAY}, max: ${MAX_DAY}`, dayValidator);
 
 			_private.get(this).repository.add(user);
 		},
 
 		deleteUser() {
 			if (_private.get(this).repository.isEmpty()) {
-				return console.log(
-					"Forbidden operation. There are no users yet in repository"
-				);
+				return console.log("Forbidden operation. There are no users yet in repository");
 			}
 
 			const MIN_INDEX = 0;
@@ -177,20 +164,14 @@ const App = (() => {
 				return value < MIN_INDEX || value > MAX_INDEX;
 			};
 
-			const message = `Enter index, choose one from a list:\n\n${range.join(
-				"\n"
-			)}`;
+			const message = `Enter index, choose one from a list:\n\n${range.join("\n")}`;
 
 			const indexToBeDeleted = STDIN.number(message, indexValidator);
 
-			const deletedUser = _private
-				.get(this)
-				.repository.delete(indexToBeDeleted);
+			const deletedUser = _private.get(this).repository.delete(indexToBeDeleted);
 
 			console.log(`User ${deletedUser.fullName} has been deleted`);
-			console.log(
-				`There are ${_private.get(this).repository.count()} users in repository`
-			);
+			console.log(`There are ${_private.get(this).repository.count()} users in repository`);
 		},
 
 		showUser() {
@@ -202,16 +183,10 @@ const App = (() => {
 				const yearType = DATE.isLeapYear(user.year) ? " (is leap year)" : "";
 				const [zodiacName, zodiacSign] = DATE.getZodiac(user.month, user.day);
 
-				console.log(
-					`[${index + 1}]: ${user.fullName}, ${
-						user.age
-					} age old${yearType} ${zodiacName} ${zodiacSign}`
-				);
+				console.log(`[${index + 1}]: ${user.fullName}, ${user.age} age old${yearType} ${zodiacName} ${zodiacSign}`);
 			};
 
-			console.log(
-				`There are ${_private.get(this).repository.count()} users in repository`
-			);
+			console.log(`There are ${_private.get(this).repository.count()} users in repository`);
 			_private.get(this).repository.each(show);
 		},
 
@@ -224,8 +199,7 @@ const App = (() => {
 
 			const query = STDIN.string(message);
 
-			const predicate = (user) =>
-				user.firstName === query || user.lastName === query;
+			const predicate = (user) => user.firstName === query || user.lastName === query;
 
 			const user = _private.get(this).repository.find(predicate);
 
@@ -245,18 +219,11 @@ const App = (() => {
 
 			const query = STDIN.string(message);
 
-			const predicate = (user) =>
-				[user.firstName, user.lastName].some((value) => value.includes(query));
+			const predicate = (user) => [user.firstName, user.lastName].some((value) => value.includes(query));
 
-			const normalizeUser = (user, index) =>
-				`${index + 1}: ${user.fullName} - ${user.day}/${user.month}/${
-					user.year
-				}`;
+			const normalizeUser = (user, index) => `${index + 1}: ${user.fullName} - ${user.day}/${user.month}/${user.year}`;
 
-			const users = _private
-				.get(this)
-				.repository.filter(predicate)
-				.map(normalizeUser);
+			const users = _private.get(this).repository.filter(predicate).map(normalizeUser);
 
 			if (users.length) {
 				console.log(`Users have been found:\n\n${users.join("\n")}`);
@@ -278,9 +245,7 @@ const App = (() => {
 				count++;
 			});
 
-			console.log(
-				`There are ${_private.get(this).repository.count()} users in repository`
-			);
+			console.log(`There are ${_private.get(this).repository.count()} users in repository`);
 			console.log(`Average age is: ${age / count}`);
 		},
 

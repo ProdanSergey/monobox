@@ -1,4 +1,5 @@
-import { Gadget } from "../gadget";
+import { TurnLeft, TurnRight } from "../events";
+import { Gadget, TYPES } from "../gadget";
 
 const NORTH = "north";
 const WEST = "west";
@@ -25,30 +26,31 @@ const COMPASS = {
 };
 
 export class GPS extends Gadget {
-	constructor(pointer = NORTH, map = {}) {
-		super();
+	constructor(pointer = NORTH) {
+		super(TYPES.GPS);
 
 		this.pointer = pointer;
-		this.map = map;
 	}
 
 	set(vehicle) {
-		vehicle.computer.subscribe("right", () => this.pointToRight());
-		vehicle.computer.subscribe("left", () => this.pointToLeft());
+		vehicle.computer.subscribe(TurnRight, () => this.pointToRight());
+		vehicle.computer.subscribe(TurnLeft, () => this.pointToLeft());
 
 		return super.set(vehicle);
 	}
 
 	pointToRight() {
 		this.pointer = COMPASS[this.pointer].right;
+		this.report(`New direction: ${this.pointer}`);
 	}
 
 	pointToLeft() {
 		this.pointer = COMPASS[this.pointer].left;
+		this.report(`New direction: ${this.pointer}`);
 	}
 
-	toString() {
-		return this.map[this.pointer] ?? this.pointer;
+	report(message) {
+		this.vehicle.journal.for(this).info().message(message);
 	}
 
 	static NORTH = NORTH;

@@ -1,12 +1,13 @@
-import { Gadget } from "../gadget";
+import { Gadget, TYPES } from "../gadget";
 
 export class AutoPilot extends Gadget {
 	constructor() {
-		super();
+		super(TYPES.AUTOPILOT);
 	}
 
 	drive(route) {
 		this.vehicle.turnOn();
+		this.vehicle.journal.for(this).info().message("Starts a ride");
 
 		for (const statement of route) {
 			switch (statement) {
@@ -24,6 +25,7 @@ export class AutoPilot extends Gadget {
 			}
 		}
 
+		this.vehicle.journal.for(this).info().message("Completes a ride");
 		this.vehicle.turnOff();
 	}
 }

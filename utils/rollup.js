@@ -1,6 +1,7 @@
 import cleaner from "rollup-plugin-cleaner";
 import htmlTemplate from "rollup-plugin-generate-html-template";
 import postcss from "rollup-plugin-postcss";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import alias from "@rollup/plugin-alias";
 
 import { extname, resolve } from "path";
@@ -36,6 +37,7 @@ export const utils = () => {
 			template: mapSrc(dir, "index.html"),
 			target: mapDist(dir, "index.html"),
 		}),
+		nodeResolve(),
 	];
 
 	return {

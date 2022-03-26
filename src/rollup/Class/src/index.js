@@ -1,41 +1,20 @@
-import { AutoPilot } from "./app/gadgets/autopilot";
-import { Computer } from "./app/gadgets/computer";
-import { GPS } from "./app/gadgets/gps";
-import { Vehicle } from "./app/vehicle";
+import { BMWFactory } from "./domain/vehicles/bmw/factory";
+import { TeslaFactory } from "./domain/vehicles/tesla/factory";
 
-class M5 extends Vehicle {
-	constructor(computer, gps) {
-		super(computer, gps);
-	}
-}
+const bmwM5 = BMWFactory("M5");
 
-const bmw = new M5(new Computer(), new GPS(GPS.SOUTH));
+bmwM5.turnOn();
+bmwM5.forward();
+bmwM5.forward();
+bmwM5.left();
+bmwM5.forward();
+bmwM5.forward();
+bmwM5.turnOff();
 
-bmw.turnOn();
-bmw.forward();
-bmw.forward();
-bmw.left();
-bmw.forward();
-bmw.forward();
-bmw.turnOff();
+bmwM5.report(console.log);
 
-console.log(bmw.report());
+const teslaModelX = TeslaFactory("ModelX");
 
-class ModelX extends Vehicle {
-	constructor(computer, gps, autoPilot) {
-		super(computer, gps);
+teslaModelX.drive(["f", "f", "f", "l", "f", "l", "f", "r", "r", "f"]);
 
-		this.autoPilot = autoPilot.set(this);
-	}
-
-	drive(route) {
-		this.computer.emit("drive", () => "enable autopilot");
-		this.autoPilot.drive(route);
-	}
-}
-
-const modelX = new ModelX(new Computer(), new GPS(), new AutoPilot());
-
-modelX.drive(["f", "f", "f", "l", "f", "l", "f", "r", "r", "f"]);
-
-console.log(modelX.report());
+teslaModelX.report(console.log);
