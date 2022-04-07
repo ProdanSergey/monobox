@@ -1,0 +1,59 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.app-rating {
+  display: flex;
+}
+
+.app-rating i {
+  display: block;
+  font-style: normal;
+  filter: grayscale();
+  cursor: pointer;
+}
+
+.app-rating i:not(:last-child) {
+  margin-right: 0.25em;
+}
+
+.app-rating i.previewed {
+  filter: grayscale(0.5);
+}
+
+.app-rating i.selected {
+  filter: none;
+}
+
+.app-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.app-dialog__overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.app-dialog__body {
+  display: flex;
+  flex-direction: column;
+  width: 50vmin;
+  height: 50vmin;
+  padding: 16px;
+  border-radius: 8px;
+  z-index: 1;
+  background-color: #fff;
+}
+
+.app-dialog__footer {
+  margin-top: auto;
+}
