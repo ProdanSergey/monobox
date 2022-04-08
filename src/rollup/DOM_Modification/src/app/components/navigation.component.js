@@ -1,4 +1,4 @@
-import DOM from "../../dom";
+import DOM from "../dom";
 
 export const Navigation = ({ items }) => {
 	const renderLink = ({ to, title }) => {

@@ -1,4 +1,4 @@
-import DOM from "../../dom";
+import DOM from "../dom";
 
 export const LastUpdate = () => {
 	return DOM.create("section")({

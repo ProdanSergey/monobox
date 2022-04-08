@@ -1,5 +1,5 @@
 import { DOMRender } from "@utils/dom-render";
-import DOM from "../../dom";
+import DOM from "../dom";
 
 const ListItem = ({ text }) => {
 	return DOM.create("li")({
@@ -10,7 +10,7 @@ const ListItem = ({ text }) => {
 	});
 };
 
-export const List = DOMRender.withState([], (props, state) => {
+const ListComponent = (props, state) => {
 	const [items, setItems] = state;
 
 	const addItem = () => {
@@ -41,4 +41,6 @@ export const List = DOMRender.withState([], (props, state) => {
 			}),
 		],
 	});
-});
+};
+
+export const List = DOMRender.withState([])(ListComponent);

@@ -1,4 +1,4 @@
-import DOM from "../../dom";
+import DOM from "../dom";
 
 export const Title = ({ title }) => {
 	return DOM.create("header")({
