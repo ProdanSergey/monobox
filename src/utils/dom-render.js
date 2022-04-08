@@ -1,76 +1,116 @@
+import { compose, isObject, isFalsy, isFunction } from "./fn";
+
 export const DOMRender = (() => {
-	const isObject = (v) =>
-		typeof v === "object" && !Array.isArray(v) && v !== null;
+	class DOMError extends Error {
+		name = "DOMError";
+	}
 
-	const setProps = (element, props) => {
+	const applyClassName = (classNames, element) => {
+		const className = classNames.shift();
+
+		if (isFalsy(className)) return element;
+
+		if (isObject(className)) {
+			return applyClassName(
+				Object.getOwnPropertyNames(className).reduce(
+					(classNames, key) => (isFalsy(className[key]) ? classNames : [...classNames, className[key]]),
+					[]
+				),
+				element
+			);
+		}
+
+		element.classList.add(className);
+
+		return applyClassName(classNames, element);
+	};
+
+	const withClassNames = (classNames) => (element) => {
+		applyClassName(Array.from(classNames), element);
+
+		return element;
+	};
+
+	const applyProperty = (key, value) => (element) => {
+		if (Object.prototype.hasOwnProperty.call(element, key)) {
+			element[key] = value;
+		}
+
+		return element;
+	};
+
+	const applyAttribute = (key, value) => (element) => {
+		if (!Object.prototype.hasOwnProperty.call(element, key)) {
+			element.setAttribute(key, value);
+		}
+
+		return element;
+	};
+
+	const withProps = (props) => (element) => {
 		for (const key of Object.getOwnPropertyNames(props)) {
-			element[key] = props[key];
+			compose(applyAttribute(key, props[key]), applyProperty(key, props[key]))(element);
 		}
+
+		return element;
 	};
 
-	const classnames = (element, classNames) => {
-		for (const cn of classNames) {
-			if (isObject(cn)) {
-				for (const key of Object.getOwnPropertyNames(cn).filter((k) =>
-					Boolean(cn[k])
-				)) {
-					element.classList.add(key);
-				}
-			} else {
-				element.classList.add(cn);
-			}
-		}
+	const applyHandler = (key, value) => (element) => {
+		element.addEventListener(key, value);
 	};
 
-	const setAttrs = (element, attrs) => {
-		for (const key of Object.getOwnPropertyNames(attrs)) {
-			element.setAttribute(key, attrs[key]);
-		}
-	};
-
-	const setListeners = (element, handlers) => {
+	const withListeners = (handlers) => (element) => {
 		for (const type of Object.getOwnPropertyNames(handlers)) {
-			element.addEventListener(type, handlers[type]);
+			applyHandler(type, handlers[type])(element);
 		}
+
+		return element;
 	};
 
-	const setChildren = (element, children) => {
+	const appendNode = (child) => (element) => {
+		if (child instanceof Node) {
+			element.append(child);
+		}
+
+		return element;
+	};
+
+	const appendHTML = (child) => (element) => {
+		if (!(child instanceof Node)) {
+			element.insertAdjacentHTML("afterbegin", child);
+		}
+
+		return element;
+	};
+
+	const withChildren = (children) => (element) => {
 		for (const child of children.filter(Boolean)) {
-			if (child instanceof Node) {
-				element.append(child);
-			} else {
-				element.insertAdjacentHTML("afterbegin", child);
-			}
+			compose(appendNode(child), appendHTML(child))(element);
 		}
+
+		return element;
 	};
 
-	const render =
-		(element) =>
-		(options = {}) => {
-			const {
-				classNames = [],
-				props = {},
-				attrs = {},
-				handlers = {},
-				children = [],
-			} = options;
+	const render = (element) => (options) => {
+		if (isFalsy(options)) return element;
 
-			classnames(element, classNames);
-			setProps(element, props);
-			setAttrs(element, attrs);
-			setListeners(element, handlers);
-			setChildren(element, children);
+		const { classNames = [], children = [], props = {}, handlers = {} } = options;
 
-			return element;
-		};
+		return compose(
+			withChildren(children),
+			withListeners(handlers),
+			withProps(props),
+			withClassNames(classNames)
+		)(element);
+	};
 
 	class DOMRender {
 		constructor(root) {
-			if (root instanceof HTMLElement) {
-				this.root = root;
-			} else {
-				throw new Error("Provide a valid mount point");
+			if (!(root instanceof HTMLElement)) {
+				throw new DOMError("Mount root is not defined");
 			}
+
+			this.root = root;
 		}
 
 		mount(element) {
@@ -86,32 +126,29 @@ export const DOMRender = (() => {
 		}
 
 		static withState(initial, component) {
-			let node, props, render;
+			let state = initial,
+				root,
+				render;
 
-			let state = initial;
-
-			const setState = (update) => {
-				const predecessor = node;
-
-				const successor = render(
-					(state = typeof update === "function" ? update(state) : update),
-					setState,
-					props
-				);
+			const reRender = () => {
+				const ref = root;
+				root = render([state, setState]);
 
 				requestAnimationFrame(() => {
-					predecessor.replaceWith(successor);
+					ref.replaceWith(root);
 				});
 			};
 
-			return (render = (...args) => {
-				return (node = component.call(
-					null,
-					state,
-					setState,
-					(props = args.at(-1))
-				));
-			});
+			const setState = (update) => {
+				state = isFunction(update) ? update(state) : update;
+				reRender();
+			};
+
+			const bind = (...args) => {
+				return (render = component.bind(null, ...args));
+			};
+
+			return (...args) => (root = bind(...args)([state, setState]));
 		}
 	}
 

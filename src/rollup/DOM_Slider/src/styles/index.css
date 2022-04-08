@@ -1,0 +1,28 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: lightcoral;
+}
+
+.section {
+  padding: 24px 0;
+}
+
+.slider {
+  display: flex;
+  width: 80vw;
+  height: 260px;
+  margin: 0 auto;
+  padding: 16px 8px;
+  background-color: purple;
+  overflow: auto;
+}
+
+.slider__item {
+  flex: 1;
+  min-width: calc(((80vw - 16px) / 3) - 16px);
+  margin: 0 8px;
+  background-color: aquamarine;
+}

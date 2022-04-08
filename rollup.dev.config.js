@@ -28,6 +28,8 @@ const bootstrap = async () => {
 			}),
 			livereload({
 				delay: 500,
+				exts: ["html", "js"],
+				watch: mapDist(PACKAGE),
 			}),
 		],
 	};
