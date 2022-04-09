@@ -1,5 +1,5 @@
 import cleaner from "rollup-plugin-cleaner";
-import htmlTemplate from "rollup-plugin-generate-html-template";
+import html from "rollup-plugin-html2";
 import postcss from "rollup-plugin-postcss";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import alias from "@rollup/plugin-alias";
@@ -33,9 +33,8 @@ export const utils = () => {
 		postcss({
 			extract: mapDist(dir, "bundle.css"),
 		}),
-		htmlTemplate({
+		html({
 			template: mapSrc(dir, "index.html"),
-			target: mapDist(dir, "index.html"),
 		}),
 		nodeResolve(),
 	];
