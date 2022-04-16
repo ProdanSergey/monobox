@@ -1,12 +1,12 @@
-import { BaseComponent } from "../component";
+import { BaseComponent, image } from "@utils/dom";
 
 export class ImageComponent extends BaseComponent {
-	constructor(props) {
-		super("img", props, {
-			attributes: {
-				className: ["sc-image"],
-				src: props.src,
-			},
+	render() {
+		const { src } = this.props;
+
+		return image({
+			className: "sc-image",
+			src,
 		});
 	}
 }

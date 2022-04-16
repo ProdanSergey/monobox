@@ -1,4 +1,4 @@
-import DOM from "./dom";
+import { div, DOMRenderer } from "@utils/dom";
 import { Title } from "./components/title.component";
 import { Navigation } from "./components/navigation.component";
 import { LastUpdate } from "./components/last-update.component";
@@ -10,12 +10,10 @@ export const App = () => {
 		{ to: "/about", title: "About Us" },
 	];
 
-	return DOM.create("div")({
-		children: [
-			Title({ title: "User Archive" }),
-			Navigation({ items: LINKS }),
-			LastUpdate(),
-			List({ title: "Users count" }),
-		],
-	});
+	return DOMRenderer.fragment(
+		Title({ title: "User Archive" }),
+		Navigation({ items: LINKS }),
+		LastUpdate(),
+		List({ title: "Users count" })
+	);
 };

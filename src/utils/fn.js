@@ -8,4 +8,56 @@ const compose =
 	(arg) =>
 		fns.reduceRight((prevArg, fn) => fn(prevArg), arg);
 
-export { isObject, isFunction, isFalsy, isTruthy, compose };
+const template = (items, mapper) => {
+	return items.reduce((html, item) => (html += mapper(item)), "");
+};
+class ArrayNamespace {
+	static segregate(v, ...predicates) {
+		return Array.from(v).reduce(
+			(buckets, current) => {
+				const bucketIndex = predicates.findIndex((predicate) => {
+					return compose(isTruthy, predicate)(current);
+				});
+
+				buckets[bucketIndex >= 0 ? bucketIndex : buckets.length - 1].push(current);
+
+				return buckets;
+			},
+			new Array(predicates.length + 1).fill(null).map(() => [])
+		);
+	}
+}
+
+class ObjectNamespace {
+	static deepCopy(v) {
+		return JSON.parse(JSON.stringify(v));
+	}
+
+	static pick(v, keys) {
+		return ObjectNamespace.pickBy(v, ({ key }) => keys.includes(key));
+	}
+
+	static pickBy(v, cb) {
+		return Object.entries(v).reduce((acc, [key, value]) => {
+			return cb({ key, value }) ? { ...acc, [key]: value } : acc;
+		}, {});
+	}
+
+	static pickTruthy(v) {
+		return ObjectNamespace.pickBy(v, ({ value }) => value);
+	}
+
+	static truthyKeys(v) {
+		return Object.keys(ObjectNamespace.pickTruthy(v));
+	}
+
+	static truthyValues(v) {
+		return Object.values(ObjectNamespace.pickTruthy(v));
+	}
+
+	static truthy(v) {
+		return Object.entries(ObjectNamespace.pickTruthy(v));
+	}
+}
+
+export { ArrayNamespace, ObjectNamespace, isObject, isFunction, isFalsy, isTruthy, template, compose };

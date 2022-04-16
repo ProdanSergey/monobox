@@ -1,6 +1,5 @@
-import { ImageComponent } from "./app/components/image";
+import { DOMRenderer } from "@utils/dom";
 import { SliderComponent } from "./app/components/slider";
-import { Framework } from "./app/framework";
 import "./styles/index.css";
 
 const slider = new SliderComponent({
@@ -13,4 +12,4 @@ const slider = new SliderComponent({
 	],
 });
 
-Framework.mount(document.getElementById("root"), slider);
+DOMRenderer.mount(document.getElementById("root"), slider);

@@ -1,4 +1,4 @@
-import DOM from "./app/dom";
+import { DOMRenderer } from "@utils/dom";
 import { App } from "./app/app";
 
-DOM.mount(App());
+DOMRenderer.mount(document.getElementById("root"), App);

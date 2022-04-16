@@ -1,87 +1,62 @@
-import { BaseComponent } from "../component";
-import { Framework } from "../framework";
+import { DOMRenderer, BaseComponent, div, button, classnames } from "@utils/dom";
 import { ImageComponent } from "./image";
 
 class SliderItemComponent extends BaseComponent {
-	constructor(props) {
-		super("div", props, {
-			attributes: {
-				className: "sc-slider__item",
-			},
-			children: [props.item],
-		});
-	}
-}
+	render() {
+		const { item } = this.props;
 
-class SliderTrackComponent extends BaseComponent {
-	constructor(props) {
-		super("div", props, {
-			attributes: {
-				className: "sc-slider__track",
+		return div(
+			{
+				className: "sc-slider__item",
+				"@click": () => this.emit("slide:click", item),
 			},
-			children: props.items.map((item) => new SliderItemComponent({ item })),
-		});
+			[new ImageComponent({ src: item })]
+		);
 	}
 }
 
 class SliderControlComponent extends BaseComponent {
-	constructor(props) {
-		const { icon, position, onClick } = props;
+	render() {
+		const { icon, position, onClick } = this.props;
 
-		super("button", props, {
-			attributes: {
-				onclick: onClick,
-				className: Framework.className("sc-slider__control", position),
+		return button(
+			{
+				"@click": onClick,
+				className: classnames("sc-slider__control", position),
 			},
-			children: [icon],
-		});
+			[icon]
+		);
 	}
 }
 
 export const SliderComponent = (() => {
-	const isAtFirstSlide = (track) => {
-		return track.scrollLeft === 0;
+	const trackRef = DOMRenderer.createRef();
+
+	const isAtFirstSlide = () => {
+		return trackRef.current.scrollLeft === 0;
 	};
 
-	const isAtLastSlide = (track, count) => {
-		return track.scrollLeft >= track.clientWidth * (count - 1);
+	const isAtLastSlide = (count) => {
+		return trackRef.current.scrollLeft >= trackRef.current.clientWidth * (count - 1);
 	};
 
 	class SliderComponent extends BaseComponent {
-		constructor(props) {
-			const trackRef = Framework.createRef();
-
-			super(
-				"div",
-				props,
-				{
-					attributes: {
-						className: ["sc-slider"],
-					},
-					children: [
-						new SliderControlComponent({ icon: "<", position: "left", onClick: () => this.prev() }),
-						new SliderTrackComponent({
-							items: props.items.map((src) => new ImageComponent({ src })),
-						}).withRef(trackRef),
-						new SliderControlComponent({ icon: ">", position: "right", onClick: () => this.next() }),
-					],
-				},
-				{ track: trackRef }
-			);
-		}
+		handleClick = (e) => {
+			console.log(e);
+		};
 
 		prev() {
-			isAtFirstSlide(this.track()) ? this.last() : (this.track().scrollLeft -= this.track().clientWidth);
+			isAtFirstSlide() ? this.last() : (trackRef.current.scrollLeft -= trackRef.current.clientWidth);
 		}
 
 		next() {
-			isAtLastSlide(this.track(), this.props.items.length)
+			isAtLastSlide(this.props.items.length)
 				? this.first()
-				: (this.track().scrollLeft += this.track().clientWidth);
+				: (trackRef.current.scrollLeft += trackRef.current.clientWidth);
 		}
 
 		nth(nthPosition) {
-			this.track().scrollLeft = this.track().clientWidth * (nthPosition - 1);
+			trackRef.current.scrollLeft = trackRef.current.clientWidth * (nthPosition - 1);
 		}
 
 		last() {
@@ -92,8 +67,26 @@ export const SliderComponent = (() => {
 			this.nth(1);
 		}
 
-		track() {
-			return this.refs.track.current;
+		render() {
+			const { items } = this.props;
+
+			return div(
+				{
+					className: "sc-slider",
+					"@slide:click": this.handleClick,
+				},
+				[
+					new SliderControlComponent({ icon: "<", position: "left", onClick: () => this.prev() }),
+					div(
+						{
+							ref: trackRef,
+							className: "sc-slider__track",
+						},
+						items.map((item) => new SliderItemComponent({ item }))
+					),
+					new SliderControlComponent({ icon: ">", position: "right", onClick: () => this.next() }),
+				]
+			);
 		}
 	}
 
