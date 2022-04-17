@@ -3,6 +3,7 @@ import html from "rollup-plugin-html2";
 import postcss from "rollup-plugin-postcss";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import alias from "@rollup/plugin-alias";
+import copy from "rollup-plugin-copy";
 
 import { extname, resolve } from "path";
 
@@ -29,6 +30,9 @@ export const utils = () => {
 		}),
 		alias({
 			entries: [{ find: "@utils", replacement: UTILS_PATH }],
+		}),
+		copy({
+			targets: [{ src: mapSrc(dir, "assets/**/*"), dest: mapDist(dir, "assets") }],
 		}),
 		postcss({
 			extract: mapDist(dir, "bundle.css"),

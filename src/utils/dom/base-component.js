@@ -33,11 +33,9 @@ export class BaseComponent {
 							requestAnimationFrame(() => {
 								const { ref, isMounted, prevProps, prevState } = getContext(self);
 
-								if (!isMounted && self.onBeforeMount) {
-									self.onBeforeMount();
-								}
+								!isMounted && self.onBeforeMount && self.onBeforeMount();
 
-								ref.replaceWith(render);
+								isMounted && ref.replaceWith(render);
 
 								isMounted ? self.onUpdate?.(prevProps, prevState) : self.onMount?.();
 

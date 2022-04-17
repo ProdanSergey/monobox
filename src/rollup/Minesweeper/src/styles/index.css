@@ -15,7 +15,7 @@ body {
 	margin: 0;
 	width: 100%;
 	height: 100vh;
-	background-image: url("../media/texture.gif");
+	background-image: url("../assets/texture.gif");
 	background-repeat: no-repeat;
 	background-size: cover;
 }
@@ -25,8 +25,14 @@ button {
 	font-family: "Press Start 2P", cursive;
 }
 
+.audio {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+}
+
 .field {
-	display: grid;
+	display: inline-grid;
 	grid-template-columns: repeat(5, 2.5rem);
 	grid-template-rows: repeat(5, 2.5rem);
 	border-left: 1px solid black;

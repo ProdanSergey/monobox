@@ -1,54 +1,52 @@
-const DOM = new DOMRender(document.querySelector("#root"));
+import { withState, div, button, p, item, list } from "@utils/dom";
+import { RANDOM } from "@utils/random";
 
 const Info = ({ text }) => {
-	return DOM.create("p")({
-		props: {
+	return p(
+		{
 			className: "info",
 		},
-		children: [text],
-	});
+		[text]
+	);
 };
 
 const Message = ({ type, value }) => {
-	return DOM.create("p")({
-		props: {
+	return p(
+		{
 			className: `message message--${type}`,
 		},
-		children: [value],
-	});
+		[value]
+	);
 };
 
 const Restart = () => {
-	return DOM.create("button")({
-		props: {
+	return button(
+		{
 			className: "restart",
 		},
-		children: ["Restart a game"],
-	});
+		["Restart a game"]
+	);
 };
 
 const Item = ({ id, type }) => {
-	return DOM.create("li")({
-		attrs: {
-			"data-id": id,
-			"data-type": type,
-		},
-		props: {
-			className: "field__item",
-		},
+	return item({
+		"data-id": id,
+		"data-type": type,
+		className: "field__item",
 	});
 };
 
 const List = ({ items }) => {
-	return DOM.create("ul")({
-		props: {
+	return list(
+		false,
+		{
 			className: "field",
 		},
-		children: items.map(Item),
-	});
+		items.map(Item)
+	);
 };
 
-const Game = (attempts) => {
+export const Game = (attempts) => {
 	const FIELD = new Array(25).fill(0);
 
 	const CELL = {
@@ -67,10 +65,7 @@ const Game = (attempts) => {
 
 				return {
 					...acc,
-					items: [
-						...acc.items,
-						{ id, type: [CELL.NO_BOMB, CELL.BOMB][random] },
-					],
+					items: [...acc.items, { id, type: [CELL.NO_BOMB, CELL.BOMB][random] }],
 					count: random ? acc.count + 1 : acc.count,
 				};
 			},
@@ -95,8 +90,8 @@ const Game = (attempts) => {
 		return state;
 	};
 
-	const Component = (state, setState) => {
-		const click = {
+	const Component = ([state, setState]) => {
+		const onClick = {
 			handleEvent(event) {
 				const target = event.target;
 
@@ -168,22 +163,18 @@ const Game = (attempts) => {
 
 		const { items, disarmed, attempts, message } = state;
 
-		return DOM.create("div")({
-			children: [
+		return div(
+			{
+				"@click": onClick,
+			},
+			[
 				Info({ text: `Bombs: ${total}` }),
 				Info({ text: `Disarmed: ${disarmed}` }),
 				Info({ text: `Attempts: ${attempts}` }),
 				...(message ? [Message(message), Restart()] : [List({ items })]),
-			],
-			handlers: {
-				click: click,
-			},
-		});
+			]
+		);
 	};
 
-	return DOMRender.withState(generateGame(), Component);
+	return withState(generateGame())(Component);
 };
-
-const Minesweeper = Game(5);
-
-DOM.mount(Minesweeper());
