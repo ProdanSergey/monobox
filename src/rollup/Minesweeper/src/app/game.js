@@ -1,5 +1,6 @@
 import { withState, div, button, p, item, list } from "@utils/dom";
 import { RANDOM } from "@utils/random";
+import { Button } from "./button";
 
 const Info = ({ text }) => {
 	return p(
@@ -20,12 +21,7 @@ const Message = ({ type, value }) => {
 };
 
 const Restart = () => {
-	return button(
-		{
-			className: "restart",
-		},
-		["Restart a game"]
-	);
+	return Button({ className: "restart", label: "Restart a game" });
 };
 
 const Item = ({ id, type }) => {

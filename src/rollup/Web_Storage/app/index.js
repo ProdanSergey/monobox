@@ -14,10 +14,7 @@ const Input = ({ name, type, value, error }) => {
 				},
 			}),
 			DOM.create("span")({
-				classNames: [
-					"form__error",
-					{ ["form__error--visible"]: typeof error === "string" },
-				],
+				classNames: ["form__error", { ["form__error--visible"]: typeof error === "string" }],
 				children: [error],
 			}),
 		],
@@ -56,9 +53,7 @@ const Form = DOMRender.withState(
 				},
 				errors: {
 					...form.errors,
-					[name]: Form.SCHEMA[name]?.validation?.(value)
-						? Form.SCHEMA[name]?.message
-						: false,
+					[name]: Form.SCHEMA[name]?.validation?.(value) ? Form.SCHEMA[name]?.message : false,
 				},
 			}));
 		};
@@ -78,18 +73,13 @@ const Form = DOMRender.withState(
 			children: [
 				...Form.FIELDS.map(({ name, type, label }) => {
 					return Field({
-						children: [
-							label,
-							Input({ name, type, value: state[name], error: errors[name] }),
-						],
+						children: [label, Input({ name, type, value: state[name], error: errors[name] })],
 					});
 				}),
 				DOM.create("button")({
 					props: {
 						type: "submit",
-						disabled: Object.keys(errors).some(
-							(name) => errors[name] !== false
-						),
+						disabled: Object.keys(errors).some((name) => errors[name] !== false),
 					},
 					children: ["Submit"],
 				}),
@@ -124,10 +114,8 @@ Form.SCHEMA = {
 		message: "must be valid email",
 	},
 	password: {
-		validation: (value) =>
-			!value.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/) || value < 9 || value > 24,
-		message:
-			"must contain from 9 to 24 chars, at least one digit, upper and lower case letter",
+		validation: (value) => !value.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/) || value < 9 || value > 24,
+		message: "must contain from 9 to 24 chars, at least one digit, upper and lower case letter",
 	},
 };
 

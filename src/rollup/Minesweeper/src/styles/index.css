@@ -25,10 +25,24 @@ button {
 	font-family: "Press Start 2P", cursive;
 }
 
+.button {
+	padding: 12px;
+	cursor: pointer;
+}
+
+.button--flat {
+  background: transparent;
+  border: none;
+}
+
 .audio {
   position: fixed;
   top: 2rem;
-  left: 2rem;
+  right: 2rem;
+}
+
+.mute {
+  font-size: 2rem;
 }
 
 .field {
@@ -87,9 +101,4 @@ button {
 
 .message.message--failed {
 	color: crimson;
-}
-
-.restart {
-	padding: 12px;
-	cursor: pointer;
 }

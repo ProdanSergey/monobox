@@ -58,6 +58,10 @@ class ObjectNamespace {
 	static truthy(v) {
 		return Object.entries(ObjectNamespace.pickTruthy(v));
 	}
+
+	static hasProperty(v, key) {
+		return Object.prototype.hasOwnProperty.call(v, key);
+	}
 }
 
 export { ArrayNamespace, ObjectNamespace, isObject, isFunction, isFalsy, isTruthy, template, compose };

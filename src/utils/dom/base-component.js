@@ -1,79 +1,114 @@
-import { ObjectNamespace } from "@utils/fn";
+import { isFunction, isObject, ObjectNamespace } from "@utils/fn";
 import { StateError } from "./errors";
 import { SyntheticEvent } from "./events";
+import { isElement } from "./utils/fn";
 
-const context = new WeakMap();
+class State {
+	constructor(init = {}) {
+		if (!isObject(init)) {
+			throw new StateError("State must be an object");
+		}
 
-const getContext = (instance) => {
-	return context.get(instance);
-};
+		Object.assign(this, init);
+	}
 
-const setContext = (instance, state) => {
-	context.set(instance, state);
-};
-
-export class BaseComponent {
-	constructor(props = {}) {
-		this.props = Object.freeze(props);
-
-		context.set(this, {
-			ref: null,
-			isMounted: false,
-			prevProps: props,
-			prevState: this.state,
-		});
+	subscribe(observer) {
+		if (!isFunction(observer)) {
+			return new StateError("Observer must be a function");
+		}
 
 		return new Proxy(this, {
-			get(self, methodName) {
-				switch (methodName) {
-					case "render":
-						return () => {
-							const render = self.render();
-
-							requestAnimationFrame(() => {
-								const { ref, isMounted, prevProps, prevState } = getContext(self);
-
-								!isMounted && self.onBeforeMount && self.onBeforeMount();
-
-								isMounted && ref.replaceWith(render);
-
-								isMounted ? self.onUpdate?.(prevProps, prevState) : self.onMount?.();
-
-								setContext(self, {
-									ref: render,
-									isMounted: true,
-									prevProps: ObjectNamespace.deepCopy(self.props),
-									prevState: self.state && ObjectNamespace.deepCopy(self.state),
-								});
-							});
-
-							return render;
-						};
-					default:
-						break;
+			set(...args) {
+				try {
+					Reflect.set(...args);
+					observer();
+					return true;
+				} catch (error) {
+					throw new StateError(error.message);
 				}
-
-				return self[methodName];
 			},
 		});
 	}
+}
 
-	setState(updater) {
-		if (!this.state) {
-			throw new StateError("Component does not have a state");
-		}
+export class BaseComponent {
+	#ref = null;
 
-		this.state = updater(this.state);
+	constructor(props = {}) {
+		this.props = Object.freeze(props);
 
-		this.render();
+		let prevProps = props;
+		let prevState = this.state;
+
+		const mount = (render) => {
+			this.onBeforeMount?.();
+			this.#ref = render;
+			this.onMount?.();
+		};
+
+		const update = (render) => {
+			this.#ref.replaceWith(render);
+			this.#ref = render;
+			this.onUpdate?.(prevProps, prevState);
+		};
+
+		const snapshot = () => {
+			prevProps = ObjectNamespace.deepCopy(this.props);
+			prevState = self.state && ObjectNamespace.deepCopy(this.state);
+		};
+
+		const proxy = new Proxy(this, {
+			get(self, key) {
+				if (key === "render") {
+					return () => {
+						const render = self.render();
+
+						requestAnimationFrame(() => {
+							isElement(self.#ref) ? update(render) : mount(render);
+							snapshot();
+						});
+
+						return render;
+					};
+				}
+				return Reflect.get(self, key);
+			},
+			set(self, key, value) {
+				if (key === "state") {
+					return Reflect.set(
+						self,
+						key,
+						new State(value).subscribe(() => {
+							proxy.render();
+						})
+					);
+				}
+
+				return Reflect.set(self, key, value);
+			},
+			defineProperty(self, key, attributes) {
+				if (key === "state") {
+					return Reflect.defineProperty(self, key, {
+						...attributes,
+						value: new State(attributes.value).subscribe(() => {
+							proxy.render();
+						}),
+					});
+				}
+
+				return Reflect.defineProperty(self, key, attributes);
+			},
+		});
+
+		return proxy;
 	}
 
-	emit(type, payload) {
-		getContext(this).ref.dispatchEvent(
+	emit = (type, payload) => {
+		this.#ref.dispatchEvent(
 			new SyntheticEvent(type, {
 				detail: payload,
 				bubbles: true,
 			})
 		);
-	}
+	};
 }

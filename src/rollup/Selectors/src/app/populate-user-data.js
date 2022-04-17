@@ -1,5 +1,6 @@
 import { STDIN } from "@utils/stdin";
 import { DATE } from "@utils/date";
+import { ObjectNamespace } from "@utils/fn";
 
 const APP = (() => {
 	return {
@@ -61,7 +62,7 @@ const APP = (() => {
 })();
 
 export const populateUserData = (elements, className) => {
-	const templates = elements.filter((el) => el.innerText in APP && el.closest(className));
+	const templates = elements.filter((el) => ObjectNamespace.hasProperty(APP, el.innerText) && el.closest(className));
 
 	for (const template of templates) {
 		template.innerText = APP[template.innerText]();

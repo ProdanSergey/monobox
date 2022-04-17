@@ -1,14 +1,42 @@
-import { BaseComponent, button, div, DOMRenderer } from "@utils/dom";
+import { BaseComponent, div } from "@utils/dom";
+import { Button } from "./button";
 
-export class AudioPlayer extends BaseComponent {
+class MuteButton extends BaseComponent {
 	state = { paused: false };
 
-	audio = this.init();
-
 	handleClick = () => {
-		console.log(this.state);
-		this.audio.paused ? this.audio.play() : this.audio.pause();
+		console.log("cc", this);
+		const { audio } = this.props;
+
+		audio.paused ? audio.play() : audio.pause();
+
+		this.state.paused = audio.paused;
 	};
+
+	onMount() {
+		const { audio } = this.props;
+
+		audio.addEventListener("canplaythrough", async () => {
+			try {
+				await audio.play();
+			} catch (error) {
+				this.state.paused = true;
+			}
+		});
+	}
+
+	render() {
+		return Button({
+			type: "flat",
+			label: [this.state.paused ? "🔇" : "🔈"],
+			className: "mute",
+			onClick: this.handleClick,
+		});
+	}
+}
+
+export class AudioPlayer extends BaseComponent {
+	audio = this.init();
 
 	init() {
 		const audio = new Audio("assets/sample.mp3");
@@ -20,30 +48,12 @@ export class AudioPlayer extends BaseComponent {
 		return audio;
 	}
 
-	onMount() {
-		this.audio.addEventListener("canplaythrough", async () => {
-			try {
-				await this.audio.play();
-			} catch (error) {
-				this.setState(() => ({ paused: true }));
-			}
-		});
-	}
-
 	render() {
 		return div(
 			{
 				className: "audio",
 			},
-			[
-				button(
-					{
-						"@click": this.handleClick,
-					},
-					[this.state.paused ? "🔇" : "🔈"]
-				),
-				this.audio,
-			]
+			[new MuteButton({ audio: this.audio }), this.audio]
 		);
 	}
 }

@@ -9,10 +9,7 @@ const validations = {
 basic.addEventListener("focusout", (event) => {
 	const { name, value, checked } = event.target;
 
-	event.target.setAttribute(
-		"aria-invalid",
-		name in validations ? validations[name](value, checked) : false
-	);
+	event.target.setAttribute("aria-invalid", name in validations ? validations[name](value, checked) : false);
 });
 
 basic.addEventListener("focusin", (event) => {
@@ -48,35 +45,12 @@ basic.addEventListener("submit", (event) => {
 
 	const data = new FormData(event.currentTarget);
 
-	const serialized = Array.from(new Set(Array.from(data.keys()))).reduce(
-		(serialized, key) => {
-			return {
-				...serialized,
-				[key]: data.getAll(key).join(","),
-			};
-		},
-		{}
-	);
+	const serialized = Array.from(new Set(Array.from(data.keys()))).reduce((serialized, key) => {
+		return {
+			...serialized,
+			[key]: data.getAll(key).join(","),
+		};
+	}, {});
 
 	console.log(serialized);
 });
-
-// basic.login.addEventListener('mousedown', (event) => {
-// 	event.preventDefault();
-
-// 	console.log('down');
-// });
-
-// basic.login.addEventListener('mouseup', (event) => {
-// 	event.preventDefault();
-
-// 	console.log('up');
-// });
-
-// basic.login.addEventListener('click', () => {
-// 	console.log('click');
-// });
-
-// basic.theme.addEventListener('mousedown', (event) => {
-// 	event.preventDefault();
-// });

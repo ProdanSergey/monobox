@@ -8,7 +8,6 @@ class SliderItemComponent extends BaseComponent {
 		return div(
 			{
 				className: "sc-slider__item",
-				"@click": () => this.emit("slide:click", item),
 			},
 			[new ImageComponent({ src: item })]
 		);
@@ -41,10 +40,6 @@ export const SliderComponent = (() => {
 	};
 
 	class SliderComponent extends BaseComponent {
-		handleClick = (e) => {
-			console.log(e);
-		};
-
 		prev() {
 			isAtFirstSlide() ? this.last() : (trackRef.current.scrollLeft -= trackRef.current.clientWidth);
 		}
@@ -73,7 +68,6 @@ export const SliderComponent = (() => {
 			return div(
 				{
 					className: "sc-slider",
-					"@slide:click": this.handleClick,
 				},
 				[
 					new SliderControlComponent({ icon: "<", position: "left", onClick: () => this.prev() }),
