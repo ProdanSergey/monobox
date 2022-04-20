@@ -1,0 +1,67 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+input,
+select,
+button {
+  padding: 4px 8px;
+  max-width: 200px;
+  margin: 0;
+}
+
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"],
+select,
+button {
+  cursor: pointer;
+}
+
+input[type="range"]:active {
+  cursor: grab;
+}
+
+label {
+  user-select: none;
+}
+
+fieldset {
+  margin: 0;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+.form__field {
+	display: flex;
+  flex-direction: column;
+  margin: 0 0 10px 0;
+}
+
+.form__field label {
+  margin: 0 0 4px;
+}
+
+.form__field--inline {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.form__field--inline label {
+  margin: 0 0 0 4px;
+}
+
+.error {
+	visibility: hidden;
+}
+
+[aria-invalid="true"] + .error {
+	visibility: visible;
+}

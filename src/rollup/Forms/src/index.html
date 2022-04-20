@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Forms</title>
+	</head>
+	<body>
+		<section>
+			<form name="basic" class="form">
+				<div class="form__field">
+          <label for="login">Login</label>
+          <input
+            id="login"
+            name="login"
+            type="text"
+            required
+          />
+          <span class="form__error" role="alert" data-for="login" style="visibility: hidden;"></span>
+        </div>
+				<div class="form__field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="text"
+            required
+          />
+          <span class="form__error" role="alert" data-for="email" style="visibility: hidden;"></span>
+        </div>
+				<div class="form__field">
+          <label for="theme">Theme</label>
+          <select id="theme" name="theme">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </div>
+				<div class="form__field">
+          <label for="power">Power</label>
+          <input id="power" name="power" type="range" />
+        </div>
+				<div class="form__field">
+          <fieldset name="subscribes" data-type="checkbox-group">
+            <legend>Choose your subscriptions</legend>
+            <div class="form__field form__field--inline">
+              <label for="subscribe-news">Do you want to get our newsletter?</label>
+              <input id="subscribe-news" name="subscribe" type="checkbox" value="news" />
+            </div>
+            <div class="form__field form__field--inline">
+              <label for="subscribe-products">Do you want to get new product offers?</label>
+              <input id="subscribe-products" name="subscribe" type="checkbox" value="products" />
+            </div>
+            <div class="form__field form__field--inline">
+              <label for="subscribe-updates">Do you want to know all the latest updates?</label>
+              <input id="subscribe-updates" name="subscribe" type="checkbox" value="updates" />
+            </div>
+          </fieldset>
+          <span class="form__error" role="alert" data-for="subscribes" style="visibility: hidden;"></span>
+        </div>
+				<div class="form__field">
+          <fieldset name="plans" data-type="radio-group">
+            <legend>Choose your plan</legend>
+            <div class="form__field form__field--inline">
+              <label for="plan-simple">Simple</label>
+              <input id="plan-simple" name="plan" type="radio" value="simple" checked />
+            </div>
+            <div class="form__field form__field--inline">
+              <label for="plan-advanced">Advanced</label>
+              <input id="plan-advanced" name="plan" type="radio" value="advanced" />
+            </div>
+            <div class="form__field form__field--inline">
+              <label for="plan-pro">Pro</label>
+              <input id="plan-pro" name="plan" type="radio" value="pro" />
+            </div>
+          </fieldset>
+        </div>
+				<div class="form__field form__field--inline">
+          <label for="consent">User agreement</label>
+          <input id="consent" name="consent" type="checkbox" required />
+          <span class="form__error" role="alert" data-for="consent" style="visibility: hidden;"></span>
+        </div>
+				<button type="submit">Submit</button>
+			</form>
+		</section>
+	</body>
+</html>

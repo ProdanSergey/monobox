@@ -1,64 +1,3 @@
-const DOM = new DOMRender(document.getElementById("time"));
-
-class Clock {
-	constructor(root) {
-		this.root = root;
-		this.timerId = null;
-	}
-
-	start() {
-		this.render();
-
-		setInterval(() => {
-			this.render();
-		}, 1000);
-	}
-
-	currentTime() {
-		const now = new Date();
-
-		return ["getHours", "getMinutes", "getSeconds"].map((method) => {
-			return `${now[method]()}`.padStart(2, "0");
-		});
-	}
-
-	currentDate() {
-		return new Date().toISOString();
-	}
-
-	setTimer(timeout) {
-		this.timerId = setTimeout(() => {
-			document.dispatchEvent(new CustomEvent("clock:alarm"));
-		}, timeout);
-	}
-
-	removeTimer() {
-		clearTimeout(this.timerId);
-	}
-
-	render() {
-		const datetime = this.currentDate();
-		const [hours, minutes, seconds] = this.currentTime();
-
-		const clock = DOM.create("time")({
-			attrs: {
-				datetime,
-			},
-			children: [
-				`<span>${seconds}</span>`,
-				`<span>${minutes}</span>`,
-				`<span>${hours}</span>`,
-			],
-		});
-
-		DOM.mount(clock);
-	}
-}
-
-const clock = new Clock();
-
-clock.start();
-
 const { controls, alarm } = document.forms;
 
 alarm.addEventListener("submit", (e) => {
@@ -73,8 +12,7 @@ alarm.addEventListener("submit", (e) => {
 	const hTimeout = h < hours ? 24 - hours + h : h - hours;
 	const mTimeout = m < minutes ? 60 - minutes + m : m - minutes;
 
-	const timeout =
-		hTimeout * 60 * 60 * 1000 + mTimeout * 60 * 1000 - seconds * 1000;
+	const timeout = hTimeout * 60 * 60 * 1000 + mTimeout * 60 * 1000 - seconds * 1000;
 
 	clock.setTimer(timeout < 0 ? timeout + 24 * 60 * 60 * 1000 : timeout);
 

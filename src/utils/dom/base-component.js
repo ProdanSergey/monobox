@@ -1,35 +1,7 @@
-import { isFunction, isObject, ObjectNamespace } from "@utils/fn";
-import { StateError } from "./errors";
+import { ObjectNamespace } from "@utils/fn";
+import { State } from "@utils/state";
 import { SyntheticEvent } from "./events";
 import { isElement } from "./utils/fn";
-
-class State {
-	constructor(init = {}) {
-		if (!isObject(init)) {
-			throw new StateError("State must be an object");
-		}
-
-		Object.assign(this, init);
-	}
-
-	subscribe(observer) {
-		if (!isFunction(observer)) {
-			return new StateError("Observer must be a function");
-		}
-
-		return new Proxy(this, {
-			set(...args) {
-				try {
-					Reflect.set(...args);
-					observer();
-					return true;
-				} catch (error) {
-					throw new StateError(error.message);
-				}
-			},
-		});
-	}
-}
 
 export class BaseComponent {
 	#ref = null;

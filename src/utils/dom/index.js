@@ -1,4 +1,3 @@
-export { DOMError, StateError } from "./errors";
 export { classnames } from "./utils/classnames";
 export { withState } from "./hocs/with-state";
 export * from "./fabrics";

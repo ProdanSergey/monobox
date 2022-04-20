@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "esModuleInterop": true,      
     "baseUrl": ".",
     "paths": {
       "@utils/*": ["src/utils/*"]

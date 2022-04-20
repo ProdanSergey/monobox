@@ -62,9 +62,7 @@ const withProps = (props) => (container) => {
 };
 
 const withRef = (ref) => (container) => {
-	if (!ref) return container;
-
-	ref.set(container);
+	if (ref) ref.set(container);
 
 	return container;
 };
