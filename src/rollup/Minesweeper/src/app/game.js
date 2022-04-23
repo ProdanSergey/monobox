@@ -1,4 +1,5 @@
 import { withState, div, button, p, item, list } from "@utils/dom";
+import { uList } from "@utils/dom/fabrics/index";
 import { RANDOM } from "@utils/random";
 import { Button } from "./button";
 
@@ -33,8 +34,7 @@ const Item = ({ id, type }) => {
 };
 
 const List = ({ items }) => {
-	return list(
-		false,
+	return uList(
 		{
 			className: "field",
 		},

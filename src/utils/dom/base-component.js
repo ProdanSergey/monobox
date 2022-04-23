@@ -1,7 +1,6 @@
-import { ObjectNamespace } from "@utils/fn";
+import { isFunction, isObject, ObjectNamespace } from "@utils/fn";
 import { State } from "@utils/state";
 import { SyntheticEvent } from "./events";
-import { isElement } from "./utils/fn";
 
 export class BaseComponent {
 	#ref = null;
@@ -9,12 +8,16 @@ export class BaseComponent {
 	constructor(props = {}) {
 		this.props = Object.freeze(props);
 
+		let mounted = false;
 		let prevProps = props;
 		let prevState = this.state;
+
+		const isMounted = () => mounted;
 
 		const mount = (render) => {
 			this.onBeforeMount?.();
 			this.#ref = render;
+			mounted = true;
 			this.onMount?.();
 		};
 
@@ -24,36 +27,37 @@ export class BaseComponent {
 			this.onUpdate?.(prevProps, prevState);
 		};
 
+		const setState = () => {
+			isMounted() && proxy.render();
+		};
+
 		const snapshot = () => {
 			prevProps = ObjectNamespace.deepCopy(this.props);
-			prevState = self.state && ObjectNamespace.deepCopy(this.state);
+			prevState = isObject(self.state) ? ObjectNamespace.deepCopy(this.state) : null;
 		};
 
 		const proxy = new Proxy(this, {
 			get(self, key) {
+				const reflect = () => Reflect.get(self, key);
+
 				if (key === "render") {
 					return () => {
 						const render = self.render();
 
 						requestAnimationFrame(() => {
-							isElement(self.#ref) ? update(render) : mount(render);
+							isMounted() ? update(render) : mount(render);
 							snapshot();
 						});
 
 						return render;
 					};
 				}
-				return Reflect.get(self, key);
+
+				return reflect();
 			},
 			set(self, key, value) {
 				if (key === "state") {
-					return Reflect.set(
-						self,
-						key,
-						new State(value).subscribe(() => {
-							proxy.render();
-						})
-					);
+					return Reflect.set(self, key, new State(value).subscribe(setState));
 				}
 
 				return Reflect.set(self, key, value);
@@ -62,9 +66,7 @@ export class BaseComponent {
 				if (key === "state") {
 					return Reflect.defineProperty(self, key, {
 						...attributes,
-						value: new State(attributes.value).subscribe(() => {
-							proxy.render();
-						}),
+						value: new State(attributes.value).subscribe(setState),
 					});
 				}
 
@@ -76,11 +78,6 @@ export class BaseComponent {
 	}
 
 	emit = (type, payload) => {
-		this.#ref.dispatchEvent(
-			new SyntheticEvent(type, {
-				detail: payload,
-				bubbles: true,
-			})
-		);
+		this.#ref.dispatchEvent(new SyntheticEvent(type, { payload }));
 	};
 }

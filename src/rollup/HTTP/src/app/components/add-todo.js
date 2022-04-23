@@ -1,20 +1,32 @@
-import { DOMRenderer, withState } from "@utils/dom";
+import { DOMRenderer, BaseComponent } from "@utils/dom";
 
-export const AddTodo = withState("")((props, state) => {
-	const { onClick } = props;
-	const [value, setValue] = state;
+export class AddTodo extends BaseComponent {
+	handleSubmit = (event) => {
+		event.preventDefault();
 
-	const onChange = ({ target }) => {
-		setValue(target.value);
+		this.emit("todo:add", event.target.body.value);
 	};
 
-	return DOMRenderer.hydrate(
-		`
-      <div>
-        <input value="${value}" @change="onChange">
-        <button @click="onClick">+</button>
-      </div>
-    `,
-		{ onChange, onClick: onClick(value) }
-	);
-});
+	render() {
+		return DOMRenderer.create(
+			"form",
+			{
+				name: "add-todo",
+				"@submit": this.handleSubmit,
+			},
+			[
+				DOMRenderer.create("input", {
+					type: "text",
+					name: "body",
+				}),
+				DOMRenderer.create(
+					"button",
+					{
+						type: "submit",
+					},
+					["+"]
+				),
+			]
+		);
+	}
+}

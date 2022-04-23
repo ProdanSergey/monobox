@@ -4,11 +4,11 @@ import { AddTodo } from "./components/add-todo";
 import { TodoList } from "./components/todo-list";
 
 export class App extends BaseComponent {
-	state = { items: null };
+	state = { items: [] };
 
-	create = (data) => async () => {
+	create = async ({ detail: { payload } }) => {
 		try {
-			const { response } = await api.createTodo(data);
+			const { response } = await api.createTodo(payload);
 
 			this.state.items = [...this.state.items, response];
 		} catch (err) {
@@ -16,17 +16,15 @@ export class App extends BaseComponent {
 		}
 	};
 
-	remove =
-		({ id, fakeId }) =>
-		async () => {
-			try {
-				await api.removeTodo(id);
+	remove = async ({ detail: { payload } }) => {
+		try {
+			await api.removeTodo(payload);
 
-				this.state.items = this.state.items.filter((item) => (item.fakeId ?? item.id) !== (fakeId ?? id));
-			} catch (err) {
-				console.error(err);
-			}
-		};
+			this.state.items = this.state.items.filter(({ fakeId, id }) => (fakeId ?? id) !== payload);
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 	async onMount() {
 		const { response } = await api.getTodos();
@@ -35,8 +33,12 @@ export class App extends BaseComponent {
 	}
 
 	render() {
-		return this.state.items
-			? section({}, [AddTodo({ onClick: this.create }), TodoList({ items: this.state.items, onRemove: this.remove })])
-			: section();
+		return section(
+			{
+				"@todo:add": this.create,
+				"@todo:remove": this.remove,
+			},
+			[new AddTodo(), new TodoList({ items: this.state.items })]
+		);
 	}
 }

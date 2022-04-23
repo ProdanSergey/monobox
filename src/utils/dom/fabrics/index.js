@@ -4,9 +4,16 @@ export const div = (attributes, children) => {
 	return Framework.create("div", attributes, children);
 };
 
-export const headline = (level, attributes, children) => {
+export const headline = (level) => (attributes, children) => {
 	return Framework.create(`h${level}`, attributes, children);
 };
+
+export const h1 = headline(1);
+export const h2 = headline(2);
+export const h3 = headline(3);
+export const h4 = headline(4);
+export const h5 = headline(5);
+export const h6 = headline(6);
 
 export const p = (attributes, children) => {
 	return Framework.create("p", attributes, children);
@@ -36,7 +43,7 @@ export const button = (attributes, children) => {
 	return Framework.create("button", attributes, children);
 };
 
-export const list = (type, attributes, children) => {
+export const list = (type) => (attributes, children) => {
 	switch (type) {
 		case true:
 			return Framework.create("ol", attributes, children);
@@ -45,6 +52,9 @@ export const list = (type, attributes, children) => {
 			return Framework.create("ul", attributes, children);
 	}
 };
+
+export const oList = list("ol");
+export const uList = list("ul");
 
 export const item = (attributes, children) => {
 	return Framework.create("li", attributes, children);

@@ -5,7 +5,6 @@ class MuteButton extends BaseComponent {
 	state = { paused: false };
 
 	handleClick = () => {
-		console.log("cc", this);
 		const { audio } = this.props;
 
 		audio.paused ? audio.play() : audio.pause();

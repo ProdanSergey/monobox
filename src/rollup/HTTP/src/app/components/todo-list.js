@@ -1,10 +1,13 @@
-import { list } from "@utils/dom";
+import { BaseComponent, uList } from "@utils/dom";
 import { Todo } from "./todo";
 
-export const TodoList = ({ items, onRemove }) => {
-	return list(
-		false,
-		{},
-		items.map((todo) => Todo({ ...todo, onRemove: onRemove(todo) }))
-	);
-};
+export class TodoList extends BaseComponent {
+	render() {
+		const { items } = this.props;
+
+		return uList(
+			{},
+			items.map((todo) => new Todo(todo))
+		);
+	}
+}

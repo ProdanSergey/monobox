@@ -24,10 +24,10 @@ const render = (node) => {
 const listen = (container, event, handler) => {
 	const eventType = event.slice(1).toLowerCase();
 
-	container.addEventListener(eventType, handler);
+	container.addEventListener(eventType, handler, false);
 
 	return () => {
-		container.removeEventListener(eventType, handler);
+		container.removeEventListener(eventType, handler, false);
 	};
 };
 
