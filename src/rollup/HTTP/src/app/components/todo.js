@@ -1,22 +1,19 @@
-import { BaseComponent, item, button } from "@utils/dom";
+import { DOMRenderer, BaseComponent, item, button } from "@utils/dom";
 
 export class Todo extends BaseComponent {
 	render() {
 		const { id, fakeId, title } = this.props;
 
-		return item(
-			{
-				"data-id": fakeId ?? id,
-			},
-			[
-				title,
-				button(
-					{
-						"@click": () => this.emit("todo:remove", fakeId ?? id),
-					},
-					["x"]
-				),
-			]
+		return DOMRenderer.hydrate(
+			`
+        <li data-id="${fakeId ?? id}">
+          <span>${title}</span>
+          <button @click="onClick">
+            x
+          </button>
+        </li>
+      `,
+			{ onClick: () => this.emit("todo:remove", { id: fakeId ?? id }) }
 		);
 	}
 }

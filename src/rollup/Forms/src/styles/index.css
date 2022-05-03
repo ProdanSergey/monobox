@@ -1,67 +1,41 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-input,
-select,
-button {
-  padding: 4px 8px;
-  max-width: 200px;
-  margin: 0;
-}
-
-input[type="checkbox"],
-input[type="radio"],
-input[type="range"],
-select,
-button {
-  cursor: pointer;
-}
-
-input[type="range"]:active {
-  cursor: grab;
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
 }
 
 label {
-  user-select: none;
-}
-
-fieldset {
-  margin: 0;
-}
-
-.form {
-	display: flex;
-	flex-direction: column;
-	max-width: 400px;
-	margin: 0 auto;
-}
-
-.form__field {
-	display: flex;
-  flex-direction: column;
-  margin: 0 0 10px 0;
-}
-
-.form__field label {
-  margin: 0 0 4px;
-}
-
-.form__field--inline {
+  cursor: pointer;
   display: flex;
+  flex-direction: column;
+}
+
+label:not(:last-child),
+fieldset:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+
+label span:first-child {
+  font-weight: bold;
+  margin: 0 0 4px 0;
+}
+
+label[data-inline] {
   flex-direction: row-reverse;
-  align-items: center;
   justify-content: flex-end;
 }
 
-.form__field--inline label {
+label[data-inline] span:first-child {
   margin: 0 0 0 4px;
 }
 
-.error {
-	visibility: hidden;
+button[type="submit"] {
+  margin-top: 4px;
+  margin-left: auto;
+  cursor: pointer;
 }
 
-[aria-invalid="true"] + .error {
-	visibility: visible;
+[role="alert"] {
+  color: orangered;
 }

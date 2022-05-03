@@ -1,5 +1,3 @@
-import "./styles/index.css";
-
 const entries = [];
 
 while (true) {

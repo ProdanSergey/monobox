@@ -4,7 +4,7 @@ export class AddTodo extends BaseComponent {
 	handleSubmit = (event) => {
 		event.preventDefault();
 
-		this.emit("todo:add", event.target.body.value);
+		this.emit("todo:add", { value: event.target.body.value });
 	};
 
 	render() {

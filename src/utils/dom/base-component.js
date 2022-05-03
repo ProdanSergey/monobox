@@ -1,9 +1,13 @@
-import { isFunction, isObject, ObjectNamespace } from "@utils/fn";
+import { isObject, ObjectNamespace } from "@utils/fn";
 import { State } from "@utils/state";
 import { SyntheticEvent } from "./events";
 
+const COMPONENT_MEMBER = {
+	RENDER: "render",
+	STATE: "state",
+};
 export class BaseComponent {
-	#ref = null;
+	#node = null;
 
 	constructor(props = {}) {
 		this.props = Object.freeze(props);
@@ -12,23 +16,23 @@ export class BaseComponent {
 		let prevProps = props;
 		let prevState = this.state;
 
-		const isMounted = () => mounted;
+		const is_mounted = () => mounted;
+
+		const seed = (node) => {
+			this.#node = node;
+			if (!is_mounted()) mounted = true;
+		};
 
 		const mount = (render) => {
 			this.onBeforeMount?.();
-			this.#ref = render;
-			mounted = true;
+			seed(render);
 			this.onMount?.();
 		};
 
 		const update = (render) => {
-			this.#ref.replaceWith(render);
-			this.#ref = render;
+			this.#node.replaceWith(render);
+			seed(render);
 			this.onUpdate?.(prevProps, prevState);
-		};
-
-		const setState = () => {
-			isMounted() && proxy.render();
 		};
 
 		const snapshot = () => {
@@ -36,16 +40,20 @@ export class BaseComponent {
 			prevState = isObject(self.state) ? ObjectNamespace.deepCopy(this.state) : null;
 		};
 
+		const renderer = () => {
+			is_mounted() && proxy.render();
+		};
+
 		const proxy = new Proxy(this, {
 			get(self, key) {
 				const reflect = () => Reflect.get(self, key);
 
-				if (key === "render") {
+				if (key === COMPONENT_MEMBER.RENDER) {
 					return () => {
 						const render = self.render();
 
 						requestAnimationFrame(() => {
-							isMounted() ? update(render) : mount(render);
+							is_mounted() ? update(render) : mount(render);
 							snapshot();
 						});
 
@@ -56,28 +64,33 @@ export class BaseComponent {
 				return reflect();
 			},
 			set(self, key, value) {
-				if (key === "state") {
-					return Reflect.set(self, key, new State(value).subscribe(setState));
+				const reflect = (value) => Reflect.set(self, key, new State(value).subscribe(renderer));
+
+				if (key === COMPONENT_MEMBER.STATE) {
+					return reflect(new State(value).subscribe(renderer));
 				}
 
-				return Reflect.set(self, key, value);
+				return reflect(value);
 			},
 			defineProperty(self, key, attributes) {
-				if (key === "state") {
-					return Reflect.defineProperty(self, key, {
+				const reflect = (value) =>
+					Reflect.defineProperty(self, key, {
 						...attributes,
-						value: new State(attributes.value).subscribe(setState),
+						value,
 					});
+
+				if (key === COMPONENT_MEMBER.STATE) {
+					return reflect(new State(attributes.value).subscribe(renderer));
 				}
 
-				return Reflect.defineProperty(self, key, attributes);
+				return reflect(attributes.value);
 			},
 		});
 
 		return proxy;
 	}
 
-	emit = (type, payload) => {
-		this.#ref.dispatchEvent(new SyntheticEvent(type, { payload }));
+	emit = (type, detail) => {
+		this.#node.dispatchEvent(new SyntheticEvent(type, detail));
 	};
 }

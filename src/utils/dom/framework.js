@@ -1,12 +1,12 @@
-import { ArrayNamespace, compose, ObjectNamespace } from "@utils/fn";
-import { isComponent, isFnComponent, isElement, isEventHandler } from "./utils/fn";
+import { ArrayNamespace, compose, isNullish, ObjectNamespace } from "@utils/fn";
+import { isComponent, isFunctionComponent, isEventHandler, isElement } from "./utils/fn";
 
-const create = (entity) => {
-	if (isElement(entity)) {
-		return entity;
+const create = (node) => {
+	if (isElement(node)) {
+		return node;
 	}
 
-	return document.createElement(entity);
+	return document.createElement(node);
 };
 
 const render = (node) => {
@@ -14,57 +14,62 @@ const render = (node) => {
 		return node.render();
 	}
 
-	if (isFnComponent(node)) {
+	if (isFunctionComponent(node)) {
 		return node();
 	}
 
 	return node;
 };
 
-const listen = (container, event, handler) => {
-	const eventType = event.slice(1).toLowerCase();
+const listen = (node) => (event, handler) => {
+	const type = event.slice(1).toLowerCase();
 
-	container.addEventListener(eventType, handler, false);
+	node.addEventListener(type, handler);
 
 	return () => {
-		container.removeEventListener(eventType, handler, false);
+		node.removeEventListener(type, handler);
 	};
 };
 
-const withChildren = (children) => (container) => {
-	container.append(...children.map(render));
-
-	return container;
-};
-
-const withHandlers = (handlers) => (container) => {
-	for (const key of Object.keys(handlers)) {
-		listen(container, key, handlers[key]);
+const setAttribute = (node) => (key, value) => {
+	if (key in node) {
+		node[key] = value;
+		return;
 	}
 
-	return container;
+	node.setAttribute(key, value);
 };
 
-const withProps = (props) => (container) => {
-	const [standard, custom] = ArrayNamespace.segregate(Object.keys(props), (key) => {
-		return key in container;
+const withChildren = (children) => (node) => {
+	node.append(...children.filter((child) => !isNullish(child)).map(render));
+
+	return node;
+};
+
+const withHandlers = (handlers) => (node) => {
+	const then_listen = listen(node);
+
+	ObjectNamespace.forEach(handlers, (event, handler) => {
+		then_listen(event, handler);
 	});
 
-	for (const key of standard) {
-		container[key] = props[key];
-	}
-
-	for (const key of custom) {
-		container.setAttribute(key, props[key]);
-	}
-
-	return container;
+	return node;
 };
 
-const withRef = (ref) => (container) => {
-	if (ref) ref.set(container);
+const withProps = (props) => (node) => {
+	const then_set_attribute = setAttribute(node);
 
-	return container;
+	ObjectNamespace.forEach(props, (key, value) => {
+		then_set_attribute(key, value);
+	});
+
+	return node;
+};
+
+const withRef = (ref) => (node) => {
+	if (ref) ref.set(node);
+
+	return node;
 };
 
 const mapAttributes = (attributes) => {
@@ -82,21 +87,16 @@ const mapAttributes = (attributes) => {
 };
 
 export class Framework {
-	static create(entity, attributes = {}, children = []) {
-		const element = create(entity);
-
+	static create(tagName, attributes = {}, children = []) {
 		const { ref, handlers, props } = mapAttributes(attributes);
 
-		return compose(withChildren(children), withHandlers(handlers), withProps(props), withRef(ref))(element);
-	}
-
-	static fragment(...children) {
-		const fragment = document.createDocumentFragment();
-
-		return compose(withChildren(children))(fragment);
+		return compose(withRef(ref), withChildren(children), withHandlers(handlers), withProps(props))(create(tagName));
 	}
 
 	static mount(root, node) {
+		if (!isElement(root)) {
+			throw new DOMException("Root must be valid DOM element");
+		}
 		root.replaceChildren(render(node));
 	}
 
@@ -104,32 +104,29 @@ export class Framework {
 		return node.outerHTML;
 	}
 
-	static hydrate(node, handlers) {
-		const div = Framework.create("div");
+	static hydrate(html, handlers) {
+		const then_listen = (node) => {
+			for (const child of node.children) {
+				Array.from(child.attributes)
+					.filter(({ name }) => isEventHandler(name))
+					.forEach(({ name, value, ownerElement }) => {
+						if (handlers[value]) {
+							listen(child)(name, handlers[value]);
+						}
 
-		div.insertAdjacentHTML("afterbegin", node.trim());
+						ownerElement.removeAttribute(name);
+					});
 
-		const setHandler = (nodes) => {
-			for (const node of nodes) {
-				Array.from(node.attributes).forEach(({ name, value, ownerElement }) => {
-					if (!isEventHandler(name)) {
-						return;
-					}
-
-					if (ownerElement && handlers[value]) {
-						listen(ownerElement, name, handlers[value]);
-					}
-
-					ownerElement.removeAttribute(name);
-				});
-
-				node.children && setHandler(node.children);
+				then_listen(child);
 			}
 		};
 
-		setHandler(div.children);
+		const div = create("div");
+		div.insertAdjacentHTML("afterbegin", html);
 
-		return Framework.fragment(...div.children);
+		then_listen(div.firstElementChild);
+
+		return div.firstElementChild;
 	}
 
 	static createRef(key) {

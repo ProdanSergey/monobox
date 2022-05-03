@@ -1,7 +1,10 @@
 const isObject = (v) => typeof v === "object" && !Array.isArray(v) && v !== null;
 const isFunction = (v) => typeof v === "function";
+const isString = (v) => typeof v === "string";
 const isFalsy = (v) => !v;
 const isTruthy = (v) => !isFalsy(v);
+const isNill = (v) => v === undefined || v === null;
+const isNullish = (v) => isNill(v) || v === false || (isString(v) && v.trim().length === 0);
 
 const compose =
 	(...fns) =>
@@ -62,6 +65,24 @@ class ObjectNamespace {
 	static hasProperty(v, key) {
 		return Object.prototype.hasOwnProperty.call(v, key);
 	}
+
+	static forEach(v, cb) {
+		Object.keys(v).forEach((key, index) => {
+			cb(key, v[key], index, v);
+		});
+	}
 }
 
-export { ArrayNamespace, ObjectNamespace, isObject, isFunction, isFalsy, isTruthy, template, compose };
+export {
+	ArrayNamespace,
+	ObjectNamespace,
+	isObject,
+	isFunction,
+	isString,
+	isFalsy,
+	isTruthy,
+	isNill,
+	isNullish,
+	template,
+	compose,
+};

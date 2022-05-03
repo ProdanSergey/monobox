@@ -1,5 +1,5 @@
 export class SyntheticEvent extends CustomEvent {
-	constructor(type, detail = {}) {
+	constructor(type, detail) {
 		super(type, {
 			detail,
 			bubbles: true,

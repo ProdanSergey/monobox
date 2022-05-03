@@ -6,9 +6,9 @@ import { TodoList } from "./components/todo-list";
 export class App extends BaseComponent {
 	state = { items: [] };
 
-	create = async ({ detail: { payload } }) => {
+	create = async ({ detail }) => {
 		try {
-			const { response } = await api.createTodo(payload);
+			const { response } = await api.createTodo(detail.value);
 
 			this.state.items = [...this.state.items, response];
 		} catch (err) {
@@ -16,11 +16,11 @@ export class App extends BaseComponent {
 		}
 	};
 
-	remove = async ({ detail: { payload } }) => {
+	remove = async ({ detail }) => {
 		try {
-			await api.removeTodo(payload);
+			await api.removeTodo(detail.id);
 
-			this.state.items = this.state.items.filter(({ fakeId, id }) => (fakeId ?? id) !== payload);
+			this.state.items = this.state.items.filter(({ fakeId, id }) => (fakeId ?? id) !== detail.id);
 		} catch (err) {
 			console.error(err);
 		}
