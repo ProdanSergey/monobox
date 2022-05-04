@@ -4,6 +4,7 @@ import postcss from "rollup-plugin-postcss";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import alias from "@rollup/plugin-alias";
 import copy from "rollup-plugin-copy";
+import svg from "rollup-plugin-svg";
 
 import { extname, resolve } from "path";
 
@@ -12,6 +13,7 @@ const DIGESTIVE = [".js"];
 export const utils = () => {
 	const BASE_PATH = resolve(__dirname, "./src/rollup");
 	const UTILS_PATH = resolve(__dirname, "./src/utils");
+	const ICONS_PATH = resolve(__dirname, "./src/icons");
 
 	const digest = (entry) => DIGESTIVE.some((ext) => extname(entry) === ext);
 	const directory = (entry) => !extname(entry);
@@ -29,7 +31,10 @@ export const utils = () => {
 			targets: [mapDist(dir)],
 		}),
 		alias({
-			entries: [{ find: "@utils", replacement: UTILS_PATH }],
+			entries: [
+				{ find: "@utils", replacement: UTILS_PATH },
+				{ find: "@icons", replacement: ICONS_PATH },
+			],
 		}),
 		copy({
 			targets: [{ src: mapSrc(dir, "assets/**/*"), dest: mapDist(dir, "assets") }],
@@ -40,6 +45,7 @@ export const utils = () => {
 		html({
 			template: mapSrc(dir, "index.html"),
 		}),
+		svg(),
 		nodeResolve(),
 	];
 

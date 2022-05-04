@@ -7,7 +7,8 @@
     "allowSyntheticDefaultImports": true,  
     "baseUrl": "./",
     "paths": {
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@icons/*": ["src/icons/*"]
     }
   }
 }

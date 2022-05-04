@@ -1,31 +1,39 @@
+import { image, item, span } from "@utils/dom";
+import { BYTE } from "@utils/numeric";
+
 import "./styles/index.css";
 
-const createDocument = (file) => {
-	const item = document.createElement("li");
+import { store } from "./app/store";
+import { DocumentDropzone } from "./app/document-dropzone";
+import { DocumentInput } from "./app/document-input";
+import { DocumentReader } from "./app/document-reader";
 
-	return item;
+const dropzone = document.getElementById("dropzone");
+const file = document.getElementById("file");
+
+const render = () => {
+	dropzone.innerHTML = "";
+
+	for (const file of store.values()) {
+		const thumbnail = DocumentReader(
+			file,
+			image({ className: "document__thumbnail", title: file.name, draggable: false })
+		);
+
+		const listItem = item(
+			{
+				className: "document",
+			},
+			[
+				thumbnail,
+				span({ className: "document__title", title: file.name }, [file.name]),
+				span({}, [new BYTE(file.size).toMegabytes().toString()]),
+			]
+		);
+
+		dropzone.append(listItem);
+	}
 };
 
-const FileDropzone = (dropzone, fileInput) => {
-	dropzone.addEventListener("click", () => {
-		fileInput.click();
-	});
-
-	dropzone.addEventListener("dragover", (event) => {
-		event.preventDefault();
-	});
-
-	dropzone.addEventListener("dragenter", (event) => {
-		console.log("dragenter", event);
-	});
-
-	dropzone.addEventListener("drop", (event) => {
-		event.preventDefault();
-
-		for (const dataItem of event.dataTransfer.items) {
-			const file = dataItem.getAsFile();
-		}
-	});
-};
-
-FileDropzone(document.querySelector(".dropzone"), document.querySelector("#dropzone"));
+DocumentDropzone(dropzone, render);
+DocumentInput(file, render);

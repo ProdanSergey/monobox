@@ -8,8 +8,15 @@
 </head>
 <body>
   <main>
-    <ul class="dropzone"></ul>
+    <form>
+      <ul id="dropzone" class="dropzone"></ul>
+      <label class="add-button">
+        <i class="icon">
+          <object data="./assets/icons/plus.svg"></object>
+        </i>
+        <input id="file" type="file" accept="image/*" multiple>
+      </label>
+    </form>
   </main>
-  <input type="file" name="dropzone" id="filename" multiple>
 </body>
 </html>
