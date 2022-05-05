@@ -2,7 +2,7 @@
 	"private": true,
 	"scripts": {
 		"build": "rollup -c",
-		"watch": "node watch"
+		"start": "node start"
 	},
 	"devDependencies": {
 		"@rollup/plugin-alias": "^3.1.9",

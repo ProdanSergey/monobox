@@ -6,10 +6,10 @@ class DropzoneHandler {
 			dropzone.addEventListener(eventType, this.preventDefault, false);
 		});
 
-		dropzone.addEventListener("dragenter", (event) => onEnter(this, event));
-		dropzone.addEventListener("drop", (event) => onDrop(this, event));
+		dropzone.addEventListener("dragenter", ({ dataTransfer }) => onEnter(this, dataTransfer));
+		dropzone.addEventListener("drop", ({ dataTransfer }) => onDrop(this, dataTransfer));
 
-		["dragleave", "drop"].forEach((eventType) => dropzone.addEventListener(eventType, () => this.clearInvalid));
+		["dragleave", "drop"].forEach((eventType) => dropzone.addEventListener(eventType, () => this.clearInvalid()));
 
 		this.dropzone = dropzone;
 	}
@@ -25,7 +25,7 @@ class DropzoneHandler {
 	}
 
 	isInvalid() {
-		return this.dropzone.attributes["aria-invalid"];
+		return this.dropzone.hasAttribute("aria-invalid");
 	}
 
 	preventDefault(event) {
@@ -36,19 +36,17 @@ class DropzoneHandler {
 export const DocumentDropzone = (dropzone, render) => {
 	return new DropzoneHandler(
 		dropzone,
-		(dropzone, event) => {
-			const { dataTransfer } = event;
-
-			if (Array.from(dataTransfer.items).some(({ type }) => !type.startsWith("image/"))) {
+		(dropzone, { items }) => {
+			if (Array.from(items).some(({ type }) => !type.startsWith("image/"))) {
 				dropzone.setInvalid();
 			}
 		},
-		(dropzone, event) => {
+		(dropzone, { files }) => {
 			if (dropzone.isInvalid()) {
 				return;
 			}
 
-			for (const file of event.dataTransfer.files) {
+			for (const file of files) {
 				store.set(file.name, file);
 			}
 
