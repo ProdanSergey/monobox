@@ -4,7 +4,7 @@ import postcss from "rollup-plugin-postcss";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import alias from "@rollup/plugin-alias";
 import copy from "rollup-plugin-copy";
-import svg from "rollup-plugin-svg";
+import svg from "rollup-plugin-svg-import";
 
 import { extname, resolve } from "path";
 

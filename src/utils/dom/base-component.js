@@ -1,5 +1,6 @@
 import { isObject, ObjectNamespace } from "@utils/fn";
 import { State } from "@utils/state";
+import { render } from "./utils/render";
 import { SyntheticEvent } from "./events";
 
 const COMPONENT_MEMBER = {
@@ -10,7 +11,15 @@ export class BaseComponent {
 	#node = null;
 
 	constructor(props = {}) {
-		this.props = Object.freeze(props);
+		this.props = Object.freeze(
+			ObjectNamespace.map(props, (key, value) => {
+				if (key === "children") {
+					return render(value);
+				}
+
+				return value;
+			})
+		);
 
 		let mounted = false;
 		let prevProps = props;
@@ -93,4 +102,8 @@ export class BaseComponent {
 	emit = (type, detail) => {
 		this.#node.dispatchEvent(new SyntheticEvent(type, detail));
 	};
+
+	findNode(selector) {
+		return this.#node?.querySelector(selector);
+	}
 }

@@ -73,5 +73,16 @@ export const DATE = (function () {
 
 			return [];
 		},
+		getTime() {
+			const moment = new Date();
+
+			return {
+				h: moment.getHours(),
+				H: moment.getHours() % 12,
+				m: moment.getMinutes(),
+				s: moment.getSeconds(),
+				ms: moment.getMilliseconds(),
+			};
+		},
 	};
 })();

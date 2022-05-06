@@ -1,5 +1,7 @@
 import { ArrayNamespace, compose, isNullish, ObjectNamespace } from "@utils/fn";
-import { isComponent, isFunctionComponent, isEventHandler, isElement } from "./utils/fn";
+import { setAttribute } from "./utils/set-attribute";
+import { render } from "./utils/render";
+import { isEventHandler, isElement } from "./utils/fn";
 
 const create = (node) => {
 	if (isElement(node)) {
@@ -8,20 +10,11 @@ const create = (node) => {
 
 	return document.createElement(node);
 };
-
-const render = (node) => {
-	if (isComponent(node)) {
-		return node.render();
-	}
-
-	if (isFunctionComponent(node)) {
-		return node();
-	}
-
-	return node;
-};
-
 const listen = (node) => (event, handler) => {
+	if (!handler) {
+		return;
+	}
+
 	const type = event.slice(1).toLowerCase();
 
 	node.addEventListener(type, handler);
@@ -29,15 +22,6 @@ const listen = (node) => (event, handler) => {
 	return () => {
 		node.removeEventListener(type, handler);
 	};
-};
-
-const setAttribute = (node) => (key, value) => {
-	if (key in node) {
-		node[key] = value;
-		return;
-	}
-
-	node.setAttribute(key, value);
 };
 
 const withChildren = (children) => (node) => {

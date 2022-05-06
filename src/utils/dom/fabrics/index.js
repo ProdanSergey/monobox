@@ -23,6 +23,10 @@ export const span = (attributes, children) => {
 	return Framework.create("span", attributes, children);
 };
 
+export const article = (attributes, children) => {
+	return Framework.create("article", attributes, children);
+};
+
 export const section = (attributes, children) => {
 	return Framework.create("section", attributes, children);
 };
