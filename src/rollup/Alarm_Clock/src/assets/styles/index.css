@@ -1,0 +1,73 @@
+:root {
+  --color--positive: #0ead69;
+  --color--negative: #ee4266;
+  --theme-background: #343535;
+  --theme-color: #008000;
+}
+
+:root.set-alarm {
+  --theme-background: #ffd166;
+  --theme-color: #001219;
+}
+
+:root.alarm {
+  --theme-background: #66ff91;
+  --theme-color: #fdfdfd;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 64px;
+  width: 100%;
+  height: 100vh;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#frame, #root, .screen, .app {
+  width: 100%;
+  height: 100%;
+}
+
+#slot {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+#root {
+  position: relative;
+}
+
+.screen {
+  display: grid;
+  grid-template-rows: minmax(1rem, auto) 1fr;
+  background: var(--theme-background);
+}
+
+.clock__icon {
+  color: var(--theme-color);
+}
+
+.set-alarm__submit {
+  color: var(--color--positive);
+}
+
+.set-alarm__reject {
+  color: var(--color--negative);
+}
+
+.alarm__message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "DS Digital";
+  font-size: 6rem;
+}

@@ -32,15 +32,15 @@ export class BaseComponent {
 			if (!is_mounted()) mounted = true;
 		};
 
-		const mount = (render) => {
+		const mount = (node) => {
 			this.onBeforeMount?.();
-			seed(render);
+			seed(node);
 			this.onMount?.();
 		};
 
-		const update = (render) => {
-			this.#node.replaceWith(render);
-			seed(render);
+		const update = (node) => {
+			this.#node.replaceWith(node);
+			seed(node);
 			this.onUpdate?.(prevProps, prevState);
 		};
 
@@ -59,14 +59,14 @@ export class BaseComponent {
 
 				if (key === COMPONENT_MEMBER.RENDER) {
 					return () => {
-						const render = self.render();
+						const node = render(self.render());
 
 						requestAnimationFrame(() => {
-							is_mounted() ? update(render) : mount(render);
+							is_mounted() ? update(node) : mount(node);
 							snapshot();
 						});
 
-						return render;
+						return node;
 					};
 				}
 

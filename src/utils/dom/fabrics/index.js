@@ -1,4 +1,5 @@
 import { Framework } from "../framework";
+import { listen } from "../utils/listen";
 
 export const div = (attributes, children) => {
 	return Framework.create("div", attributes, children);
@@ -70,4 +71,16 @@ export const image = (attributes, children) => {
 
 export const anchor = (attributes, children) => {
 	return Framework.create("a", attributes, children);
+};
+
+export const form = (attributes, children) => {
+	const form = Framework.create("form", attributes, children);
+
+	listen(form)("@submit", (e) => e.preventDefault());
+
+	return form;
+};
+
+export const input = (attributes, children) => {
+	return Framework.create("input", attributes, children);
 };

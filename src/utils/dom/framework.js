@@ -1,6 +1,7 @@
 import { ArrayNamespace, compose, isNullish, ObjectNamespace } from "@utils/fn";
 import { setAttribute } from "./utils/set-attribute";
 import { render } from "./utils/render";
+import { listen } from "./utils/listen";
 import { isEventHandler, isElement } from "./utils/fn";
 
 const create = (node) => {
@@ -9,19 +10,6 @@ const create = (node) => {
 	}
 
 	return document.createElement(node);
-};
-const listen = (node) => (event, handler) => {
-	if (!handler) {
-		return;
-	}
-
-	const type = event.slice(1).toLowerCase();
-
-	node.addEventListener(type, handler);
-
-	return () => {
-		node.removeEventListener(type, handler);
-	};
 };
 
 const withChildren = (children) => (node) => {

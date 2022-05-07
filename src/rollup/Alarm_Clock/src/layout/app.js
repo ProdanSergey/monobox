@@ -1,12 +1,9 @@
-import { section } from "@utils/dom";
-import { ClockStatusBar } from "./clock.statusbar";
+import { BaseComponent, div } from "@utils/dom";
+import { AlarmScreen } from "./alarm.screen";
 import { ClockScreen } from "./clock.screen";
 
-export const App = () => {
-	return section(
-		{
-			className: "app",
-		},
-		[new ClockStatusBar(), new ClockScreen()]
-	);
-};
+export class App extends BaseComponent {
+	render() {
+		return div({ className: "app" }, [new ClockScreen(), new AlarmScreen()]);
+	}
+}

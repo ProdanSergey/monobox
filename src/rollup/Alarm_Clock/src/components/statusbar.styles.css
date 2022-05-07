@@ -1,0 +1,17 @@
+.statusbar {
+  padding: 0 1rem;
+}
+
+.statusbar__list {
+  display: flex;
+  justify-content: end;
+}
+
+.statusbar__list button {
+  padding: 4px;
+  background: transparent;
+}
+
+.statusbar__icon {
+  color: var(--theme-color);
+}

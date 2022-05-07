@@ -1,13 +1,36 @@
-import { BaseComponent, button, div } from "@utils/dom";
-import { Face } from "../components/face.component";
+import { BaseComponent, div, span } from "@utils/dom";
+import { Dialog } from "../components/dialog.component";
+import { StatusBar } from "../components/statusbar.component";
+import { toggleTheme } from "../helpers/theme";
+
+class Screen extends BaseComponent {
+	render() {
+		return div({ className: "screen alarm" }, [
+			new StatusBar(),
+			div({ className: "alarm__message" }, [span({}, ["Wake Up!"])]),
+		]);
+	}
+}
 
 export class AlarmScreen extends BaseComponent {
-	render() {
-		const { onSubmit } = this.props;
+	state = { hidden: true };
 
-		return div({ className: "alarm" }, [
-			new Face({ hours: 0, minutes: 0, seconds: 0, onSubmit: this.close }),
-			button({ "@click": onSubmit }, ["Set Alarm"]),
-		]);
+	onMount() {
+		document.addEventListener("clock:alarm", () => {
+			this.state.hidden = false;
+		});
+	}
+
+	onUpdate() {
+		toggleTheme("alarm");
+	}
+
+	render() {
+		const { hidden } = this.state;
+
+		return new Dialog({
+			hidden,
+			children: new Screen(),
+		});
 	}
 }
