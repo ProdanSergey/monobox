@@ -19,10 +19,11 @@
 		"rollup-plugin-postcss": "^4.0.2",
 		"rollup-plugin-scss": "^3.0.0",
 		"rollup-plugin-serve": "^1.1.0",
-    "rollup-plugin-svg": "^2.0.0",
+		"rollup-plugin-svg-import": "^1.6.0",
 		"sass": "^1.49.8"
 	},
 	"_moduleAliases": {
-		"@utils": "./src/utils"
+		"@utils": "./src/utils",
+    "@icons": "./src/icons"
 	}
 }

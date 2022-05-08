@@ -1,0 +1,45 @@
+.face {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: "DS Digital";
+  font-size: 8rem;
+  color: var(--theme-color);
+  user-select: none;
+  text-align: center;
+}
+
+.face__digit {
+  width: 2ch;
+}
+
+.face__input {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-size: 8rem;
+  color: var(--theme-color);
+  text-align: center;
+  width: 2ch;
+  background: none;
+  border: 0;
+  outline: 0;
+}
+
+.face__separator {
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+.face__seconds {
+  font-size: 2rem;
+}
+
+@keyframes blink {
+  0% { opacity: 1 }
+  10% { opacity: 0}
+  50% { opacity: 1};
+  90% { opacity: 0};
+  100% { opacity: 1 }
+}

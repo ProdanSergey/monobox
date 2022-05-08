@@ -1,0 +1,8 @@
+.clock {
+  --theme-background: #343535;
+  --theme-color: #008000;
+}
+
+.clock__icon {
+  color: var(--theme-color);
+}

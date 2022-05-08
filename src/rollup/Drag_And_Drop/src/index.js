@@ -1,4 +1,3 @@
-import { even } from "src/rollup/Symbol_Iterator_Generator/src/app/odd-even";
 import "./styles/index.css";
 
 const from = document.querySelector(".list:not([data-dropzone])");

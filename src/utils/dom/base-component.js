@@ -1,5 +1,6 @@
 import { isObject, ObjectNamespace } from "@utils/fn";
 import { State } from "@utils/state";
+import { render } from "./utils/render";
 import { SyntheticEvent } from "./events";
 
 const COMPONENT_MEMBER = {
@@ -10,7 +11,15 @@ export class BaseComponent {
 	#node = null;
 
 	constructor(props = {}) {
-		this.props = Object.freeze(props);
+		this.props = Object.freeze(
+			ObjectNamespace.map(props, (key, value) => {
+				if (key === "children") {
+					return render(value);
+				}
+
+				return value;
+			})
+		);
 
 		let mounted = false;
 		let prevProps = props;
@@ -23,15 +32,15 @@ export class BaseComponent {
 			if (!is_mounted()) mounted = true;
 		};
 
-		const mount = (render) => {
+		const mount = (node) => {
 			this.onBeforeMount?.();
-			seed(render);
+			seed(node);
 			this.onMount?.();
 		};
 
-		const update = (render) => {
-			this.#node.replaceWith(render);
-			seed(render);
+		const update = (node) => {
+			this.#node.replaceWith(node);
+			seed(node);
 			this.onUpdate?.(prevProps, prevState);
 		};
 
@@ -50,21 +59,21 @@ export class BaseComponent {
 
 				if (key === COMPONENT_MEMBER.RENDER) {
 					return () => {
-						const render = self.render();
+						const node = render(self.render());
 
 						requestAnimationFrame(() => {
-							is_mounted() ? update(render) : mount(render);
+							is_mounted() ? update(node) : mount(node);
 							snapshot();
 						});
 
-						return render;
+						return node;
 					};
 				}
 
 				return reflect();
 			},
 			set(self, key, value) {
-				const reflect = (value) => Reflect.set(self, key, new State(value).subscribe(renderer));
+				const reflect = (value) => Reflect.set(self, key, value);
 
 				if (key === COMPONENT_MEMBER.STATE) {
 					return reflect(new State(value).subscribe(renderer));
@@ -93,4 +102,12 @@ export class BaseComponent {
 	emit = (type, detail) => {
 		this.#node.dispatchEvent(new SyntheticEvent(type, detail));
 	};
+
+	on = (type, callback) => {
+		document.addEventListener(type, callback);
+	};
+
+	findNode(selector) {
+		return this.#node?.querySelector(selector);
+	}
 }

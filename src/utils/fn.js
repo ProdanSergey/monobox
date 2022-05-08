@@ -71,6 +71,14 @@ class ObjectNamespace {
 			cb(key, v[key], index, v);
 		});
 	}
+
+	static map(v, cb) {
+		return Object.keys(v).reduce((acc, key, index) => {
+			acc[key] = cb(key, v[key], index, v);
+
+			return acc;
+		}, {});
+	}
 }
 
 export {
