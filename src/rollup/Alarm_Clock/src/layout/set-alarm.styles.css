@@ -1,0 +1,17 @@
+.set-alarm {
+  --theme-background: #ffd166;
+  --theme-color: #001219;
+}
+
+.set-alarm__statusbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.set-alarm__negative {
+  color: var(--feedback-negative);
+}
+
+.set-alarm__positive {
+  color: var(--feedback-positive);
+}

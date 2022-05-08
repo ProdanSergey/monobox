@@ -73,7 +73,7 @@ export class BaseComponent {
 				return reflect();
 			},
 			set(self, key, value) {
-				const reflect = (value) => Reflect.set(self, key, new State(value).subscribe(renderer));
+				const reflect = (value) => Reflect.set(self, key, value);
 
 				if (key === COMPONENT_MEMBER.STATE) {
 					return reflect(new State(value).subscribe(renderer));
@@ -101,6 +101,10 @@ export class BaseComponent {
 
 	emit = (type, detail) => {
 		this.#node.dispatchEvent(new SyntheticEvent(type, detail));
+	};
+
+	on = (type, callback) => {
+		document.addEventListener(type, callback);
 	};
 
 	findNode(selector) {

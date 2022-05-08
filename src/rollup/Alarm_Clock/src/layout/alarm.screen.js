@@ -1,36 +1,34 @@
-import { BaseComponent, div, span } from "@utils/dom";
-import { Dialog } from "../components/dialog.component";
+import { BaseComponent, div, h2, span } from "@utils/dom";
+import tickIcon from "../assets/icons/tick.svg";
+import { ButtonWithIcon } from "../components/button.component";
 import { StatusBar } from "../components/statusbar.component";
-import { toggleTheme } from "../helpers/theme";
 
-class Screen extends BaseComponent {
-	render() {
-		return div({ className: "screen alarm" }, [
-			new StatusBar(),
-			div({ className: "alarm__message" }, [span({}, ["Wake Up!"])]),
-		]);
-	}
-}
+import "./alarm.styles.css";
 
 export class AlarmScreen extends BaseComponent {
-	state = { hidden: true };
+	dismiss = () => {
+		this.emit("alarm:dismiss");
+		this.emit("dialog:close", "alarm-dialog");
+	};
 
 	onMount() {
-		document.addEventListener("clock:alarm", () => {
-			this.state.hidden = false;
+		this.on("alarm:active", () => {
+			this.emit("dialog:open", "alarm-dialog");
 		});
-	}
-
-	onUpdate() {
-		toggleTheme("alarm");
 	}
 
 	render() {
-		const { hidden } = this.state;
-
-		return new Dialog({
-			hidden,
-			children: new Screen(),
-		});
+		return div({ className: "screen alarm" }, [
+			new StatusBar({
+				children: [
+					new ButtonWithIcon({
+						icon: tickIcon(),
+						onClick: this.dismiss,
+						className: "alarm__icon",
+					}),
+				],
+			}),
+			h2({ className: "alarm__message" }, [span({}, ["Wake Up!"])]),
+		]);
 	}
 }

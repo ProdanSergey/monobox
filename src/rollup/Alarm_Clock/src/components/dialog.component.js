@@ -2,29 +2,29 @@ import { article, BaseComponent, classnames } from "@utils/dom";
 
 import "./dialog.styles.css";
 
-const dialogContext = new Map();
-
-export const openDialog = (id) => {
-	dialogContext.get(id)?.classList.add("dialog--hidden");
-};
-
-export const closeDialog = (id) => {
-	dialogContext.get(id)?.classList.remove("dialog--hidden");
-};
-
-export const toggleDialog = (id) => {
-	dialogContext.get(id)?.classList.toggle("dialog--hidden");
-};
-
 export class Dialog extends BaseComponent {
-	constructor(props) {
-		super(props);
+	state = { hidden: this.props.hidden ?? true };
 
-		dialogContext.set(props.id, this);
+	open = ({ detail }) => {
+		const { id } = this.props;
+
+		if (detail === id) this.state.hidden = false;
+	};
+
+	close = ({ detail }) => {
+		const { id } = this.props;
+
+		if (detail === id) this.state.hidden = true;
+	};
+
+	onMount() {
+		this.on("dialog:open", this.open);
+		this.on("dialog:close", this.close);
 	}
 
 	render() {
-		const { hidden, className, children } = this.props;
+		const { hidden } = this.state;
+		const { className, children } = this.props;
 
 		return article({ className: classnames("dialog", { ["dialog--hidden"]: hidden }, className) }, [children]);
 	}

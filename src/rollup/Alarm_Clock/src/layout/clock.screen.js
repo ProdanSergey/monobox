@@ -2,56 +2,37 @@ import { DATE } from "@utils/date";
 import { article, BaseComponent, div } from "@utils/dom";
 import alertOff from "../assets/icons/alert-off.svg";
 import alertOn from "../assets/icons/alert-on.svg";
+import alertOnRepeatable from "../assets/icons/alert-on-repeatable.svg";
 import { ButtonWithIcon } from "../components/button.component";
-import { Dialog } from "../components/dialog.component";
 import { Face } from "../components/face.component";
 import { StatusBar } from "../components/statusbar.component";
-import { toggleTheme } from "../helpers/theme";
-import { SetAlarmScreen } from "./set-alarm.screen";
+
+import "./clock.styles.css";
 
 class SetAlarm extends BaseComponent {
-	state = { alarm: { hidden: true, active: false } };
+	state = { alarm: { active: false, repeatable: false } };
 
-	timerId = null;
-
-	open = () => {
-		this.state.alarm = { ...this.state.alarm, hidden: false };
+	click = () => {
+		this.emit("dialog:open", "set-alarm-dialog");
 	};
 
-	close = () => {
-		this.state.alarm = { ...this.state.alarm, hidden: true };
-	};
-
-	submit = ({ ms }) => {
-		this.state.alarm = { hidden: true, active: true };
-
-		if (this.timerId) {
-			clearTimeout(this.timerId);
-		}
-
-		this.timerId = setTimeout(() => {
-			this.emit("clock:alarm");
-		}, ms);
-	};
-
-	onUpdate() {
-		toggleTheme("set-alarm");
+	onMount() {
+		this.on("alarm:set", ({ detail: { repeatable } }) => {
+			this.state.alarm = { active: true, repeatable };
+		});
+		this.on("alarm:dismiss", () => {
+			this.state.alarm = { active: true, repeatable: false };
+		});
 	}
 
 	render() {
-		const { hidden, active } = this.state.alarm;
+		const { active, repeatable } = this.state.alarm;
 
-		return div({}, [
-			new ButtonWithIcon({
-				icon: active ? alertOn() : alertOff(),
-				className: "clock__icon",
-				onClick: this.open,
-			}),
-			new Dialog({
-				hidden,
-				children: new SetAlarmScreen({ onSubmit: this.submit, onClose: this.close }),
-			}),
-		]);
+		return new ButtonWithIcon({
+			icon: active ? (repeatable ? alertOnRepeatable() : alertOn()) : alertOff(),
+			className: "clock__icon",
+			onClick: this.click,
+		});
 	}
 }
 
@@ -82,12 +63,53 @@ class ClockFace extends BaseComponent {
 }
 
 export class ClockScreen extends BaseComponent {
+	timerId = null;
+	repeatable = false;
+
+	clearAlarm() {
+		clearTimeout(this.timerId);
+	}
+
+	setRepeatableAlarm() {
+		this.timerId = setInterval(() => {
+			this.emit("alarm:active");
+		}, 1000 * 60 * 60);
+	}
+
+	setAlarm = ({ ms }, repeatable) => {
+		if (this.timerId) {
+			this.clearAlarm();
+		}
+
+		this.timerId = setTimeout(() => {
+			this.emit("alarm:active");
+
+			if (repeatable) {
+				this.setRepeatableAlarm();
+			}
+		}, ms);
+	};
+
+	onMount() {
+		this.on("alarm:set", ({ detail: { alarm, repeatable } }) => {
+			this.setAlarm(alarm, repeatable);
+		});
+		this.on("alarm:clear", () => {
+			this.clearAlarm();
+		});
+	}
+
 	render() {
 		return div(
 			{
 				className: "screen clock",
 			},
-			[new StatusBar({ children: [new SetAlarm()] }), new ClockFace()]
+			[
+				new StatusBar({
+					children: [new SetAlarm()],
+				}),
+				new ClockFace(),
+			]
 		);
 	}
 }

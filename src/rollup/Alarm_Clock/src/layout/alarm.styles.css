@@ -1,0 +1,17 @@
+.alarm {
+  --theme-background: #66ff91;
+  --theme-color: #fdfdfd;
+}
+
+.alarm__icon {
+  color: var(--feedback-positive);
+}
+
+.alarm__message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "DS Digital";
+  font-size: 6rem;
+  margin: 0;
+}

@@ -1,18 +1,6 @@
 :root {
-  --color--positive: #0ead69;
-  --color--negative: #ee4266;
-  --theme-background: #343535;
-  --theme-color: #008000;
-}
-
-:root.set-alarm {
-  --theme-background: #ffd166;
-  --theme-color: #001219;
-}
-
-:root.alarm {
-  --theme-background: #66ff91;
-  --theme-color: #fdfdfd;
+  --feedback-positive: #0ead69;
+  --feedback-negative: #ee4266;
 }
 
 *, *::before, *::after {
@@ -50,24 +38,5 @@ ul {
   display: grid;
   grid-template-rows: minmax(1rem, auto) 1fr;
   background: var(--theme-background);
-}
-
-.clock__icon {
   color: var(--theme-color);
-}
-
-.set-alarm__submit {
-  color: var(--color--positive);
-}
-
-.set-alarm__reject {
-  color: var(--color--negative);
-}
-
-.alarm__message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "DS Digital";
-  font-size: 6rem;
 }
