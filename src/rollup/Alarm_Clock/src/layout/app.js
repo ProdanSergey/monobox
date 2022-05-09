@@ -1,8 +1,8 @@
 import { BaseComponent, div } from "@utils/dom";
-import { Dialog } from "../components/dialog.component";
-import { AlarmScreen } from "./alarm.screen";
-import { ClockScreen } from "./clock.screen";
-import { SetAlarmScreen } from "./set-alarm.screen";
+import { Dialog } from "../components/dialog";
+import { AlarmScreen } from "./screen/alarm";
+import { ClockScreen } from "./screen/clock";
+import { SetAlarmScreen } from "./screen/set-alarm";
 
 export class App extends BaseComponent {
 	render() {

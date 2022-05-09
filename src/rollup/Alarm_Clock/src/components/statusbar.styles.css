@@ -7,9 +7,8 @@
   justify-content: end;
 }
 
-.statusbar__list button {
+.statusbar__item {
   padding: 4px;
-  background: transparent;
 }
 
 .statusbar__icon {

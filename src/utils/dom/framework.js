@@ -1,16 +1,9 @@
 import { ArrayNamespace, compose, isNullish, ObjectNamespace } from "@utils/fn";
-import { setAttribute } from "./utils/set-attribute";
+import { isEventHandler, isElement } from "./utils/fn";
+import { setAttribute, mapAttributes } from "./utils/attributes";
+import { create } from "./utils/create";
 import { render } from "./utils/render";
 import { listen } from "./utils/listen";
-import { isEventHandler, isElement } from "./utils/fn";
-
-const create = (node) => {
-	if (isElement(node)) {
-		return node;
-	}
-
-	return document.createElement(node);
-};
 
 const withChildren = (children) => (node) => {
 	node.append(...children.filter((child) => !isNullish(child)).map(render));
@@ -44,20 +37,6 @@ const withRef = (ref) => (node) => {
 	return node;
 };
 
-const mapAttributes = (attributes) => {
-	const [refKey, handlerKeys, propsKeys] = ArrayNamespace.segregate(
-		Object.keys(attributes),
-		(key) => key === "ref",
-		(key) => key.startsWith("@")
-	);
-
-	return {
-		ref: attributes[refKey],
-		handlers: ObjectNamespace.pick(attributes, handlerKeys),
-		props: ObjectNamespace.pick(attributes, propsKeys),
-	};
-};
-
 export class Framework {
 	static create(tagName, attributes = {}, children = []) {
 		const { ref, handlers, props } = mapAttributes(attributes);
@@ -79,15 +58,15 @@ export class Framework {
 	static hydrate(html, handlers) {
 		const then_listen = (node) => {
 			for (const child of node.children) {
-				Array.from(child.attributes)
-					.filter(({ name }) => isEventHandler(name))
-					.forEach(({ name, value, ownerElement }) => {
-						if (handlers[value]) {
-							listen(child)(name, handlers[value]);
-						}
+				const [handlerKeys] = ArrayNamespace.segregate(Array.from(child.attributes), (key) => isEventHandler(key));
 
-						ownerElement.removeAttribute(name);
-					});
+				handlerKeys.forEach(({ name, value, ownerElement }) => {
+					if (handlers[value]) {
+						listen(child)(name, handlers[value]);
+					}
+
+					ownerElement.removeAttribute(name);
+				});
 
 				then_listen(child);
 			}

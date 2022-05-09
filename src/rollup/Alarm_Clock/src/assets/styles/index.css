@@ -1,4 +1,5 @@
 :root {
+  --feedback-neutral: #0e65ad;
   --feedback-positive: #0ead69;
   --feedback-negative: #ee4266;
 }

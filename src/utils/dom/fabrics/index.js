@@ -81,6 +81,10 @@ export const form = (attributes, children) => {
 	return form;
 };
 
+export const label = (attributes, children) => {
+	return Framework.create("label", attributes, children);
+};
+
 export const input = (attributes, children) => {
 	return Framework.create("input", attributes, children);
 };

@@ -1,5 +1,5 @@
 import { BaseComponent, button, classnames } from "@utils/dom";
-import { Icon } from "./icon.component";
+import { Icon } from "./icon";
 
 import "./button.style.css";
 

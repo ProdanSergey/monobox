@@ -53,18 +53,31 @@ const FaceInput = (name, value, className) => {
 };
 
 export class EditableFace extends BaseComponent {
-	handleSubmit = ({ target: { hours, minutes, seconds } }) => {
-		this.props.onSubmit?.([hours, minutes, seconds].map((el) => el.value).join(":"));
+	submit = ({ target }) => {
+		this.props.onSubmit?.(this.serialize(target));
 	};
 
-	render() {
-		const { name } = this.props;
+	serialize(target) {
+		const formData = new FormData(target);
 
-		return form({ id: name, name, novalidate: true, className: "face", "@submit": this.handleSubmit }, [
+		return Array.from(new Set(formData.keys())).reduce(
+			(state, key) => ({
+				...state,
+				[key]: formData.get(key),
+			}),
+			{}
+		);
+	}
+
+	render() {
+		const { id, children } = this.props;
+
+		return form({ id, name: id, novalidate: true, className: "face", "@submit": this.submit }, [
 			FaceInput("hours", 0),
 			span({ className: "face__separator" }, [":"]),
 			FaceInput("minutes", 0),
 			FaceInput("seconds", 0, "face__seconds"),
+			...children,
 		]);
 	}
 }
