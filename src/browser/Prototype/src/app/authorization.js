@@ -1,4 +1,8 @@
-const Account = function Account(data) {
+import { STDIN } from "@utils/stdin";
+import { Repository } from "./repository";
+import { User } from "./user";
+
+export const Account = function Account(data) {
 	User.call(this, data);
 
 	const props = {
@@ -19,7 +23,7 @@ Account.prototype = Object.create(User.prototype, {
 	},
 });
 
-const SuperAdmin = function SuperAdmin(data = {}) {
+export const SuperAdmin = function SuperAdmin(data = {}) {
 	Account.call(this, {
 		...data,
 		role: "SuperAdmin",
@@ -33,7 +37,7 @@ SuperAdmin.prototype = Object.create(Account.prototype, {
 	},
 });
 
-const Admin = function Admin(data = {}) {
+export const Admin = function Admin(data = {}) {
 	Account.call(this, {
 		...data,
 		role: "Admin",
@@ -47,7 +51,7 @@ Admin.prototype = Object.create(Account.prototype, {
 	},
 });
 
-const Guest = function Guest() {
+export const Guest = function Guest() {
 	Account.call(this, {
 		role: "Guest",
 		permissions: [],
@@ -60,7 +64,7 @@ Guest.prototype = Object.create(Account.prototype, {
 	},
 });
 
-const Authorization = (() => {
+export const Authorization = (() => {
 	const _private = new WeakMap();
 
 	function Authorization() {
@@ -84,11 +88,7 @@ const Authorization = (() => {
 		constructor: Authorization,
 
 		signIn() {
-			const email = STDIN.string(
-				"Enter registered email",
-				(value) => !value.includes("@"),
-				true
-			);
+			const email = STDIN.string("Enter registered email", (value) => !value.includes("@"), true);
 			const password = STDIN.string("Enter password", void 0, true);
 
 			const user = this.findUserByEmail(email);
@@ -113,11 +113,7 @@ const Authorization = (() => {
 
 			const MIN_LENGTH = 9;
 
-			account.email = STDIN.string(
-				"Enter email",
-				(value) => !value.includes("@") || this.hasUser(value),
-				true
-			);
+			account.email = STDIN.string("Enter email", (value) => !value.includes("@") || this.hasUser(value), true);
 			account.password = STDIN.string(
 				`Enter password: min length ${MIN_LENGTH} symbols`,
 				(value) => value.length < MIN_LENGTH,
@@ -154,9 +150,7 @@ const Authorization = (() => {
 		},
 
 		grant(email, role) {
-			const index = _private
-				.get(this)
-				.repository.findIndex((user) => user.email === email);
+			const index = _private.get(this).repository.findIndex((user) => user.email === email);
 
 			if (index < 0) {
 				console.log("Operation forbidden, user not found");

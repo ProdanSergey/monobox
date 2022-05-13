@@ -1,3 +1,7 @@
+import { DATE } from "@utils/date";
+import { STDIN } from "@utils/stdin";
+import { archiveFactory, userFactory } from "./app/factories";
+
 const fuse = (app, features) => ({
 	choose() {
 		const WELCOME_MESSAGE = this.mapFeaturesToWelcomeMessage(features);
@@ -10,9 +14,7 @@ const fuse = (app, features) => ({
 	mapFeaturesToWelcomeMessage() {
 		const list = features.map(([name], index) => `${index} - ${name}`);
 
-		return `Hello! You can choose one of the available features from the list:\n\n${list.join(
-			"\n"
-		)}`;
+		return `Hello! You can choose one of the available features from the list:\n\n${list.join("\n")}`;
 	},
 
 	run(index) {
@@ -89,10 +91,7 @@ const APP = {
 			return value < MIN_YEAR || value > MAX_YEAR;
 		};
 
-		user.year = STDIN.number(
-			`Enter user's birth year pls, min: ${MIN_YEAR}, max: ${MAX_YEAR}`,
-			yearValidator
-		);
+		user.year = STDIN.number(`Enter user's birth year pls, min: ${MIN_YEAR}, max: ${MAX_YEAR}`, yearValidator);
 
 		const MIN_MONTH = 1;
 		const MAX_MONTH = 12;
@@ -101,10 +100,7 @@ const APP = {
 			return value < MIN_MONTH || value > MAX_MONTH;
 		};
 
-		user.month = STDIN.number(
-			`Enter user's birth month pls, min: ${MIN_MONTH}, max: ${MAX_MONTH}`,
-			monthValidator
-		);
+		user.month = STDIN.number(`Enter user's birth month pls, min: ${MIN_MONTH}, max: ${MAX_MONTH}`, monthValidator);
 
 		const MIN_DAY = 1;
 		const MAX_DAY = DATE.getMaxDay(user.year, user.month);
@@ -113,35 +109,26 @@ const APP = {
 			return value < MIN_DAY || value > MAX_DAY;
 		};
 
-		user.day = STDIN.number(
-			`Enter user's birth day pls, min: ${MIN_DAY}, max: ${MAX_DAY}`,
-			dayValidator
-		);
+		user.day = STDIN.number(`Enter user's birth day pls, min: ${MIN_DAY}, max: ${MAX_DAY}`, dayValidator);
 
 		this.archive.add(user);
 	},
 
 	deleteUser() {
 		if (this.archive.isEmpty()) {
-			return console.log(
-				"Forbidden operation. There are no users yet in archive"
-			);
+			return console.log("Forbidden operation. There are no users yet in archive");
 		}
 
 		const MIN_INDEX = 0;
 		const MAX_INDEX = this.archive.count() - 1;
 
-		const range = this.archive
-			.take()
-			.map((user, index) => `[${index}]: ${user.fullName}`);
+		const range = this.archive.take().map((user, index) => `[${index}]: ${user.fullName}`);
 
 		const indexValidator = function (value) {
 			return value < MIN_INDEX || value > MAX_INDEX;
 		};
 
-		const message = `Enter index, choose one from a list:\n\n${range.join(
-			"\n"
-		)}`;
+		const message = `Enter index, choose one from a list:\n\n${range.join("\n")}`;
 
 		const indexToBeDeleted = STDIN.number(message, indexValidator);
 
@@ -160,11 +147,7 @@ const APP = {
 			const yearType = DATE.isLeapYear(user.year) ? " (is leap year)" : "";
 			const [zodiacName, zodiacSign] = DATE.getZodiac(user.month, user.day);
 
-			console.log(
-				`[${index + 1}]: ${user.fullName}, ${
-					user.age
-				} age old${yearType} ${zodiacName} ${zodiacSign}`
-			);
+			console.log(`[${index + 1}]: ${user.fullName}, ${user.age} age old${yearType} ${zodiacName} ${zodiacSign}`);
 		};
 
 		console.log(`There are ${this.archive.count()} users in archive`);
@@ -180,8 +163,7 @@ const APP = {
 
 		const query = STDIN.string(message);
 
-		const predicate = (user) =>
-			user.firstName === query || user.lastName === query;
+		const predicate = (user) => user.firstName === query || user.lastName === query;
 
 		const user = this.archive.find(predicate);
 
@@ -201,11 +183,9 @@ const APP = {
 
 		const query = STDIN.string(message);
 
-		const predicate = (user) =>
-			[user.firstName, user.lastName].some((value) => value.includes(query));
+		const predicate = (user) => [user.firstName, user.lastName].some((value) => value.includes(query));
 
-		const normalizeUser = (user, index) =>
-			`${index + 1}: ${user.fullName} - ${user.day}/${user.month}/${user.year}`;
+		const normalizeUser = (user, index) => `${index + 1}: ${user.fullName} - ${user.day}/${user.month}/${user.year}`;
 
 		const users = this.archive.filter(predicate).map(normalizeUser);
 

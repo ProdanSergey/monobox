@@ -1,4 +1,4 @@
-const userFactory = function userFactory() {
+export const userFactory = function userFactory() {
 	return {
 		firstName: null,
 		lastName: null,
@@ -9,22 +9,6 @@ const userFactory = function userFactory() {
 		get fullName() {
 			return `${this.firstName} ${this.lastName}`;
 		},
-
-		// get age() {
-		// 	const month = this.month - 1;
-
-		// 	const now = new Date();
-		// 	const birth = new Date(this.year, month, this.day);
-		// 	const birthDay = new Date(now.getFullYear(), month, this.day);
-
-		// 	const fullAge = now.getFullYear() - birth.getFullYear();
-
-		// 	if (now > birthDay) {
-		// 		return fullAge;
-		// 	}
-
-		// 	return fullAge - 1;
-		// },
 
 		get age() {
 			const now = new Date();
@@ -44,7 +28,7 @@ const userFactory = function userFactory() {
 	};
 };
 
-const archiveFactory = function archiveFactory() {
+export const archiveFactory = function archiveFactory() {
 	const entries = [];
 
 	return {

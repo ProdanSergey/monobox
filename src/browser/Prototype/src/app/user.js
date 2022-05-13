@@ -1,4 +1,4 @@
-const User = function User(data = {}) {
+export const User = function User(data = {}) {
 	const props = {
 		firstName: null,
 		lastName: null,

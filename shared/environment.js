@@ -1,7 +1,7 @@
 import { resolve } from "path";
 
 export const environment = (dirname) => {
-	const PACKAGES_PATH = resolve(dirname, "./src/packages");
+	const PACKAGES_PATH = resolve(dirname, "./src/browser");
 	const UTILS_PATH = resolve(dirname, "./src/utils");
 	const ASSETS_PATH = resolve(dirname, "./src/assets");
 
