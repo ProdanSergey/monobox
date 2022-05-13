@@ -24,6 +24,6 @@
 	},
 	"_moduleAliases": {
 		"@utils": "./src/utils",
-    "@icons": "./src/icons"
+    "@assets": "./src/assets"
 	}
 }

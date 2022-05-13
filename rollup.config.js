@@ -1,40 +1,35 @@
 import { readdir } from "fs/promises";
-import path from "path";
-
-import { utils } from "./utils/rollup";
-
-const BASE_PATH = path.resolve(__dirname, "./src/rollup");
-
-const { digest, directory, plugins, mapDist, mapSrc } = utils(BASE_PATH);
+import { utils } from "./shared/rollup";
+import { environment } from "./shared/environment";
 
 const bootstrap = async () => {
+	const { digest, directory, plugins, mapDist, mapSrc } = utils();
+
 	let packages = [];
 
-	try {
-		const files = await readdir(BASE_PATH);
+	const { PACKAGES_PATH } = environment(__dirname);
 
-		const mapProject = async (dir) => {
-			try {
-				const entries = await readdir(mapSrc(dir));
+	const files = await readdir(PACKAGES_PATH);
 
-				return entries.filter(digest).map((file) => ({
-					input: mapSrc(dir, file),
-					output: {
-						format: "iife",
-						entryFileNames: "[hash]-bundle.js",
-						dir: mapDist(dir),
-					},
-					plugins: plugins(dir),
-				}));
-			} catch (error) {
-				return [];
-			}
-		};
+	const mapProject = async (dir) => {
+		try {
+			const entries = await readdir(mapSrc(dir));
 
-		for (const dir of files.filter(directory)) packages = [...packages, ...(await mapProject(dir))];
-	} catch (err) {
-		console.error(err);
-	}
+			return entries.filter(digest).map((file) => ({
+				input: mapSrc(dir, file),
+				output: {
+					format: "iife",
+					entryFileNames: "[hash]-bundle.js",
+					dir: mapDist(dir),
+				},
+				plugins: plugins(dir),
+			}));
+		} catch (error) {
+			return [];
+		}
+	};
+
+	for (const dir of files.filter(directory)) packages = [...packages, ...(await mapProject(dir))];
 
 	return packages;
 };

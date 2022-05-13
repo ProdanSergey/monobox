@@ -1,3 +1,5 @@
+import { extname } from "path";
+
 import cleaner from "rollup-plugin-cleaner";
 import html from "rollup-plugin-html2";
 import postcss from "rollup-plugin-postcss";
@@ -6,14 +8,11 @@ import alias from "@rollup/plugin-alias";
 import copy from "rollup-plugin-copy";
 import svg from "rollup-plugin-svg-import";
 
-import { extname, resolve } from "path";
-
-const DIGESTIVE = [".js"];
+import { environment } from "./environment";
 
 export const utils = () => {
-	const BASE_PATH = resolve(__dirname, "./src/rollup");
-	const UTILS_PATH = resolve(__dirname, "./src/utils");
-	const ICONS_PATH = resolve(__dirname, "./src/icons");
+	const { PACKAGES_PATH, UTILS_PATH, ASSETS_PATH } = environment(__dirname);
+	const DIGESTIVE = [".js"];
 
 	const digest = (entry) => DIGESTIVE.some((ext) => extname(entry) === ext);
 	const directory = (entry) => !extname(entry);
@@ -21,7 +20,7 @@ export const utils = () => {
 	const mapPath =
 		(target) =>
 		(dir, file = "") =>
-			`${BASE_PATH}/${dir}/${target}` + (file && `/${file}`);
+			`${PACKAGES_PATH}/${dir}/${target}` + (file && `/${file}`);
 
 	const mapSrc = mapPath("src");
 	const mapDist = mapPath("dist");
@@ -33,7 +32,7 @@ export const utils = () => {
 		alias({
 			entries: [
 				{ find: "@utils", replacement: UTILS_PATH },
-				{ find: "@icons", replacement: ICONS_PATH },
+				{ find: "@assets", replacement: ASSETS_PATH },
 			],
 		}),
 		copy({
