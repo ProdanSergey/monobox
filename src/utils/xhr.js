@@ -6,11 +6,7 @@ export const XHR = (() => {
 	const DEFAULT_RESPONSE_TYPE = "json";
 
 	const request =
-		(
-			method = "GET",
-			headers = DEFAULT_HEADERS,
-			responseType = DEFAULT_RESPONSE_TYPE
-		) =>
+		(method = "GET", headers = DEFAULT_HEADERS, responseType = DEFAULT_RESPONSE_TYPE) =>
 		(url, body, options = {}) => {
 			return new Promise((resolve, reject) => {
 				const xhr = new XMLHttpRequest();

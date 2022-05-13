@@ -1,15 +1,22 @@
+import { readdir } from "fs/promises";
+
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
 
-import { readdir } from "fs/promises";
-
-import { utils } from "./utils/rollup";
-
-const { digest, plugins, mapDist, mapSrc } = utils();
+import { utils } from "./shared/rollup";
 
 const bootstrap = async () => {
+	const { digest, plugins, mapDist, mapSrc } = utils();
+
 	const PACKAGE = process.env.PACKAGE;
-	const entries = await readdir(mapSrc(PACKAGE));
+
+	let entries;
+
+	try {
+		entries = await readdir(mapSrc(PACKAGE));
+	} catch {
+		throw new Error(`Package "${PACKAGE}" Not Found`);
+	}
 
 	return {
 		input: entries.filter(digest).map((file) => mapSrc(PACKAGE, file)),
