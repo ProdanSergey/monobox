@@ -1,5 +1,5 @@
-import { InternalError } from "./utils/error.util";
-import { Logger } from "./utils/logger.util";
+import { InternalError } from "./utils/error";
+import { Logger } from "./utils/logger";
 import { TodoController } from "./app/todo/todo.controller";
 
 const bootstrap = () => {
@@ -14,9 +14,7 @@ const bootstrap = () => {
 	process.on("uncaughtException", handleError);
 	process.on("unhandledRejection", handleError);
 
-	const [argv] = process.argv.slice(2);
-
-	new TodoController(argv);
+	new TodoController(process.argv);
 };
 
 bootstrap();

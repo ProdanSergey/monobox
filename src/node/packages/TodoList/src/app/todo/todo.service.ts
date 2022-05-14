@@ -1,13 +1,14 @@
 import * as fs from "fs";
+import { resolve } from "path";
 import { v4 as uuid } from "uuid";
 import {
 	BadRequestError,
 	InternalError,
 	NoContentError,
 	NotFoundError,
-} from "../../utils/error.util";
+} from "../../utils/error";
 
-const filePath = "./todos.json";
+const filePath = resolve(__dirname, "../store.json");
 
 class Todo {
 	public id: string = uuid();

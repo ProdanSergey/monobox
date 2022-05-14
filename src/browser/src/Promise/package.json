@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "npm run start --prefix ../../"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^6.3.1"
+  }
+}

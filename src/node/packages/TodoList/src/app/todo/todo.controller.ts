@@ -1,15 +1,65 @@
-import { BadRequestError, InternalError } from "../../utils/error.util";
-import { Logger } from "../../utils/logger.util";
+import { BadRequestError, InternalError } from "../../utils/error";
+import { Logger } from "../../utils/logger";
 import { TodoService } from "./todo.service";
+
+interface Command {
+  execute(): void
+}
+
+class CreateCommand implements Command {
+  constructor(
+    private readonly argv: string[], 
+    private readonly logger: Logger
+  ) {}
+  
+  execute(): void {
+    
+  }
+
+
+};
+
+class ListCommand implements Command {
+  execute(argv: string[], logger: Logger): void {
+    throw new Error("Method not implemented.");
+  }
+
+};
+
+class GetCommand implements Command {
+  execute(argv: string[], logger: Logger): void {
+    throw new Error("Method not implemented.");
+  }
+
+};
+
+class ChangeStatusCommand implements Command {
+  execute(argv: string[], logger: Logger): void {
+    throw new Error("Method not implemented.");
+  }
+
+};
+
+class UpdateCommand implements Command {
+  execute(argv: string[], logger: Logger): void {
+    throw new Error("Method not implemented.");
+  }
+
+};
+
 
 export const TodoController = class TodoController {
 	constructor(
-		private readonly arg: string,
+		private readonly argv: string[],
 		private readonly logger = new Logger(),
 		private readonly todoService = new TodoService()
 	) {
 		this.handle();
 	}
+
+  private parse(): [any, any] {
+    return this.arg.split("=");
+  }
 
 	async handle(): Promise<void> {
 		try {
@@ -17,8 +67,7 @@ export const TodoController = class TodoController {
 				throw new InternalError();
 			}
 
-			const [type, value] = this.arg.split("=");
-			const [method, option] = type.split(":");
+			const [action, value] = this.parse();
 
 			switch (method) {
 				case "set":
@@ -40,6 +89,8 @@ export const TodoController = class TodoController {
 			this.logger.throw(error as Error);
 		}
 	}
+
+  
 
 	async handleSet(option: string, value: string): Promise<void> {
 		switch (value) {

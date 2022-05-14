@@ -1,0 +1,14 @@
+{
+	"name": "todo-list",
+	"version": "0.0.1",
+	"private": true,
+	"description": "",
+	"scripts": {
+		"start": "node ./dist/index.js",
+		"watch": "tsc --watch",
+		"build": "tsc",
+    "debug": "npm run build && node run start -- --inspect"
+	},
+	"author": "",
+	"license": "ISC"
+}
