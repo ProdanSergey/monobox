@@ -1,18 +1,18 @@
 import { DOMRenderer, item } from "@utils/dom";
 import { template } from "@utils/fn";
 
+import "./navigation.styles.css";
+
 export const Navigation = ({ items }) => {
 	return DOMRenderer.hydrate(`
-    <section>
+    <section class="navigation">
       <nav>
-        <ul class="navigation">
+        <ul class="links">
           ${template(
 						items,
 						({ to, title }) => `
-              <li>
-                <span>
-                  <a href="${to}">${title}</a>
-                </span>
+              <li class="link">
+                <a class="link__chip" href="${to}">${title}</a>
               </li>
             `
 					)}

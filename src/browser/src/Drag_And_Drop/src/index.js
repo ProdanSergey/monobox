@@ -3,10 +3,10 @@ import "./styles/index.css";
 const from = document.querySelector(".list:not([data-dropzone])");
 const to = document.querySelector(".list[data-dropzone]");
 
-const Draggable = (from, to) => {
+const DragAndDrop = (list, dropzone) => {
 	const store = new Map();
 
-	from.addEventListener("dragstart", (event) => {
+	list.addEventListener("dragstart", (event) => {
 		const flakeId = new Date().getTime().toString();
 
 		store.set(flakeId, event.target);
@@ -14,7 +14,7 @@ const Draggable = (from, to) => {
 		event.dataTransfer.setData("text/plain", flakeId);
 	});
 
-	from.addEventListener("dragend", (event) => {
+	list.addEventListener("dragend", (event) => {
 		event.preventDefault();
 
 		console.log("end");
@@ -22,19 +22,19 @@ const Draggable = (from, to) => {
 		store.clear();
 	});
 
-	to.addEventListener("dragenter", (event) => {
+	dropzone.addEventListener("dragenter", (event) => {
 		event.target.classList.add("active");
 	});
 
-	to.addEventListener("dragleave", (event) => {
+	dropzone.addEventListener("dragleave", (event) => {
 		event.target.classList.remove("active");
 	});
 
-	to.addEventListener("dragover", (event) => {
+	dropzone.addEventListener("dragover", (event) => {
 		event.preventDefault();
 	});
 
-	to.addEventListener("drop", (event) => {
+	dropzone.addEventListener("drop", (event) => {
 		event.preventDefault();
 		event.target.classList.remove("active");
 
@@ -52,4 +52,4 @@ const Draggable = (from, to) => {
 	});
 };
 
-Draggable(from, to);
+DragAndDrop(from, to);

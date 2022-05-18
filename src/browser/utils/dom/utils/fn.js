@@ -5,7 +5,6 @@ export const isFunctionComponent = (v) => v instanceof Function;
 export const isFragment = (v) => v instanceof DocumentFragment;
 export const isElement = (v) => v instanceof Element;
 export const isElementType = (v, tagName) => isElement(v) && v.tagName === tagName;
-export const isEventHandler = (v) => v.startsWith("@");
 
 export const hasParent = (v, selector) => {
 	if (!isElement(v)) {

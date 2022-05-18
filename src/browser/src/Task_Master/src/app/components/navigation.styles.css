@@ -1,0 +1,14 @@
+.links {
+  display: flex;
+}
+
+.link {
+  margin-right: 8px;
+}
+
+.link__chip {
+  display: block;
+  text-transform: uppercase;
+  font-size: 14px;
+  text-decoration: none;
+}

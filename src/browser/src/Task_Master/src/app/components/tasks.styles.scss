@@ -1,0 +1,15 @@
+.tasks {
+  margin-top: 2rem;
+}
+
+.task {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px dotted lightgray;
+  margin-bottom: 8px;
+  background-color: #fff;
+  
+  &[data-hover]:not([data-dragged]) {
+    background-color: salmon;
+  }
+}
