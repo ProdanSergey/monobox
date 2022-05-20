@@ -1,0 +1,9 @@
+.audio {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+}
+
+.mute {
+  font-size: 2rem;
+}

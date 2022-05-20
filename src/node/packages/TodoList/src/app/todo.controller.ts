@@ -12,14 +12,14 @@ import { ClearCommand } from "../commands/clear";
 
 export const TodoController = class TodoController {
   constructor(private readonly todoService: TodoService, private readonly logger: Logger) {
-		try {
+    try {
       this.handle();
     } catch (error) {
-			this.logger.throw(error as Error);
-		}
-	}
-  
-	async handle(): Promise<void> {
+      this.logger.throw(error as Error);
+    }
+  }
+
+  async handle(): Promise<void> {
     const [commandArg, inputArg] = mapToArguments(process.argv);
 
     switch (mapToCommand(commandArg)) {
@@ -32,7 +32,11 @@ export const TodoController = class TodoController {
       case "delete":
         return new DeleteCommand(mapToDeleteCommandInput(inputArg), this.todoService, this.logger).execute();
       case "complete":
-        return new UpdateStatusCommand(mapToUpdateStatusCommandInput(inputArg), this.todoService, this.logger).execute();
+        return new UpdateStatusCommand(
+          mapToUpdateStatusCommandInput(inputArg),
+          this.todoService,
+          this.logger
+        ).execute();
       case "list":
         return new ListCommand(mapToListCommandInput(inputArg), this.todoService, this.logger).execute();
       case "clear":
@@ -40,5 +44,5 @@ export const TodoController = class TodoController {
       default:
         throw new BadRequestError();
     }
-	}
+  }
 };

@@ -7,21 +7,21 @@ export const isElement = (v) => v instanceof Element;
 export const isElementType = (v, tagName) => isElement(v) && v.tagName === tagName;
 
 export const hasParent = (v, selector) => {
-	if (!isElement(v)) {
-		return false;
-	}
+  if (!isElement(v)) {
+    return false;
+  }
 
-	const closest = v.closest(selector);
+  const closest = v.closest(selector);
 
-	if (closest === null) {
-		return false;
-	}
+  if (closest === null) {
+    return false;
+  }
 
-	return v !== closest;
+  return v !== closest;
 };
 
 export const hasProperty = (v, property) => {
-	if (!(property in v)) {
-		return false;
-	}
+  if (!(property in v)) {
+    return false;
+  }
 };

@@ -9,87 +9,88 @@ import { Entity } from "./entity.service";
 type TableName = "appointments" | "facilities" | "doctors";
 
 const DB = {
-	appointments: [] as Appointment[],
-	facilities: [] as Facility[],
-	doctors: [] as Doctor[],
+  appointments: [] as Appointment[],
+  facilities: [] as Facility[],
+  doctors: [] as Doctor[],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PartialEntity<T> = Partial<Record<keyof T, any>>;
 
 export class Repository<T extends Entity> {
-	constructor(private readonly name: TableName) {}
+  constructor(private readonly name: TableName) {}
 
-	insert(entity: T): T {
-		const repository = DB[this.name] as T[];
+  insert(entity: T): T {
+    const repository = DB[this.name] as T[];
 
-		repository.push(entity);
+    repository.push(entity);
 
-		return entity;
-	}
+    return entity;
+  }
 
-	update(value: PartialEntity<T>, id: string): T | never {
-		const repository = DB[this.name] as T[];
+  update(value: PartialEntity<T>, id: string): T | never {
+    const repository = DB[this.name] as T[];
 
-		const index = repository.findIndex((e) => e.id === id);
+    const index = repository.findIndex((e) => e.id === id);
 
-		if (index < 0) {
-			throw new NotFoundError();
-		}
+    if (index < 0) {
+      throw new NotFoundError();
+    }
 
-		const entity = repository[index];
+    const entity = repository[index];
 
-		const updateKeys = Object.getOwnPropertyNames(value) as (keyof T)[];
+    const updateKeys = Object.getOwnPropertyNames(value) as (keyof T)[];
 
-		for (const key of updateKeys) {
-			entity[key] = value[key];
-		}
+    for (const key of updateKeys) {
+      entity[key] = value[key];
+    }
 
-		return repository[index];
-	}
+    return repository[index];
+  }
 
-	delete(id: string): T | never {
-		const repository = DB[this.name] as T[];
+  delete(id: string): T | never {
+    const repository = DB[this.name] as T[];
 
-		const index = repository.findIndex((e) => e.id === id);
+    const index = repository.findIndex((e) => e.id === id);
 
-		if (index < 0) {
-			throw new NotFoundError();
-		}
+    if (index < 0) {
+      throw new NotFoundError();
+    }
 
-		const [deleted] = repository.splice(index, 1);
+    const [deleted] = repository.splice(index, 1);
 
-		return deleted;
-	}
+    return deleted;
+  }
 
-	findOne(where: PartialEntity<T>): T | void {
-		const repository = DB[this.name] as T[];
+  findOne(where: PartialEntity<T>): T | void {
+    const repository = DB[this.name] as T[];
 
-		const index = repository.findIndex((e) => {
-			const map = flatten<PartialEntity<T>, Record<string, unknown>>(where);
+    const index = repository.findIndex((e) => {
+      const map = flatten<PartialEntity<T>, Record<string, unknown>>(where);
 
-			return Object.keys(map).every((key) => get(where, key) === get(e, key));
-		});
+      return Object.keys(map).every((key) => get(where, key) === get(e, key));
+    });
 
-		return repository[index];
-	}
+    return repository[index];
+  }
 
-	findOneOrFail(where: PartialEntity<T>): T | never {
-		const match = this.findOne(where);
+  findOneOrFail(where: PartialEntity<T>): T | never {
+    const match = this.findOne(where);
 
-		if (!match) {
-			throw new NotFoundError();
-		}
+    if (!match) {
+      throw new NotFoundError();
+    }
 
-		return match;
-	}
+    return match;
+  }
 
-	findMany(where: PartialEntity<T>): T[] {
-		const repository = DB[this.name] as T[];
+  findMany(where: PartialEntity<T>): T[] {
+    const repository = DB[this.name] as T[];
 
-		return repository.filter((e) => {
-			const keys = Object.getOwnPropertyNames(where) as (keyof T)[];
+    return repository.filter((e) => {
+      const keys = Object.getOwnPropertyNames(where) as (keyof T)[];
 
-			return keys.some((key) => where[key] === e[key]);
-		});
-	}
+      return keys.some((key) => where[key] === e[key]);
+    });
+  }
 }

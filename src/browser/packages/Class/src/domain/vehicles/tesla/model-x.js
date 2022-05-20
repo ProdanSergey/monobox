@@ -1,4 +1,3 @@
-import { Journal } from "../../journal";
 import { Computer } from "../../gadgets/computer";
 import { GPS } from "../../gadgets/gps";
 import { AutoPilot } from "../../gadgets/autopilot";

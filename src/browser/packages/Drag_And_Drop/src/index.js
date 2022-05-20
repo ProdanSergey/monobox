@@ -4,52 +4,52 @@ const from = document.querySelector(".list:not([data-dropzone])");
 const to = document.querySelector(".list[data-dropzone]");
 
 const DragAndDrop = (list, dropzone) => {
-	const store = new Map();
+  const store = new Map();
 
-	list.addEventListener("dragstart", (event) => {
-		const flakeId = new Date().getTime().toString();
+  list.addEventListener("dragstart", (event) => {
+    const flakeId = new Date().getTime().toString();
 
-		store.set(flakeId, event.target);
+    store.set(flakeId, event.target);
 
-		event.dataTransfer.setData("text/plain", flakeId);
-	});
+    event.dataTransfer.setData("text/plain", flakeId);
+  });
 
-	list.addEventListener("dragend", (event) => {
-		event.preventDefault();
+  list.addEventListener("dragend", (event) => {
+    event.preventDefault();
 
-		console.log("end");
+    console.log("end");
 
-		store.clear();
-	});
+    store.clear();
+  });
 
-	dropzone.addEventListener("dragenter", (event) => {
-		event.target.classList.add("active");
-	});
+  dropzone.addEventListener("dragenter", (event) => {
+    event.target.classList.add("active");
+  });
 
-	dropzone.addEventListener("dragleave", (event) => {
-		event.target.classList.remove("active");
-	});
+  dropzone.addEventListener("dragleave", (event) => {
+    event.target.classList.remove("active");
+  });
 
-	dropzone.addEventListener("dragover", (event) => {
-		event.preventDefault();
-	});
+  dropzone.addEventListener("dragover", (event) => {
+    event.preventDefault();
+  });
 
-	dropzone.addEventListener("drop", (event) => {
-		event.preventDefault();
-		event.target.classList.remove("active");
+  dropzone.addEventListener("drop", (event) => {
+    event.preventDefault();
+    event.target.classList.remove("active");
 
-		if (event.target.hasAttribute("data-dropzone")) {
-			console.log("drop");
+    if (event.target.hasAttribute("data-dropzone")) {
+      console.log("drop");
 
-			const flakeId = event.dataTransfer.getData("text");
+      const flakeId = event.dataTransfer.getData("text");
 
-			const target = store.get(flakeId);
+      const target = store.get(flakeId);
 
-			target.remove();
-			target.removeAttribute("draggable");
-			event.target.append(target);
-		}
-	});
+      target.remove();
+      target.removeAttribute("draggable");
+      event.target.append(target);
+    }
+  });
 };
 
 DragAndDrop(from, to);

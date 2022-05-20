@@ -1,121 +1,83 @@
 import * as express from "express";
 import type { Request, Response } from "express";
 import { AppointmentService } from "./appointment.service";
-import {
-	AppointmentDTO,
-	AppointmentsParams,
-	AppointmentParams,
-} from "./appointment.definition";
+import { AppointmentDTO, AppointmentsParams, AppointmentParams } from "./appointment.definition";
 import { UnauthorizedError } from "../../definitions/error.definition";
 
 const appointments = express.Router({ mergeParams: true });
 
 const appointmentService = new AppointmentService();
 
-appointments.post(
-	"/",
-	(
-		req: Request<AppointmentsParams, unknown, AppointmentDTO>,
-		res: Response
-	) => {
-		const userId = req.user;
+appointments.post("/", (req: Request<AppointmentsParams, unknown, AppointmentDTO>, res: Response) => {
+  const userId = req.user;
 
-		if (!userId) {
-			throw new UnauthorizedError();
-		}
+  if (!userId) {
+    throw new UnauthorizedError();
+  }
 
-		const { facilityId, doctorId } = req.params;
-		const { startAt } = req.body;
+  const { facilityId, doctorId } = req.params;
+  const { startAt } = req.body;
 
-		const response = appointmentService.create(
-			userId,
-			facilityId,
-			doctorId,
-			startAt
-		);
+  const response = appointmentService.create(userId, facilityId, doctorId, startAt);
 
-		res.json(response);
-	}
-);
+  res.json(response);
+});
 
-appointments.put(
-	"/:appointmentId",
-	(req: Request<AppointmentParams, any, AppointmentDTO>, res: Response) => {
-		const userId = req.user;
+appointments.put("/:appointmentId", (req: Request<AppointmentParams, unknown, AppointmentDTO>, res: Response) => {
+  const userId = req.user;
 
-		if (!userId) {
-			throw new UnauthorizedError();
-		}
+  if (!userId) {
+    throw new UnauthorizedError();
+  }
 
-		const { facilityId, doctorId, appointmentId } = req.params;
-		const { startAt } = req.body;
+  const { facilityId, doctorId, appointmentId } = req.params;
+  const { startAt } = req.body;
 
-		const response = appointmentService.update(
-			userId,
-			facilityId,
-			doctorId,
-			appointmentId,
-			startAt
-		);
+  const response = appointmentService.update(userId, facilityId, doctorId, appointmentId, startAt);
 
-		res.json(response);
-	}
-);
+  res.json(response);
+});
 
-appointments.delete(
-	"/:appointmentId",
-	(req: Request<AppointmentParams>, res: Response) => {
-		const userId = req.user;
+appointments.delete("/:appointmentId", (req: Request<AppointmentParams>, res: Response) => {
+  const userId = req.user;
 
-		if (!userId) {
-			throw new UnauthorizedError();
-		}
+  if (!userId) {
+    throw new UnauthorizedError();
+  }
 
-		const { facilityId, doctorId, appointmentId } = req.params;
+  const { facilityId, doctorId, appointmentId } = req.params;
 
-		appointmentService.delete(userId, facilityId, doctorId, appointmentId);
+  appointmentService.delete(userId, facilityId, doctorId, appointmentId);
 
-		res.sendStatus(204);
-	}
-);
+  res.sendStatus(204);
+});
 
-appointments.get(
-	"/:appointmentId",
-	(req: Request<AppointmentParams>, res: Response) => {
-		const userId = req.user;
+appointments.get("/:appointmentId", (req: Request<AppointmentParams>, res: Response) => {
+  const userId = req.user;
 
-		if (!userId) {
-			throw new UnauthorizedError();
-		}
+  if (!userId) {
+    throw new UnauthorizedError();
+  }
 
-		const { facilityId, doctorId, appointmentId } = req.params;
+  const { facilityId, doctorId, appointmentId } = req.params;
 
-		const response = appointmentService.find(
-			userId,
-			facilityId,
-			doctorId,
-			appointmentId
-		);
+  const response = appointmentService.find(userId, facilityId, doctorId, appointmentId);
 
-		res.json(response);
-	}
-);
+  res.json(response);
+});
 
-appointments.get(
-	"/",
-	function (req: Request<AppointmentsParams>, res: Response) {
-		const userId = req.user;
+appointments.get("/", function (req: Request<AppointmentsParams>, res: Response) {
+  const userId = req.user;
 
-		if (!userId) {
-			throw new UnauthorizedError();
-		}
+  if (!userId) {
+    throw new UnauthorizedError();
+  }
 
-		const { facilityId, doctorId } = req.params;
+  const { facilityId, doctorId } = req.params;
 
-		const response = appointmentService.list(userId, facilityId, doctorId);
+  const response = appointmentService.list(userId, facilityId, doctorId);
 
-		res.json(response);
-	}
-);
+  res.json(response);
+});
 
 export { appointments };

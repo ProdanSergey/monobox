@@ -12,27 +12,27 @@ const dropzone = document.getElementById("dropzone");
 const file = document.getElementById("file");
 
 const render = () => {
-	dropzone.innerHTML = "";
+  dropzone.innerHTML = "";
 
-	for (const file of store.values()) {
-		const thumbnail = DocumentReader(
-			file,
-			image({ className: "document__thumbnail", title: file.name, draggable: false })
-		);
+  for (const file of store.values()) {
+    const thumbnail = DocumentReader(
+      file,
+      image({ className: "document__thumbnail", title: file.name, draggable: false })
+    );
 
-		const listItem = item(
-			{
-				className: "document",
-			},
-			[
-				thumbnail,
-				span({ className: "document__title", title: file.name }, [file.name]),
-				span({}, [new BYTE(file.size).toMegabytes().toString()]),
-			]
-		);
+    const listItem = item(
+      {
+        className: "document",
+      },
+      [
+        thumbnail,
+        span({ className: "document__title", title: file.name }, [file.name]),
+        span({}, [new BYTE(file.size).toMegabytes().toString()]),
+      ]
+    );
 
-		dropzone.append(listItem);
-	}
+    dropzone.append(listItem);
+  }
 };
 
 DocumentDropzone(dropzone, render);

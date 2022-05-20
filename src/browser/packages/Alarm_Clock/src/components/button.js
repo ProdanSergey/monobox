@@ -4,11 +4,11 @@ import { Icon } from "./icon";
 import "./button.style.css";
 
 export class ButtonWithIcon extends BaseComponent {
-	render() {
-		const { icon, children, className, onClick, ...attributes } = this.props;
+  render() {
+    const { icon, children, className, onClick, ...attributes } = this.props;
 
-		return button({ "@click": onClick, className: classnames("button", className), ...attributes }, [
-			new Icon({ icon, className: "button__icon" }, [children]),
-		]);
-	}
+    return button({ "@click": onClick, className: classnames("button", className), ...attributes }, [
+      new Icon({ icon, className: "button__icon" }, [children]),
+    ]);
+  }
 }

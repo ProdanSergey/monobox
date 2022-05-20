@@ -3,25 +3,25 @@ import { BaseComponent, DOMRenderer } from "@utils/dom";
 import "./footer.styles.scss";
 
 export class Footer extends BaseComponent {
-	input = DOMRenderer.createRef("input");
+  input = DOMRenderer.createRef("input");
 
-	submit = (event) => {
-		event.preventDefault();
+  submit = (event) => {
+    event.preventDefault();
 
-		const form = event.target;
+    const form = event.target;
 
-		this.emit("task:add", { value: form.task.value });
+    this.emit("task:add", { value: form.task.value });
 
-		form.reset();
-	};
+    form.reset();
+  };
 
-	onMount() {
-		this.input.current.focus();
-	}
+  onMount() {
+    this.input.current.focus();
+  }
 
-	render() {
-		return DOMRenderer.hydrate(
-			`
+  render() {
+    return DOMRenderer.hydrate(
+      `
         <footer class="footer">
           <div class="container">
             <form class="form" @submit="submit">
@@ -30,7 +30,7 @@ export class Footer extends BaseComponent {
           </div>
         </footer>
       `,
-			{ ref: this.input, submit: this.submit }
-		);
-	}
+      { ref: this.input, submit: this.submit }
+    );
+  }
 }

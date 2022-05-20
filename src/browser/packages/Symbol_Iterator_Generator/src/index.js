@@ -1,7 +1,5 @@
 import { mutableCount } from "./app/mutable-count";
 import { even, evenSequence } from "./app/odd-even";
-import { leapYears } from "./app/leap-year";
-import { range, down, up } from "./app/range";
 
 const counter = mutableCount();
 
@@ -13,7 +11,7 @@ console.log(counter.next().value); // 31
 console.log(counter.next(100).value); // 131
 
 for (const each of even) {
-	console.log(each);
+  console.log(each);
 }
 
 const sequence = evenSequence(10, 20);
@@ -21,9 +19,9 @@ const sequence = evenSequence(10, 20);
 let i = 20;
 
 while (i-- > 0) {
-	const { value } = sequence.next();
+  const { value } = sequence.next();
 
-	console.log(value);
+  console.log(value);
 }
 
 // for (const leapYear of leapYears(2000, 2050)) {

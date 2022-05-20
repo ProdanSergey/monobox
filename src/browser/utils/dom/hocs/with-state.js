@@ -1,27 +1,27 @@
 import { isFunction } from "@utils/fn";
 
 export const withState = (initial) => (component) => {
-	let state = initial,
-		ref,
-		render;
+  let state = initial,
+    ref,
+    render;
 
-	const reRender = () => {
-		const prevRef = ref;
-		ref = render([state, setState]);
+  const reRender = () => {
+    const prevRef = ref;
+    ref = render([state, setState]);
 
-		requestAnimationFrame(() => {
-			prevRef.replaceWith(ref);
-		});
-	};
+    requestAnimationFrame(() => {
+      prevRef.replaceWith(ref);
+    });
+  };
 
-	const setState = (update) => {
-		state = isFunction(update) ? update(state) : update;
-		reRender();
-	};
+  const setState = (update) => {
+    state = isFunction(update) ? update(state) : update;
+    reRender();
+  };
 
-	const bind = (...args) => {
-		return (render = component.bind(null, ...args));
-	};
+  const bind = (...args) => {
+    return (render = component.bind(null, ...args));
+  };
 
-	return (...args) => (ref = bind(...args)([state, setState]));
+  return (...args) => (ref = bind(...args)([state, setState]));
 };

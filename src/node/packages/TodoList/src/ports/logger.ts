@@ -1,7 +1,7 @@
-export type LoggerContext = Record<string, any>;
+export type LoggerContext = Record<string, unknown>;
 
 export interface Logger {
-  withContext(context: LoggerContext): this
-  notify(message: string): void
-  throw(error: Error): void
+  withContext(context: LoggerContext): this;
+  notify(message: string): void;
+  throw(error: Error): void;
 }

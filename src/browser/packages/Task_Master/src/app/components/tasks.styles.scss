@@ -8,7 +8,7 @@
   border: 1px dotted lightgray;
   margin-bottom: 8px;
   background-color: #fff;
-  
+
   &[data-hover]:not([data-dragged]) {
     background-color: salmon;
   }
