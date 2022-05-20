@@ -19,9 +19,9 @@ const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 
 const connect = async () => {
-	await mongoose.connect(
-		`mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.h2lxe.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
-	);
+  await mongoose.connect(
+    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.h2lxe.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
+  );
 };
 
 connect().catch(console.log);
@@ -36,5 +36,5 @@ app.use("/facilities", facilities);
 app.use(errorHandlingMiddleware);
 
 app.listen(PORT, () => {
-	console.log(`App listening at http://localhost:${PORT}`);
+  console.log(`App listening at http://localhost:${PORT}`);
 });

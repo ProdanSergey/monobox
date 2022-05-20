@@ -1,10 +1,10 @@
 {
-	"name": "todo-list",
-	"version": "0.0.1",
-	"private": true,
-	"description": "",
-	"scripts": {
-		"start": "node ./dist/index.js",
+  "name": "todo-list",
+  "version": "0.0.1",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "start": "node ./dist/index.js",
     "start:create": "npm run start -- --create",
     "start:get": "npm run start -- --get",
     "start:update": "npm run start -- --update",
@@ -12,10 +12,10 @@
     "start:delete": "npm run start -- --delete",
     "start:list": "npm run start -- --list",
     "start:clear": "npm run start -- --clear",
-		"watch": "tsc --watch",
-		"build": "tsc",
+    "watch": "tsc --watch",
+    "build": "tsc",
     "debug": "npm run build && node run start -- --inspect"
-	},
-	"author": "",
-	"license": "ISC"
+  },
+  "author": "",
+  "license": "ISC"
 }

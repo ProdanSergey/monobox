@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Forms</title>
-	</head>
-	<body>
-		<section>
-			<form name="quiz" novalidate>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forms</title>
+  </head>
+  <body>
+    <section>
+      <form name="quiz" novalidate>
         <fieldset name="personalData">
           <legend>Personal Data</legend>
           <label for="fullName">
             <span>Your Name</span>
-            <input id="fullName" type="text" name="fullName" required>
+            <input id="fullName" type="text" name="fullName" required />
             <span role="alert" hidden></span>
           </label>
           <label for="email">
             <span>Last Name</span>
-            <input id="email" type="email" name="email" pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" required>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$"
+              required
+            />
             <span role="alert" hidden></span>
           </label>
         </fieldset>
@@ -26,15 +32,15 @@
           <legend>Team</legend>
           <label for="team-captain-america" data-inline>
             <span>Captain America</span>
-            <input type="radio" name="team" id="team-captain-america" value="captain-america">
+            <input type="radio" name="team" id="team-captain-america" value="captain-america" />
           </label>
           <label for="team-iron-man" data-inline>
             <span>Iron Man</span>
-            <input type="radio" name="team" id="team-iron-man" value="iron-man">
+            <input type="radio" name="team" id="team-iron-man" value="iron-man" />
           </label>
         </fieldset>
         <button type="submit">Send a form</button>
       </form>
-		</section>
-	</body>
+    </section>
+  </body>
 </html>

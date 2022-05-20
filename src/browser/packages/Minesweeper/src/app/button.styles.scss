@@ -1,0 +1,9 @@
+.button {
+  padding: 12px;
+  cursor: pointer;
+
+  &--flat {
+    background: transparent;
+    border: none;
+  }
+}

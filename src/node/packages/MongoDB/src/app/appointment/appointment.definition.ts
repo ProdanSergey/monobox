@@ -1,16 +1,16 @@
 export interface AppointmentsParams {
-	facilityId: string;
-	doctorId: string;
+  facilityId: string;
+  doctorId: string;
 }
 
 export interface AppointmentParams extends AppointmentsParams {
-	appointmentId: string;
+  appointmentId: string;
 }
 
 export interface AppointmentDTO {
-	startAt: string;
+  startAt: string;
 }
 
 export interface AppointmentUpdateDTO {
-	startAt: string;
+  startAt: string;
 }

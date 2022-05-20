@@ -1,9 +1,9 @@
 import { v4 as uuid } from "uuid";
 
 export abstract class Entity {
-	id: string;
+  id: string;
 
-	constructor() {
-		this.id = uuid().replaceAll("-", "");
-	}
+  constructor() {
+    this.id = uuid().replaceAll("-", "");
+  }
 }

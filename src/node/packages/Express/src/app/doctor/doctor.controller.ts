@@ -7,40 +7,29 @@ const doctors = express.Router({ mergeParams: true });
 
 const doctorService = new DoctorService();
 
-doctors.post(
-	"/",
-	function (
-		req: Request<DoctorCreateParams, {}, DoctorCreateDTO>,
-		res: Response
-	) {
-		const { facilityId } = req.params;
-		const { firstName, lastName, specialty } = req.body;
+doctors.post("/", function (req: Request<DoctorCreateParams, unknown, DoctorCreateDTO>, res: Response) {
+  const { facilityId } = req.params;
+  const { firstName, lastName, specialty } = req.body;
 
-		const response = doctorService.create(
-			firstName,
-			lastName,
-			specialty,
-			facilityId
-		);
+  const response = doctorService.create(firstName, lastName, specialty, facilityId);
 
-		res.json(response);
-	}
-);
+  res.json(response);
+});
 
 doctors.put("/:id", function (req: Request, res: Response) {
-	res.send(`update ${req.params.id} doctor`);
+  res.send(`update ${req.params.id} doctor`);
 });
 
 doctors.delete("/:id", function (req: Request, res: Response) {
-	res.send(`delete ${req.params.id} doctor`);
+  res.send(`delete ${req.params.id} doctor`);
 });
 
 doctors.get("/:id", function (req: Request, res: Response) {
-	res.send(`get ${req.params.id} doctor`);
+  res.send(`get ${req.params.id} doctor`);
 });
 
 doctors.get("/", function (_req: Request, res: Response) {
-	res.send("all doctors");
+  res.send("all doctors");
 });
 
 export { doctors };

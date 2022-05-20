@@ -12,17 +12,17 @@ export const mapToArguments = (args: string[]): string[] => {
 
 export const mapToCommand = (arg: string): string => {
   if (!arg?.startsWith("--")) {
-    throw new ValidationError('Must be type of string, must be prefixed with "--"', "--command")
+    throw new ValidationError('Must be type of string, must be prefixed with "--"', "--command");
   }
 
   return arg.slice(2);
-}
+};
 
 export type ArgumentQuery = Record<string, string>;
 
 export type ArgumentInput = {
-  value: string,
-  query: ArgumentQuery
+  value: string;
+  query: ArgumentQuery;
 };
 
 export const mapToInput = (arg: string) => {
@@ -30,28 +30,28 @@ export const mapToInput = (arg: string) => {
 
   return {
     value,
-    query: mapToQuery(query)
-  }
-}
+    query: mapToQuery(query),
+  };
+};
 
-export const mapToQuery = (query?: string): ArgumentQuery => {  
+export const mapToQuery = (query?: string): ArgumentQuery => {
   if (!query) {
-    return {}
+    return {};
   }
 
   return query.split("&").reduce((acc, current) => {
     const [key, value] = current.split("=");
-    
+
     return {
       ...acc,
-      [key]: value
-    }
-  }, {})
+      [key]: value,
+    };
+  }, {});
 };
 
 export type TextQuery = {
   text: string;
-}
+};
 
 export const mapToTextQuery = (text: string): TextQuery => {
   if (!text) {
@@ -59,60 +59,60 @@ export const mapToTextQuery = (text: string): TextQuery => {
   }
 
   return {
-    text
+    text,
   };
 };
 
 export type StatusQuery = {
   status?: boolean;
-}
+};
 
 export const mapToStatusQuery = (status: string): StatusQuery => {
   if (status === undefined) {
     return {
-      status: undefined
+      status: undefined,
     };
   }
-  
+
   const statusMap: Record<string, boolean> = {
     ["false"]: false,
-  }
+  };
 
   return {
-    status: statusMap[status] ?? true
+    status: statusMap[status] ?? true,
   };
 };
 
 export type SearchQuery = {
   search?: string;
-}
+};
 
 export const mapToSearchQuery = (search: string): SearchQuery => {
   if (search === undefined) {
     return {
-      search: undefined
+      search: undefined,
     };
   }
-  
+
   return {
-    search: String(search).trim()
+    search: String(search).trim(),
   };
 };
 
 export type LimitQuery = {
-  limit?: number,
-}
+  limit?: number;
+};
 
 export const mapToLimitQuery = (limit: string): LimitQuery => {
   const value = Number(limit);
-  
+
   if (isNaN(value)) {
     return {
-      limit: undefined
+      limit: undefined,
     };
   }
-  
+
   return {
-    limit: value
+    limit: value,
   };
 };

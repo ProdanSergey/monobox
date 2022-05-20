@@ -9,16 +9,14 @@ const facilities = express.Router();
 const facilityService = new FacilityService();
 
 facilities.post(
-	"/",
-	withErrorHandler<Request<unknown, unknown, FacilityCreateDTO>>(
-		async (req, res) => {
-			const { name } = req.body;
+  "/",
+  withErrorHandler<Request<unknown, unknown, FacilityCreateDTO>>(async (req, res) => {
+    const { name } = req.body;
 
-			const response = await facilityService.create(name);
+    const response = await facilityService.create(name);
 
-			res.json(response);
-		}
-	)
+    res.json(response);
+  })
 );
 
 export { facilities };

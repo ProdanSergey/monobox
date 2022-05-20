@@ -1,0 +1,41 @@
+.sc-slider {
+  position: relative;
+  width: 640px;
+  height: 480px;
+  padding: 16px 2em;
+  margin: 0 auto;
+  background-color: purple;
+  user-select: none;
+
+  &__control {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: transparent;
+    border: 0;
+    color: white;
+    font-size: 2em;
+    cursor: pointer;
+
+    @at-root &.left {
+      left: 0;
+    }
+
+    @at-root &.right {
+      right: 0;
+    }
+  }
+
+  &__item {
+    height: 100%;
+    min-width: 100%;
+    background-color: aquamarine;
+  }
+
+  &__track {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+}

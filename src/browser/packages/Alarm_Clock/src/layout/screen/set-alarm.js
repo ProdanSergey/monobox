@@ -19,139 +19,139 @@ const REPEAT_FIELD_ID = "alarm-repeat";
 const REPEAT_FIELD_NAME = "repeatable";
 
 class RepeatAction extends BaseComponent {
-	state = { active: false };
+  state = { active: false };
 
-	onMount() {
-		this.on("change", ({ target }) => {
-			if (target.name === REPEAT_FIELD_NAME) {
-				this.state.active = target.checked;
-			}
-		});
-		this.on("reset", ({ target }) => {
-			if (target.name === FORM_ID) {
-				this.state.active = false;
-			}
-		});
-	}
+  onMount() {
+    this.on("change", ({ target }) => {
+      if (target.name === REPEAT_FIELD_NAME) {
+        this.state.active = target.checked;
+      }
+    });
+    this.on("reset", ({ target }) => {
+      if (target.name === FORM_ID) {
+        this.state.active = false;
+      }
+    });
+  }
 
-	render() {
-		const { active } = this.state;
+  render() {
+    const { active } = this.state;
 
-		return label(
-			{
-				for: REPEAT_FIELD_ID,
-				className: "set-alarm__repeat-action",
-			},
-			[
-				new Icon({
-					icon: repeatIcon(),
-					className: classnames({ "set-alarm__negative": !active, "set-alarm__positive": active }),
-				}),
-			]
-		);
-	}
+    return label(
+      {
+        for: REPEAT_FIELD_ID,
+        className: "set-alarm__repeat-action",
+      },
+      [
+        new Icon({
+          icon: repeatIcon(),
+          className: classnames({ "set-alarm__negative": !active, "set-alarm__positive": active }),
+        }),
+      ]
+    );
+  }
 }
 
 class ResetAction extends BaseComponent {
-	render() {
-		return new ButtonWithIcon({
-			icon: resetTime(),
-			form: FORM_ID,
-			type: "reset",
-			className: "set-alarm__neutral",
-		});
-	}
+  render() {
+    return new ButtonWithIcon({
+      icon: resetTime(),
+      form: FORM_ID,
+      type: "reset",
+      className: "set-alarm__neutral",
+    });
+  }
 }
 
 export class SetAlarmScreen extends BaseComponent {
-	timerId = null;
+  timerId = null;
 
-	clearAlarm() {
-		clearTimeout(this.timerId);
-		this.timerId = null;
-	}
+  clearAlarm() {
+    clearTimeout(this.timerId);
+    this.timerId = null;
+  }
 
-	setRepeatableAlarm(now) {
-		this.setAlarm(DATE.diff(now, new Date(now).setHours(now.getHours() + 24)), true);
-	}
+  setRepeatableAlarm(now) {
+    this.setAlarm(DATE.diff(now, new Date(now).setHours(now.getHours() + 24)), true);
+  }
 
-	setAlarm = ({ ms }, repeatable) => {
-		if (this.timerId) {
-			this.clearAlarm();
-		}
+  setAlarm = ({ ms }, repeatable) => {
+    if (this.timerId) {
+      this.clearAlarm();
+    }
 
-		this.timerId = setTimeout(() => {
-			this.emit(ALARM_EVENT.ACTIVE);
+    this.timerId = setTimeout(() => {
+      this.emit(ALARM_EVENT.ACTIVE);
 
-			if (repeatable) {
-				this.setRepeatableAlarm(new Date());
-				return;
-			}
+      if (repeatable) {
+        this.setRepeatableAlarm(new Date());
+        return;
+      }
 
-			this.emit(ALARM_EVENT.DISMISS);
-		}, ms);
+      this.emit(ALARM_EVENT.DISMISS);
+    }, ms);
 
-		this.emit(ALARM_EVENT.SET, repeatable);
-	};
+    this.emit(ALARM_EVENT.SET, repeatable);
+  };
 
-	close = () => {
-		this.emit(DIALOG_EVENT.CLOSE, DIALOG_ID);
-	};
+  close = () => {
+    this.emit(DIALOG_EVENT.CLOSE, DIALOG_ID);
+  };
 
-	dismiss = () => {
-		this.clearAlarm();
-		this.close();
-	};
+  dismiss = () => {
+    this.clearAlarm();
+    this.close();
+  };
 
-	submit = (values) => {
-		const { hours, minutes, seconds, repeatable } = values;
+  submit = (values) => {
+    const { hours, minutes, seconds, repeatable } = values;
 
-		const from = new Date();
-		let to = new Date(from.getFullYear(), from.getMonth(), from.getDate(), hours, minutes, seconds);
+    const from = new Date();
+    let to = new Date(from.getFullYear(), from.getMonth(), from.getDate(), hours, minutes, seconds);
 
-		if (from > to) to.setDate(to.getDate() + 1);
+    if (from > to) to.setDate(to.getDate() + 1);
 
-		const alarm = DATE.diff(from, to);
+    const alarm = DATE.diff(from, to);
 
-		this.setAlarm(alarm, repeatable);
-		this.close();
-	};
+    this.setAlarm(alarm, repeatable);
+    this.close();
+  };
 
-	render() {
-		return div({ className: "screen set-alarm" }, [
-			div({ className: "set-alarm__statusbar" }, [
-				new StatusBar({
-					children: [new ResetAction(), new RepeatAction()],
-				}),
-				new StatusBar({
-					children: [
-						new ButtonWithIcon({
-							icon: cancelIcon(),
-							onClick: this.dismiss,
-							className: "set-alarm__negative",
-						}),
-						new ButtonWithIcon({
-							icon: tickIcon(),
-							form: FORM_ID,
-							type: "submit",
-							className: "set-alarm__positive",
-						}),
-						new HomeAction({ id: DIALOG_ID }),
-					],
-				}),
-			]),
-			new EditableFace({
-				id: FORM_ID,
-				onSubmit: this.submit,
-				children: [
-					input({
-						id: REPEAT_FIELD_ID,
-						type: "checkbox",
-						name: REPEAT_FIELD_NAME,
-						className: "set-alarm__repeat-input",
-					}),
-				],
-			}),
-		]);
-	}
+  render() {
+    return div({ className: "screen set-alarm" }, [
+      div({ className: "set-alarm__statusbar" }, [
+        new StatusBar({
+          children: [new ResetAction(), new RepeatAction()],
+        }),
+        new StatusBar({
+          children: [
+            new ButtonWithIcon({
+              icon: cancelIcon(),
+              onClick: this.dismiss,
+              className: "set-alarm__negative",
+            }),
+            new ButtonWithIcon({
+              icon: tickIcon(),
+              form: FORM_ID,
+              type: "submit",
+              className: "set-alarm__positive",
+            }),
+            new HomeAction({ id: DIALOG_ID }),
+          ],
+        }),
+      ]),
+      new EditableFace({
+        id: FORM_ID,
+        onSubmit: this.submit,
+        children: [
+          input({
+            id: REPEAT_FIELD_ID,
+            type: "checkbox",
+            name: REPEAT_FIELD_NAME,
+            className: "set-alarm__repeat-input",
+          }),
+        ],
+      }),
+    ]);
+  }
 }

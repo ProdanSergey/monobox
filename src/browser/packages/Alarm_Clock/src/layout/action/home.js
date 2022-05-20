@@ -6,17 +6,17 @@ import { DIALOG_EVENT } from "../../constants/events";
 import "./home.styles.css";
 
 export class HomeAction extends BaseComponent {
-	click = () => {
-		this.emit(DIALOG_EVENT.CLOSE, this.props.id);
-	};
+  click = () => {
+    this.emit(DIALOG_EVENT.CLOSE, this.props.id);
+  };
 
-	render() {
-		const { icon = homeIcon(), className } = this.props;
+  render() {
+    const { icon = homeIcon(), className } = this.props;
 
-		return new ButtonWithIcon({
-			icon,
-			onClick: this.click,
-			className: classnames("home-action", className),
-		});
-	}
+    return new ButtonWithIcon({
+      icon,
+      onClick: this.click,
+      className: classnames("home-action", className),
+    });
+  }
 }
