@@ -11,7 +11,7 @@ const start = () => {
 
 	const packageName = at(process.env.INIT_CWD.split("/"), -1);
 
-	const command = `rollup -c rollup.dev.config.js -w ${packageName ? `--environment PACKAGE:${packageName}` : ""}`;
+	const command = `rollup -c rollup.config.dev.js -w ${packageName ? `--environment PACKAGE:${packageName}` : ""}`;
 
 	execSync(command, { stdio: [0, 1, 2] });
 };

@@ -1,8 +1,8 @@
-Fragment: 
+[DOMRenderer] Fragment: 
   ☐ Make replacable while update
   ☐ Support event dispatching
-Lifecycle:
+[DOMRenderer] Lifecycle:
   ☐ Add shouldRender
   ☐ Add onUnmount
 Infra:
-  ☐ Index exports are not working
+  ✔ Index exports are not working @done(22-05-19 14:37)

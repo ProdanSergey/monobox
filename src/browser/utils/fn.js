@@ -15,7 +15,7 @@ const template = (items, mapper) => {
 	return items.reduce((html, item) => (html += mapper(item)), "");
 };
 class ArrayNamespace {
-	static segregate(v, ...predicates) {
+	static groupBy(v, ...predicates) {
 		return Array.from(v).reduce(
 			(buckets, current) => {
 				const bucketIndex = predicates.findIndex((predicate) => {

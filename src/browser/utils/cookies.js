@@ -1,6 +1,10 @@
 export const COOKIES = (() => {
+	const getAllCookies = () => {
+		return document.cookie.split(";");
+	};
+
 	const getCookie = (name) => {
-		for (const cookie of document.cookie.split(";")) {
+		for (const cookie of getAllCookies()) {
 			const [key, value] = cookie.split("=");
 
 			if (decodeURIComponent(key).trim() === name) {
@@ -47,7 +51,7 @@ export const COOKIES = (() => {
 	};
 
 	const count = () => {
-		return document.cookie.split(";").length;
+		return getAllCookies().length;
 	};
 
 	return {
