@@ -1,6 +1,10 @@
 {
 	"private": true,
-	"scripts": {
+  "type": "module",
+  "engines": {
+    "node": ">=14.16"
+  },
+  "scripts": {
 		"build": "rollup -c",
 		"start": "node start"
 	},
@@ -26,12 +30,11 @@
 		"rollup-plugin-svg-import": "^1.6.0",
 		"sass": "^1.49.8"
 	},
+  "dependencies": {
+		"uuid": "^8.3.2"
+	},
 	"_moduleAliases": {
 		"@utils": "./utils",
 		"@assets": "./assets"
-	},
-	"dependencies": {
-		"uniqid": "^5.4.0",
-		"uuid": "^8.3.2"
 	}
 }

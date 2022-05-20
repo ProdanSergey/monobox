@@ -1,4 +1,4 @@
-import { extname } from "path";
+import { extname } from "node:path";
 
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { babel } from "@rollup/plugin-babel";
@@ -11,9 +11,9 @@ import alias from "@rollup/plugin-alias";
 import copy from "rollup-plugin-copy";
 import svg from "rollup-plugin-svg-import";
 
-import { environment } from "./environment";
+import { environment } from "./environment.js";
 
-const { PACKAGES_PATH, UTILS_PATH, ASSETS_PATH } = environment(__dirname);
+const { PACKAGES_PATH, UTILS_PATH, ASSETS_PATH } = environment();
 
 const DIGESTIVE = [".js"];
 

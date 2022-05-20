@@ -1,8 +1,9 @@
 import { readdir } from "fs/promises";
 import { digest, directory, mapSrc, plugins, output } from "./shared/rollup";
 import { environment } from "./shared/environment";
+import { __filename, __dirname } from "./shared/path";
 
-const { PACKAGES_PATH } = environment(__dirname);
+const { PACKAGES_PATH } = environment();
 
 const mapPackage = async (packageName) => {
 	try {

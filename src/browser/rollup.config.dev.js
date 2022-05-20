@@ -1,4 +1,4 @@
-import { readdir } from "fs/promises";
+import { readdir } from "node:fs/promises";
 
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
@@ -30,7 +30,7 @@ const bootstrap = async () => {
 			output: output(PACKAGE_NAME),
 		};
 	} catch {
-		throw new Error(`Package "${PACKAGE_NAME}" Not Found`);
+		throw new Error(`Package "${PACKAGE_NAME}" Not Found. `);
 	}
 };
 
