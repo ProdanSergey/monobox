@@ -1,8 +1,8 @@
-import { uniqId } from "./uniq-id";
+import { v4 as uniqid } from "uuid";
 import { RANDOM } from "./random";
 
 const request = (implementation) => {
-	const requestId = uniqId();
+	const requestId = uniqid();
 
 	const promise = new Promise((resolve, reject) => {
 		console.log(`[Request: ${requestId}]: Started;`);

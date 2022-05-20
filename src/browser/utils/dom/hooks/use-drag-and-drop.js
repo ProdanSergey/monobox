@@ -1,9 +1,9 @@
+import { v4 as uniqid } from "uuid";
+
 import { useListeners } from "./use-listeners";
 
 const useStore = () => {
 	const store = new Map();
-
-	const uniqId = () => new Date().getTime().toString();
 
 	const get = async ({ dataTransfer }) => {
 		for (const item of dataTransfer.items) {
@@ -26,9 +26,9 @@ const useStore = () => {
 	};
 
 	const set = ({ target, dataTransfer }) => {
-		const flakeId = uniqId();
-		store.set(flakeId, target);
-		dataTransfer.items.add(flakeId, "text/plain");
+		const id = uniqid();
+		store.set(id, target);
+		dataTransfer.items.add(id, "text/plain");
 	};
 
 	const clear = ({ dataTransfer }) => {

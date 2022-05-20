@@ -1,58 +1,79 @@
-import { extname } from "path";
+import { extname } from "node:path";
 
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import { babel } from "@rollup/plugin-babel";
 import cleaner from "rollup-plugin-cleaner";
 import html from "rollup-plugin-html2";
 import postcss from "rollup-plugin-postcss";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
+import nodePolyfills from "rollup-plugin-node-polyfills";
+import commonjs from "@rollup/plugin-commonjs";
 import alias from "@rollup/plugin-alias";
 import copy from "rollup-plugin-copy";
 import svg from "rollup-plugin-svg-import";
 
-import { environment } from "./environment";
+import { environment } from "./environment.js";
 
-export const utils = () => {
-	const { PACKAGES_PATH, UTILS_PATH, ASSETS_PATH } = environment(__dirname);
-	const DIGESTIVE = [".js"];
+const { PACKAGES_PATH, UTILS_PATH, ASSETS_PATH } = environment();
 
-	const digest = (entry) => DIGESTIVE.some((ext) => extname(entry) === ext);
-	const directory = (entry) => !extname(entry);
+const DIGESTIVE = [".js"];
 
-	const mapPath =
-		(target) =>
-		(dir, file = "") =>
-			`${PACKAGES_PATH}/${dir}/${target}` + (file && `/${file}`);
+export const digest = (entry) => DIGESTIVE.some((ext) => extname(entry) === ext);
+export const directory = (entry) => !extname(entry);
 
-	const mapSrc = mapPath("src");
-	const mapDist = mapPath("dist");
-
-	const plugins = (dir) => [
-		cleaner({
-			targets: [mapDist(dir)],
-		}),
-		alias({
-			entries: [
-				{ find: "@utils", replacement: UTILS_PATH },
-				{ find: "@assets", replacement: ASSETS_PATH },
-			],
-		}),
-		copy({
-			targets: [{ src: mapSrc(dir, "assets/**/*"), dest: mapDist(dir, "assets") }],
-		}),
-		postcss({
-			extract: mapDist(dir, "bundle.css"),
-		}),
-		html({
-			template: mapSrc(dir, "index.html"),
-		}),
-		svg(),
-		nodeResolve(),
-	];
-
-	return {
-		digest,
-		directory,
-		plugins,
-		mapSrc,
-		mapDist,
-	};
+export const mapPath = (packageName) => {
+	return (dir, file = "") => `${PACKAGES_PATH}/${dir}/${packageName}` + (file && `/${file}`);
 };
+
+export const mapSrc = mapPath("src");
+export const mapDist = mapPath("dist");
+
+export const plugins = (packageName) => [
+	cleaner({
+		targets: [mapDist(packageName)],
+	}),
+	nodePolyfills(),
+	nodeResolve({
+		browser: true,
+		preferBuiltins: false,
+	}),
+	commonjs({
+		include: "node_modules/**",
+	}),
+	babel({
+		exclude: "node_modules/**",
+		presets: [["@babel/preset-env", { useBuiltIns: "entry", corejs: 3 }]],
+		babelHelpers: "bundled",
+	}),
+	alias({
+		entries: [
+			{ find: "@utils", replacement: UTILS_PATH },
+			{ find: "@assets", replacement: ASSETS_PATH },
+		],
+	}),
+	copy({
+		targets: [{ src: mapSrc(packageName, "assets/**/*"), dest: mapDist(packageName, "assets") }],
+	}),
+	postcss({
+		extract: mapDist(packageName, "bundle.css"),
+	}),
+	html({
+		template: mapSrc(packageName, "index.html"),
+		entries: {
+			index: {
+				type: "module",
+			},
+		},
+	}),
+	svg(),
+];
+
+export const output = (packageName) => ({
+	format: "esm",
+	entryFileNames: "[hash]-bundle.js",
+	dir: mapDist(packageName),
+	manualChunks(id) {
+		if (id.includes("node_modules")) {
+			return "vendor";
+		}
+	},
+});

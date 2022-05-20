@@ -1,4 +1,4 @@
-const at = (target, index) => {
+export const at = (target, index) => {
 	if (!target) {
 		return undefined;
 	}
@@ -9,5 +9,3 @@ const at = (target, index) => {
 
 	return target[index];
 };
-
-module.exports.at = at;
