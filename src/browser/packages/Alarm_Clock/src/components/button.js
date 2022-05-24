@@ -1,7 +1,7 @@
 import { BaseComponent, button, classnames } from "@utils/dom";
 import { Icon } from "./icon";
 
-import "./button.style.css";
+import "./button.style.scss";
 
 export class ButtonWithIcon extends BaseComponent {
   render() {

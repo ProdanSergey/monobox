@@ -1,29 +1,38 @@
-import { isObject, ObjectNamespace } from "@utils/fn";
+import { ObjectNamespace } from "@utils/fn";
 import { State } from "@utils/state";
 import { render } from "./utils/render";
 import { SyntheticEvent } from "./events";
 
-const COMPONENT_MEMBER = {
+const COMPONENT_TOKEN = {
   RENDER: "render",
   STATE: "state",
+  CHILDREN: "children",
 };
+
+const mapChildren = (children) => {
+  if (!Array.isArray(children)) {
+    throw new DOMException("Children must be an array");
+  }
+
+  return children.map(render);
+};
+
+const mapProps = (key, value) => {
+  if (key === COMPONENT_TOKEN.CHILDREN) {
+    return mapChildren(value);
+  }
+
+  return value;
+};
+
 export class BaseComponent {
   #node = null;
 
   constructor(props = {}) {
-    this.props = Object.freeze(
-      ObjectNamespace.map(props, (key, value) => {
-        if (key === "children") {
-          return render(value);
-        }
+    this.props = Object.freeze(ObjectNamespace.map(props, mapProps));
 
-        return value;
-      })
-    );
-
-    let mounted = false;
-    let prevProps = props;
-    let prevState = this.state;
+    let prevState,
+      mounted = false;
 
     const is_mounted = () => mounted;
 
@@ -41,32 +50,27 @@ export class BaseComponent {
     const update = (node) => {
       this.#node.replaceWith(node);
       seed(node);
-      this.onUpdate?.(prevProps, prevState);
+      this.onUpdate?.(prevState);
     };
 
     const snapshot = () => {
-      prevProps = ObjectNamespace.deepCopy(this.props);
-      prevState = isObject(self.state) ? ObjectNamespace.deepCopy(this.state) : null;
-    };
-
-    const renderer = () => {
-      is_mounted() && proxy.render();
+      prevState = this.state && ObjectNamespace.deepCopy(this.state);
     };
 
     const proxy = new Proxy(this, {
       get(self, key) {
         const reflect = () => Reflect.get(self, key);
 
-        if (key === COMPONENT_MEMBER.RENDER) {
+        if (key === COMPONENT_TOKEN.RENDER) {
           return () => {
-            const node = render(self.render());
+            const root = render(self.render());
 
             requestAnimationFrame(() => {
-              is_mounted() ? update(node) : mount(node);
+              is_mounted() ? update(root) : mount(root);
               snapshot();
             });
 
-            return node;
+            return root;
           };
         }
 
@@ -75,8 +79,12 @@ export class BaseComponent {
       set(self, key, value) {
         const reflect = (value) => Reflect.set(self, key, value);
 
-        if (key === COMPONENT_MEMBER.STATE) {
-          return reflect(new State(value).subscribe(renderer));
+        if (key === COMPONENT_TOKEN.STATE) {
+          return reflect(
+            new State(value).subscribe(() => {
+              proxy.render();
+            })
+          );
         }
 
         return reflect(value);
@@ -88,8 +96,12 @@ export class BaseComponent {
             value,
           });
 
-        if (key === COMPONENT_MEMBER.STATE) {
-          return reflect(new State(attributes.value).subscribe(renderer));
+        if (key === COMPONENT_TOKEN.STATE) {
+          return reflect(
+            new State(attributes.value).subscribe(() => {
+              proxy.render();
+            })
+          );
         }
 
         return reflect(attributes.value);
@@ -100,7 +112,7 @@ export class BaseComponent {
   }
 
   emit = (type, detail) => {
-    this.#node.dispatchEvent(new SyntheticEvent(type, detail));
+    this.#node?.dispatchEvent(new SyntheticEvent(type, detail));
   };
 
   on = (type, callback) => {

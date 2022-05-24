@@ -4,5 +4,7 @@
 [DOMRenderer] Lifecycle:
   ☐ Add shouldRender
   ☐ Add onUnmount
+[DOMRenderer] Render:
+  ☐ Empty render
 Infra:
   ✔ Index exports are not working @done(22-05-19 14:37)
