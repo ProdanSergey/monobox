@@ -1,0 +1,13 @@
+.button {
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  &:disabled {
+    filter: grayscale(1);
+    cursor: not-allowed;
+  }
+}

@@ -21,19 +21,20 @@ const withAttributes = (attrs) => (node) => {
 };
 
 export class Framework {
-  static create(tagName, attributes = {}, children = []) {
-    return compose(withChildren(children), withAttributes(attributes))(create(tagName));
+  static create(node, attributes = {}, children = []) {
+    return compose(withChildren(children), withAttributes(attributes))(create(node));
   }
 
   static mount(root, node) {
     if (!isElement(root)) {
       throw new DOMException("Root must be valid DOM element");
     }
-    root.replaceChildren(render(node));
+
+    create(root).replaceChildren(render(node));
   }
 
   static interpolate(node) {
-    return render(node).outerHTML;
+    return compose(render, create)(node).outerHTML;
   }
 
   static hydrate(html, attrs) {
@@ -42,7 +43,7 @@ export class Framework {
         const then_set_attribute = setAttribute(child);
 
         Array.from(child.attributes).forEach(({ name, value }) => {
-          if (attrs?.[value]) {
+          if (ObjectNamespace.hasProperty(attrs, value)) {
             then_set_attribute(name, attrs[value]);
           }
         });

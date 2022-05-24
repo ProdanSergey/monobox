@@ -1,0 +1,13 @@
+.statusbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1rem;
+
+  &__item {
+    padding: 4px;
+  }
+  
+  &__icon {
+    color: var(--theme-color);
+  }
+}

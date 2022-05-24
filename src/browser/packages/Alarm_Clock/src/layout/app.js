@@ -13,11 +13,11 @@ export class App extends BaseComponent {
       new ClockScreen(),
       new Dialog({
         id: "set-alarm-dialog",
-        children: new SetAlarmScreen(),
+        children: [new SetAlarmScreen()],
       }),
       new Dialog({
         id: "alarm-dialog",
-        children: new AlarmScreen(),
+        children: [new AlarmScreen()],
       }),
     ]);
   }

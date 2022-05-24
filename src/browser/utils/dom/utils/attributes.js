@@ -41,6 +41,8 @@ const setters = {
   class: setClassName,
   className: setClassName,
   hidden: setBoolean,
+  disabled: setBoolean,
+  readonly: setBoolean,
 };
 
 export const setAttribute = (node) => (key, value) => {

@@ -11,7 +11,7 @@ import { StatusBar } from "../../components/statusbar";
 import { Icon } from "../../components/icon";
 import { HomeAction } from "../action/home";
 
-import "./set-alarm.styles.css";
+import "./set-alarm.styles.scss";
 
 export const DIALOG_ID = "set-alarm-dialog";
 const FORM_ID = "set-alarm";
@@ -45,7 +45,7 @@ class RepeatAction extends BaseComponent {
       [
         new Icon({
           icon: repeatIcon(),
-          className: classnames({ "set-alarm__negative": !active, "set-alarm__positive": active }),
+          className: classnames({ "set-alarm__action--negative": !active, "set-alarm__action--positive": active }),
         }),
       ]
     );
@@ -58,7 +58,32 @@ class ResetAction extends BaseComponent {
       icon: resetTime(),
       form: FORM_ID,
       type: "reset",
-      className: "set-alarm__neutral",
+      className: "set-alarm__action--neutral",
+    });
+  }
+}
+
+class DismissAction extends BaseComponent {
+  state = { disabled: true };
+
+  onMount() {
+    this.on(ALARM_EVENT.SET, () => {
+      this.state.disabled = false;
+    });
+    this.on(ALARM_EVENT.DISMISS, () => {
+      this.state.disabled = true;
+    });
+  }
+
+  render() {
+    const { disabled } = this.state;
+    const { onClick } = this.props;
+
+    return new ButtonWithIcon({
+      icon: cancelIcon(),
+      className: "set-alarm__action--negative",
+      disabled,
+      onClick,
     });
   }
 }
@@ -99,7 +124,11 @@ export class SetAlarmScreen extends BaseComponent {
   };
 
   dismiss = () => {
-    this.clearAlarm();
+    if (this.timerId) {
+      this.clearAlarm();
+      this.emit(ALARM_EVENT.DISMISS);
+    }
+
     this.close();
   };
 
@@ -125,16 +154,12 @@ export class SetAlarmScreen extends BaseComponent {
         }),
         new StatusBar({
           children: [
-            new ButtonWithIcon({
-              icon: cancelIcon(),
-              onClick: this.dismiss,
-              className: "set-alarm__negative",
-            }),
+            new DismissAction({ onClick: this.dismiss }),
             new ButtonWithIcon({
               icon: tickIcon(),
               form: FORM_ID,
               type: "submit",
-              className: "set-alarm__positive",
+              className: "set-alarm__action--positive",
             }),
             new HomeAction({ id: DIALOG_ID }),
           ],

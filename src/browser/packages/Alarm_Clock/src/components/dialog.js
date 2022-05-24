@@ -26,6 +26,6 @@ export class Dialog extends BaseComponent {
     const { hidden } = this.state;
     const { className, children } = this.props;
 
-    return article({ className: classnames("dialog", { ["dialog--hidden"]: hidden }, className) }, [children]);
+    return article({ className: classnames("dialog", { ["dialog--hidden"]: hidden }, className) }, children);
   }
 }
