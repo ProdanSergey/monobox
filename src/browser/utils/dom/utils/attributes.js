@@ -1,4 +1,5 @@
-import { isFunction } from "@utils/fn";
+import { isFunction, not, isNullish } from "@utils/fn";
+import { render } from "./render";
 
 const clearAttribute = (node, { key }) => {
   if (node.hasAttribute(key)) {
@@ -45,7 +46,7 @@ const setters = {
   readonly: setBoolean,
 };
 
-export const setAttribute = (node) => (key, value) => {
+export const setAttribute = (node, { key, value }) => {
   if (key.startsWith("@")) {
     setListener(node, { key, value });
     return;
@@ -57,4 +58,24 @@ export const setAttribute = (node) => (key, value) => {
   }
 
   node.setAttribute(key, value);
+};
+
+export const mapChildren = (children) => {
+  if (!Array.isArray(children)) {
+    throw new DOMException("Children must be an array");
+  }
+
+  return children.filter(not(isNullish)).map(render);
+};
+
+const mappers = {
+  children: mapChildren,
+};
+
+export const mapProp = ({ key, value }) => {
+  if (mappers[key]) {
+    return mappers[key](value);
+  }
+
+  return value;
 };

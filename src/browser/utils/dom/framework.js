@@ -1,28 +1,29 @@
-import { compose, isNullish, ObjectNamespace } from "@utils/fn";
+import { compose, ObjectNamespace } from "@utils/fn";
 import { isElement } from "./utils/fn";
-import { setAttribute } from "./utils/attributes";
+import { mapChildren, setAttribute } from "./utils/attributes";
 import { create } from "./utils/create";
 import { render } from "./utils/render";
-
-const withChildren = (children) => (node) => {
-  node.append(...children.filter((child) => !isNullish(child)).map(render));
-
-  return node;
-};
-
-const withAttributes = (attrs) => (node) => {
-  const then_set_attribute = setAttribute(node);
-
-  ObjectNamespace.forEach(attrs, (key, value) => {
-    then_set_attribute(key, value);
-  });
-
-  return node;
-};
+import { interpolate } from "@utils/string";
 
 export class Framework {
-  static create(node, attributes = {}, children = []) {
-    return compose(withChildren(children), withAttributes(attributes))(create(node));
+  static create(node, attrs, children) {
+    const then_set_children = (node) => {
+      if (!children) {
+        return node;
+      }
+      node.append(...mapChildren(children));
+      return node;
+    };
+
+    const then_set_attributes = (node) => {
+      if (!attrs) {
+        return node;
+      }
+      ObjectNamespace.forEach(attrs, (key, value) => setAttribute(node, { key, value }));
+      return node;
+    };
+
+    return compose(then_set_children, then_set_attributes, create)(node);
   }
 
   static mount(root, node) {
@@ -33,29 +34,43 @@ export class Framework {
     create(root).replaceChildren(render(node));
   }
 
-  static interpolate(node) {
-    return compose(render, create)(node).outerHTML;
-  }
+  static hydrate(html, attrs, children) {
+    const then_interpolate_children = (node) => {
+      if (!children) {
+        return node;
+      }
+      node.replaceWith(...interpolate(node.nodeValue, { children: mapChildren(children) }, (chunks) => chunks.flat()));
+      return node;
+    };
 
-  static hydrate(html, attrs) {
     const then_set_attributes = (node) => {
-      for (const child of node.children) {
-        const then_set_attribute = setAttribute(child);
-
-        Array.from(child.attributes).forEach(({ name, value }) => {
-          if (ObjectNamespace.hasProperty(attrs, value)) {
-            then_set_attribute(name, attrs[value]);
-          }
+      if (!attrs) {
+        return node;
+      }
+      Array.from(node.attributes)
+        .filter(({ value }) => ObjectNamespace.hasProperty(attrs, value))
+        .forEach(({ name, value }) => {
+          setAttribute(node, { key: name, value: attrs[value] });
         });
+      return node;
+    };
 
-        then_set_attributes(child);
+    const then_hydrate = (node) => {
+      for (const childNode of node.childNodes) {
+        if (childNode.nodeType === Node.TEXT_NODE) {
+          then_interpolate_children(childNode);
+        }
+
+        if (childNode.nodeType === Node.ELEMENT_NODE) {
+          compose(then_hydrate, then_set_attributes)(childNode);
+        }
       }
     };
 
     const div = create("div");
     div.insertAdjacentHTML("afterbegin", html);
 
-    then_set_attributes(div.firstElementChild);
+    then_hydrate(div);
 
     return div.firstElementChild;
   }

@@ -1,0 +1,29 @@
+.input {
+  &__trigger {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    width: 4rem;
+    height: 4rem;
+    background-color: rgb(255, 0, 0, 0.3);
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(255, 0, 0, 1);
+    }
+  }
+
+  &__field {
+    appearance: none;
+    visibility: hidden;
+    position: fixed;
+    width: 0;
+    height: 0;
+    top: 0;
+    left: 0;
+  }
+}

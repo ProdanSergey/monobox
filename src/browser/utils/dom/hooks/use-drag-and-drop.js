@@ -1,101 +1,92 @@
 import { v4 as uniqid } from "uuid";
 
-import { useListeners } from "./use-listeners";
-
 const useStore = () => {
   const store = new Map();
 
-  const get = async ({ dataTransfer }) => {
-    for (const item of dataTransfer.items) {
-      const target = await new Promise((resolve) => {
-        try {
-          item.getAsString((value) => {
-            store.has(value) ? resolve(store.get(value)) : resolve(null);
-          });
-        } catch {
-          resolve(null);
-        }
-      });
+  const getElements = async ({ dataTransfer }) => {
+    const elements = Array.from(dataTransfer.items)
+      .filter((item) => item.kind === "string")
+      .map(
+        (item) =>
+          new Promise((resolve) => {
+            try {
+              item.getAsString((value) => {
+                store.has(value) ? resolve(store.get(value)) : resolve(null);
+              });
+            } catch {
+              resolve(null);
+            }
+          })
+      );
 
-      if (target) {
-        return target;
-      }
-    }
-
-    return null;
+    return Promise.all(elements);
   };
 
-  const set = ({ target, dataTransfer }) => {
+  const setElement = ({ target, dataTransfer }) => {
     const id = uniqid();
-    store.set(id, target);
     dataTransfer.items.add(id, "text/plain");
+    store.set(id, target);
   };
 
   const clear = ({ dataTransfer }) => {
-    store.clear();
     dataTransfer.items.clear();
+    store.clear();
   };
 
   return {
-    get,
-    set,
+    getElements,
+    setElement,
     clear,
   };
 };
 
-export const useDragAndDrop = (onDrop) => {
+export const useDragAndDrop = () => {
   const store = useStore();
-  const listeners = useListeners();
 
-  const hoverIn = (target) => {
-    target.setAttribute("data-hover", "");
+  const dragIn = (draggable) => {
+    draggable.setAttribute("data-dragged", "");
   };
 
-  const hoverOut = (target) => {
-    target.removeAttribute("data-hover");
+  const dragOut = (draggable) => {
+    draggable.removeAttribute("data-dragged");
   };
 
-  const dragIn = (target) => {
-    target.setAttribute("data-dragged", "");
+  const hoverIn = (draggable) => {
+    draggable.setAttribute("data-hover", "");
   };
 
-  const dragOut = (target) => {
-    target.removeAttribute("data-dragged");
+  const hoverOut = (draggable) => {
+    draggable.removeAttribute("data-hover");
   };
 
-  const dragOver = (event) => {
-    event.preventDefault();
+  const dragStart = (event) => {
     const { target } = event;
 
-    if (target.hasAttribute("draggable")) {
-      hoverIn(target);
-    }
-  };
-
-  const dragLeave = ({ target }) => {
-    if (target.hasAttribute("draggable")) {
-      hoverOut(target);
-    }
+    dragIn(target);
   };
 
   const dragEnd = (event) => {
     const { target } = event;
 
     dragOut(target);
-    store.clear(event);
-    listeners.clear();
   };
 
-  const dragStart = (event) => {
-    const { currentTarget, target } = event;
+  const dragOver = (event) => {
+    event.preventDefault();
 
-    dragIn(target);
+    const { target } = event;
 
-    listeners.add(currentTarget, "dragover", dragOver);
-    listeners.add(currentTarget, "dragleave", dragLeave);
-    listeners.add(currentTarget, "dragend", dragEnd);
+    if (!target.hasAttribute("data-hover")) {
+      hoverIn(target);
+    }
+  };
 
-    store.set(event);
+  const dragLeave = (event) => {
+    const { target } = event;
+
+    if (target.hasAttribute("data-hover")) {
+      hoverOut(target);
+    }
   };
 
   const drop = async (event) => {
@@ -103,16 +94,29 @@ export const useDragAndDrop = (onDrop) => {
     const { target } = event;
 
     hoverOut(target);
-
-    onDrop({
-      currentTarget: event.currentTarget,
-      draggedTarget: await store.get(event),
-      droppedTarget: event.target,
-    });
   };
 
-  return (element) => {
-    element.addEventListener("dragstart", dragStart);
-    element.addEventListener("drop", drop);
+  return (event) => {
+    switch (event.type) {
+      case "dragstart":
+        dragStart(event);
+        break;
+      case "dragend":
+        dragEnd(event);
+        break;
+      case "dragover":
+        dragOver(event);
+        break;
+      case "dragleave":
+        dragLeave(event);
+        break;
+      case "drop":
+        drop(event);
+        break;
+    }
+
+    return {
+      store,
+    };
   };
 };

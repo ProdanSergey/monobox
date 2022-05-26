@@ -9,14 +9,18 @@ export const Header = ({ title }) => {
     { to: "/work", title: "Work" },
   ];
 
-  return DOMRenderer.hydrate(`
-    <header class="header">
-      <div class="container">
-        <h1 class="title">${title}</h1>
-        <nav>
-          ${DOMRenderer.interpolate(Navigation({ items: LINKS }))}
-        </nav>
-      </div>
-    </header>
-  `);
+  return DOMRenderer.hydrate(
+    `
+      <header class="header">
+        <div class="container">
+          <h1 class="title">${title}</h1>
+          <nav>
+            {{children}}
+          </nav>
+        </div>
+      </header>
+    `,
+    {},
+    [Navigation({ items: LINKS })]
+  );
 };

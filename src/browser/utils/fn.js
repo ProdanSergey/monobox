@@ -5,6 +5,10 @@ const isFalsy = (v) => !v;
 const isTruthy = (v) => !isFalsy(v);
 const isNill = (v) => v === undefined || v === null;
 const isNullish = (v) => isNill(v) || v === false || (isString(v) && v.trim().length === 0);
+const not =
+  (fn) =>
+  (...args) =>
+    !fn.call(null, ...args);
 
 const compose =
   (...fns) =>
@@ -93,4 +97,5 @@ export {
   isNullish,
   template,
   compose,
+  not,
 };
