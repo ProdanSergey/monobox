@@ -6,5 +6,6 @@
   ☐ Add onUnmount
 [DOMRenderer] Render:
   ☐ Empty render
+  ☐ Keys for lists
 Infra:
   ✔ Index exports are not working @done(22-05-19 14:37)
