@@ -1,35 +1,23 @@
-import { ObjectNamespace } from "@utils/fn";
+import { compose, ObjectNamespace } from "@utils/fn";
 import { State } from "@utils/state";
+import { mapProp } from "./utils/attributes";
 import { render } from "./utils/render";
 import { SyntheticEvent } from "./events";
 
 const COMPONENT_TOKEN = {
   RENDER: "render",
   STATE: "state",
-  CHILDREN: "children",
 };
 
-const mapChildren = (children) => {
-  if (!Array.isArray(children)) {
-    throw new DOMException("Children must be an array");
-  }
-
-  return children.map(render);
-};
-
-const mapProps = (key, value) => {
-  if (key === COMPONENT_TOKEN.CHILDREN) {
-    return mapChildren(value);
-  }
-
-  return value;
+const then_map_props = (props) => {
+  return ObjectNamespace.map(props, (key, value) => mapProp({ key, value }));
 };
 
 export class BaseComponent {
   #node = null;
 
   constructor(props = {}) {
-    this.props = Object.freeze(ObjectNamespace.map(props, mapProps));
+    this.props = compose(Object.freeze, then_map_props)(props);
 
     let prevState,
       mounted = false;

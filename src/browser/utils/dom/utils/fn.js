@@ -21,7 +21,5 @@ export const hasParent = (v, selector) => {
 };
 
 export const hasProperty = (v, property) => {
-  if (!(property in v)) {
-    return false;
-  }
+  return property in v;
 };

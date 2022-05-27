@@ -6,7 +6,25 @@ import "./tasks.styles.scss";
 export class Tasks extends BaseComponent {
   state = { items: [] };
 
-  onRef = useDragAndDrop(({ currentTarget, droppedTarget, draggedTarget }) => {
+  dragAndDrop = useDragAndDrop();
+
+  dragEnd = (event) => {
+    const { store } = this.dragAndDrop(event);
+    store.clear(event);
+  };
+
+  dragStart = (event) => {
+    const { store } = this.dragAndDrop(event);
+    store.setElement(event);
+  };
+
+  drop = async (event) => {
+    const { store } = this.dragAndDrop(event);
+
+    const { currentTarget, target: droppedTarget } = event;
+
+    const [draggedTarget] = await store.getElements(event);
+
     if ([currentTarget, draggedTarget].some((target) => target === droppedTarget)) return;
 
     const indexOf = (child) => Array.from(currentTarget.children).indexOf(child);
@@ -14,7 +32,7 @@ export class Tasks extends BaseComponent {
     indexOf(draggedTarget) < indexOf(droppedTarget)
       ? droppedTarget.after(draggedTarget)
       : droppedTarget.before(draggedTarget);
-  });
+  };
 
   onMount() {
     this.on("task:add", ({ detail }) => {
@@ -29,13 +47,23 @@ export class Tasks extends BaseComponent {
       `
         <section class="tasks">
           <div class="container">
-            <ul ref="onRef" data-dropzone>
-              ${template(items, ({ value }) => `<li class="task" draggable="true">${value}</li>`)}
+            <ul @drop="drop" @dragover="dragover" @dragleave="dragleave">
+              ${template(
+                items,
+                ({ value }) =>
+                  `<li class="task" draggable="true" @dragstart="dragstart" @dragend="dragend">${value}</li>`
+              )}
             </ul>
           </div>
         </section>
       `,
-      { onRef: this.onRef }
+      {
+        dragover: this.dragAndDrop,
+        dragleave: this.dragAndDrop,
+        drop: this.drop,
+        dragstart: this.dragStart,
+        dragend: this.dragEnd,
+      }
     );
   }
 }
