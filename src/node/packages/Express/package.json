@@ -5,7 +5,6 @@
   "author": "Serhii Prodan",
   "license": "ISC",
   "keywords": [],
-  "type": "module",
   "scripts": {
     "start": "node ./dist/index.js",
     "build": "tsc",

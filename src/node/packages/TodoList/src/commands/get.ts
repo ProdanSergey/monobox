@@ -20,7 +20,7 @@ export class GetCommand implements Command {
 
     const item = await this.todoService.get(id);
 
-    this.logger.withContext(item).notify(`Item[${id}] found`);
+    this.logger.withContext({ item }).notify(`Item[${id}] found`);
   }
 }
 
