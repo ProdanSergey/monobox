@@ -21,7 +21,7 @@ export class UpdateCommand implements Command {
 
     const item = await this.todoService.update(id, { text });
 
-    this.logger.withContext(item).notify(`Item[${id}] updated`);
+    this.logger.withContext({ item }).notify(`Item[${id}] updated`);
   }
 }
 

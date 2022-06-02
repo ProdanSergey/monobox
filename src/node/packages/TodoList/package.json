@@ -13,8 +13,7 @@
     "start:list": "npm run start -- --list",
     "start:clear": "npm run start -- --clear",
     "watch": "tsc --watch",
-    "build": "tsc",
-    "debug": "npm run build && node run start -- --inspect"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC"

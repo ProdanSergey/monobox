@@ -19,7 +19,7 @@ export class CreateCommand implements Command {
 
     const item = await this.todoService.add(text);
 
-    this.logger.withContext(item).notify(`Item[${item.id}] added`);
+    this.logger.withContext({ item }).notify(`Item[${item.id}] added`);
   }
 }
 

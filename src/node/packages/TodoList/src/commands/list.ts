@@ -21,7 +21,7 @@ export class ListCommand implements Command {
 
     const items = await this.todoService.list({ completed, search, limit });
 
-    this.logger.withContext(items).notify(`Items[${items.length}] found`);
+    this.logger.withContext({ items }).notify(`Items[${items.length}] found`);
   }
 }
 

@@ -21,7 +21,7 @@ export class UpdateStatusCommand implements Command {
 
     const item = await this.todoService.update(id, { completed });
 
-    this.logger.withContext(item).notify(`Item[${id}] complete: "${completed}"`);
+    this.logger.withContext({ item }).notify(`Item[${id}] complete: "${completed}"`);
   }
 }
 
