@@ -53,7 +53,7 @@ export class AppointmentController extends BaseController {
     return Appointment.toRecord(response);
   };
 
-  handleDelete = async (req: Request<AppointmentDeleteParams, never>, res: Response) => {
+  handleDelete = async (req: Request<AppointmentDeleteParams, unknown>, res: Response) => {
     const { id } = req.params;
 
     this.appointmentService.delete(id);
@@ -61,7 +61,7 @@ export class AppointmentController extends BaseController {
     res.status(204);
   };
 
-  handleList = async (req: Request<never, AppointmentRecord[], never, AppointmentListQuery>) => {
+  handleList = async (req: Request<unknown, AppointmentRecord[], unknown, AppointmentListQuery>) => {
     const { completed, limit } = req.query;
 
     const response = this.appointmentService.findMany({ completed, limit });
