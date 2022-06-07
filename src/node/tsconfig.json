@@ -9,7 +9,8 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "experimentalDecorators": true
   },
   "watchOptions": {
     "excludeDirectories": ["node_modules", "dist"]

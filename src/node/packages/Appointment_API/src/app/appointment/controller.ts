@@ -8,8 +8,10 @@ import {
   AppointmentGetParams,
   AppointmentListQuery,
   AppointmentUpdateBody,
+  appointmentUpdateBodySchema,
   AppointmentUpdateParams,
 } from "./definition";
+import { route } from "../../infra/route";
 
 export class AppointmentController extends BaseController {
   private readonly appointmentService: AppointmentService;
@@ -19,57 +21,51 @@ export class AppointmentController extends BaseController {
 
     this.appointmentService = appointmentService;
 
-    this.router.get("/", this.handleList);
-    this.router.get("/:id", this.handleGet);
-    this.router.post("/", this.handleCreate);
-    this.router.put("/:id", this.handleUpdate);
-    this.router.delete("/:id", this.handleDelete);
+    this.router.get("/", route(this.handleList));
+    this.router.get("/:id", route(this.handleGet));
+    this.router.post("/", route(this.handleCreate));
+    this.router.put("/:id", route(this.handleUpdate, appointmentUpdateBodySchema));
+    this.router.delete("/:id", route(this.handleDelete));
   }
 
-  handleCreate = (_req: Request<never, AppointmentRecord, never>, res: Response<AppointmentRecord>) => {
+  handleCreate = async (_req: Request, res: Response) => {
     const response = this.appointmentService.create();
 
-    res.json(Appointment.toRecord(response));
+    res.status(201);
+
+    return Appointment.toRecord(response);
   };
 
-  handleGet = (req: Request<AppointmentGetParams, AppointmentRecord>, res: Response<AppointmentRecord>) => {
+  handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>) => {
     const { id } = req.params;
 
     const response = this.appointmentService.findOne(id);
 
-    res.json(Appointment.toRecord(response));
+    return Appointment.toRecord(response);
   };
 
-  handleUpdate = (
-    req: Request<AppointmentUpdateParams, AppointmentRecord, AppointmentUpdateBody>,
-    res: Response<AppointmentRecord>
-  ) => {
+  handleUpdate = async (req: Request<AppointmentUpdateParams, AppointmentRecord, AppointmentUpdateBody>) => {
     const { id } = req.params;
     const { completed } = req.body;
 
     const response = this.appointmentService.update(id, { completed });
 
-    res.json(Appointment.toRecord(response));
+    return Appointment.toRecord(response);
   };
 
-  handleDelete = (req: Request<AppointmentDeleteParams, never>, res: Response<never>) => {
+  handleDelete = async (req: Request<AppointmentDeleteParams, never>, res: Response) => {
     const { id } = req.params;
 
     this.appointmentService.delete(id);
 
-    res.status(204).end();
+    res.status(204);
   };
 
-  handleList = (
-    req: Request<never, AppointmentRecord[], never, AppointmentListQuery>,
-    res: Response<AppointmentRecord[]>
-  ) => {
+  handleList = async (req: Request<never, AppointmentRecord[], never, AppointmentListQuery>) => {
     const { completed, limit } = req.query;
-
-    console.log(completed, limit);
 
     const response = this.appointmentService.findMany({ completed, limit });
 
-    res.json(response.map((appointment) => Appointment.toRecord(appointment)));
+    return response.map((appointment) => Appointment.toRecord(appointment));
   };
 }
