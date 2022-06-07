@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { NotFoundError, UnauthorizedError } from "../definitions/error.definition";
+import { Request, Response, NextFunction } from "express";
+import { NotFoundError, UnauthorizedError } from "../domain/error";
 
 export const errorHandlingMiddleware = (err: Error, _req: Request, res: Response, next: NextFunction): void => {
   if (err instanceof UnauthorizedError) {
