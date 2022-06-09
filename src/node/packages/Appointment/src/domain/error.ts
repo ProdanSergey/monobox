@@ -1,4 +1,6 @@
-import { DomainError } from "./domain-error";
+export class DomainError extends Error {
+  name = "DomainError";
+}
 
 export class NotFoundError extends DomainError {
   constructor() {

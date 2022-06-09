@@ -1,8 +1,9 @@
-import { Router } from "express";
 import type { Request, Response } from "express";
-import { AppointmentService } from "./service";
-import { BaseController } from "../../infra/controller";
+import { BaseController, route } from "../../infra/express";
 import { Appointment, AppointmentRecord } from "../../domain/appointment";
+import { Store } from "../../ports/store";
+import { GetAppointmentCommand } from "../../commands/GetAppointmentCommand";
+import { CreateAppointmentCommand } from "../../commands/CreateAppointmentCommand";
 import {
   AppointmentDeleteParams,
   AppointmentGetParams,
@@ -11,15 +12,12 @@ import {
   appointmentUpdateBodySchema,
   AppointmentUpdateParams,
 } from "./definition";
-import { route } from "../../infra/route";
-
+import { UpdateAppointmentCommand, UpdateAppointmentCommandParams } from "../../commands/UpdateAppointmentCommand";
+import { DeleteAppointmentCommand } from "../../commands/DeleteAppointmentCommand";
+import { ListAppointmentCommand } from "../../commands/ListAppointmentCommand";
 export class AppointmentController extends BaseController {
-  private readonly appointmentService: AppointmentService;
-
-  constructor(appointmentService: AppointmentService) {
-    super(Router({ mergeParams: true }));
-
-    this.appointmentService = appointmentService;
+  constructor(private readonly store: Store) {
+    super();
 
     this.router.get("/", route(this.handleList));
     this.router.get("/:id", route(this.handleGet));
@@ -29,17 +27,17 @@ export class AppointmentController extends BaseController {
   }
 
   handleCreate = async (_req: Request, res: Response) => {
-    const response = this.appointmentService.create();
+    const response = new CreateAppointmentCommand(this.store).execute();
 
     res.status(201);
 
-    return Appointment.toRecord(response);
+    return response;
   };
 
   handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>) => {
     const { id } = req.params;
 
-    const response = this.appointmentService.findOne(id);
+    const response = new GetAppointmentCommand(this.store).execute({ id });
 
     return Appointment.toRecord(response);
   };
@@ -48,7 +46,9 @@ export class AppointmentController extends BaseController {
     const { id } = req.params;
     const { completed } = req.body;
 
-    const response = this.appointmentService.update(id, { completed });
+    const command: UpdateAppointmentCommandParams = { id, partial: { completed } };
+
+    const response = new UpdateAppointmentCommand(this.store).execute(command);
 
     return Appointment.toRecord(response);
   };
@@ -56,7 +56,7 @@ export class AppointmentController extends BaseController {
   handleDelete = async (req: Request<AppointmentDeleteParams, unknown>, res: Response) => {
     const { id } = req.params;
 
-    this.appointmentService.delete(id);
+    new DeleteAppointmentCommand(this.store).execute({ id });
 
     res.status(204);
   };
@@ -64,7 +64,7 @@ export class AppointmentController extends BaseController {
   handleList = async (req: Request<unknown, AppointmentRecord[], unknown, AppointmentListQuery>) => {
     const { completed, limit } = req.query;
 
-    const response = this.appointmentService.findMany({ completed, limit });
+    const response = new ListAppointmentCommand(this.store).execute({ completed, limit });
 
     return response.map((appointment) => Appointment.toRecord(appointment));
   };

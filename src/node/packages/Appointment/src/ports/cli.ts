@@ -6,3 +6,8 @@ export enum CLICommand {
   LIST = "list",
   CLEAR = "clear",
 }
+
+export interface CLI {
+  getCommand(): CLICommand;
+  getQuery<T extends Record<string, unknown>>(): T;
+}

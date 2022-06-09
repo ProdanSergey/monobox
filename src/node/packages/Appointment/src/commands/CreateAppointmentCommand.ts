@@ -1,12 +1,15 @@
 import { Logger } from "../ports/logger";
-import { AppointmentService } from "../app/appointment.service";
+import { Store } from "../ports/store";
+import { Appointment } from "../domain/appointment";
 
 export class CreateAppointmentCommand {
-  constructor(private readonly logger: Logger, private readonly appointmentService: AppointmentService) {}
+  constructor(private readonly logger: Logger, private readonly store: Store) {}
 
   async execute() {
-    const { id } = await this.appointmentService.create();
+    const appointment = Appointment.create();
 
-    this.logger.print(`Appointment created [${id}]`);
+    await this.store.setState({ [appointment.id]: appointment });
+
+    this.logger.print(`Appointment created [${appointment.id}]`);
   }
 }
