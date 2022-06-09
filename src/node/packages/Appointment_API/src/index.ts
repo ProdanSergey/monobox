@@ -3,9 +3,9 @@ import * as express from "express";
 
 import { queryParser } from "express-query-parser";
 
+import { InMemoryStore } from "./adapters/in-memory-store";
 import { errorHandlingMiddleware } from "./middlewares/error-handling";
 import { AppointmentController } from "./app/appointment/controller";
-import { AppointmentService } from "./app/appointment/service";
 
 dotenv.config();
 
@@ -24,7 +24,7 @@ app.use(
   })
 );
 
-app.use("/appointment", new AppointmentController(new AppointmentService()).listen());
+app.use("/appointment", new AppointmentController(InMemoryStore).process());
 
 app.use(errorHandlingMiddleware);
 

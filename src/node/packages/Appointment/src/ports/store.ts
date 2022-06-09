@@ -1,8 +1,8 @@
-import { Appointment } from "../models/appointment";
+import { AppointmentId, Appointment } from "../domain/appointment";
 
-export type State = Record<string, Appointment>;
+export type State = Record<AppointmentId, Appointment>;
 
 export interface Store {
-  getState(key: string): Promise<Appointment | undefined>;
-  setState(key: string, value: Appointment): Promise<void>;
+  getState(): Promise<State>;
+  setState(state: State): Promise<void>;
 }

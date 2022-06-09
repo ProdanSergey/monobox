@@ -1,3 +1,17 @@
+import { Router } from "express";
+
+export class BaseController {
+  router: Router;
+
+  constructor() {
+    this.router = Router({ mergeParams: true });
+  }
+
+  process() {
+    return this.router;
+  }
+}
+
 import { NextFunction, Request, Response } from "express";
 import { AnySchema } from "yup";
 

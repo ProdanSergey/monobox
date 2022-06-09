@@ -1,21 +1,23 @@
-import { AppointmentService } from "../app/appointment.service";
-import { NotFoundError } from "../errors/not-found";
+import { NotFoundError } from "../domain/error";
 import { Logger } from "../ports/logger";
+import { Store } from "../ports/store";
 
-type GetCommand = {
+type GetAppointmentCommandParams = {
   id: string;
 };
 
 export class GetAppointmentCommand {
-  constructor(private readonly logger: Logger, private readonly appointmentService: AppointmentService) {}
+  constructor(private readonly logger: Logger, private readonly store: Store) {}
 
-  async execute({ id }: GetCommand) {
-    const appointment = await this.appointmentService.get(id);
+  async execute({ id }: GetAppointmentCommandParams) {
+    const state = await this.store.getState();
+
+    const appointment = state[id];
 
     if (!appointment) {
       throw new NotFoundError();
     }
 
-    this.logger.print(`[${id}]: ${appointment?.created_at}`);
+    this.logger.print(`[${id}]: ${appointment.created_at}`);
   }
 }

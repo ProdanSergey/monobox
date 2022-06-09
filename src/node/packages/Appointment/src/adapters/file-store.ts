@@ -2,7 +2,6 @@ import { resolve } from "node:path";
 import { readdir, writeFile, readFile, stat } from "node:fs/promises";
 import * as dayjs from "dayjs";
 
-import { Appointment } from "../models/appointment";
 import { State, Store } from "../ports/store";
 
 export class FileStore implements Store {
@@ -49,15 +48,13 @@ export class FileStore implements Store {
     await writeFile(`${FileStore.DIRECTORY}/${fileName}`, JSON.stringify(state));
   }
 
-  async getState(key: string): Promise<Appointment> {
-    const store = await FileStore.readStore(this.fileName);
-
-    return store[key];
+  async getState(): Promise<State> {
+    return await FileStore.readStore(this.fileName);
   }
 
-  async setState(key: string, value: Appointment): Promise<void> {
-    const store = await FileStore.readStore(this.fileName);
+  async setState(state: State): Promise<void> {
+    const prevState = await FileStore.readStore(this.fileName);
 
-    await FileStore.writeStore(this.fileName, { ...store, [key]: value });
+    await FileStore.writeStore(this.fileName, { ...prevState, ...state });
   }
 }
