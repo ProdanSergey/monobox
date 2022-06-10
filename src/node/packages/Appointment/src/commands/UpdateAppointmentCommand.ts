@@ -10,14 +10,18 @@ export type UpdateAppointmentCommandParams = {
 export class UpdateAppointmentCommand {
   constructor(private readonly store: Store) {}
 
-  execute({ id, completed }: UpdateAppointmentCommandParams): Appointment {
-    const appointment = this.store.get(id);
+  async execute({ id, completed }: UpdateAppointmentCommandParams): Promise<Appointment> {
+    const state = await this.store.getState();
 
-    if (!appointment) {
+    if (!state[id]) {
       throw new NotFoundError();
     }
 
+    const appointment = Appointment.toModel(state[id]);
+
     appointment.update({ completed });
+
+    await this.store.setState(state);
 
     return appointment;
   }

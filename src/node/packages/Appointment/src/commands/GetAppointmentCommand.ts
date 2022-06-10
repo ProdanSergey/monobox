@@ -1,5 +1,5 @@
+import { Appointment } from "../domain/appointment";
 import { NotFoundError } from "../domain/error";
-import { Logger } from "../ports/logger";
 import { Store } from "../ports/store";
 
 type GetAppointmentCommandParams = {
@@ -7,17 +7,15 @@ type GetAppointmentCommandParams = {
 };
 
 export class GetAppointmentCommand {
-  constructor(private readonly logger: Logger, private readonly store: Store) {}
+  constructor(private readonly store: Store) {}
 
   async execute({ id }: GetAppointmentCommandParams) {
     const state = await this.store.getState();
 
-    const appointment = state[id];
-
-    if (!appointment) {
+    if (!state[id]) {
       throw new NotFoundError();
     }
 
-    this.logger.print(`[${id}]: ${appointment.created_at}`);
+    return Appointment.toModel(state[id]);
   }
 }

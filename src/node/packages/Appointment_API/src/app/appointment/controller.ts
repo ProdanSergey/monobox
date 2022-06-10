@@ -46,7 +46,7 @@ export class AppointmentController extends BaseController {
     const { id } = req.params;
     const { completed } = req.body;
 
-    const command: UpdateAppointmentCommandParams = { id, partial: { completed } };
+    const command: UpdateAppointmentCommandParams = { id, completed };
 
     const response = new UpdateAppointmentCommand(this.store).execute(command);
 

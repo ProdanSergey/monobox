@@ -14,47 +14,39 @@ export class FileStore implements Store {
   }
 
   static async initStore(): Promise<FileStore> {
-    try {
-      const files = await readdir(FileStore.DIRECTORY);
+    const files = await readdir(FileStore.DIRECTORY);
 
-      for (const fileName of files) {
-        const { ctimeMs } = await stat(`${FileStore.DIRECTORY}/${fileName}`);
+    for (const fileName of files) {
+      const { ctimeMs } = await stat(`${FileStore.DIRECTORY}/${fileName}`);
 
-        if (dayjs(ctimeMs).isAfter(dayjs().startOf("d"))) {
-          return new FileStore(fileName);
-        }
+      if (dayjs(ctimeMs).isAfter(dayjs().startOf("d"))) {
+        return new FileStore(fileName);
       }
-
-      const fileName = FileStore.createName();
-      await FileStore.writeStore(fileName, {});
-
-      return new FileStore(fileName);
-    } catch (error) {
-      throw `Internal Error: ${(error as Error).message}`;
     }
+
+    const fileName = FileStore.createName();
+    await FileStore.writeStore(fileName, "{}");
+
+    return new FileStore(fileName);
   }
 
   private static createName(): string {
     return `${new Date().toISOString().split("T")[0]}-store.json`;
   }
 
-  private static async readStore(fileName: string): Promise<State> {
-    const file = await readFile(`${FileStore.DIRECTORY}/${fileName}`, "utf-8");
-
-    return JSON.parse(file);
+  private static async readStore(fileName: string): Promise<string> {
+    return readFile(`${FileStore.DIRECTORY}/${fileName}`, "utf-8");
   }
 
-  private static async writeStore(fileName: string, state: State): Promise<void> {
-    await writeFile(`${FileStore.DIRECTORY}/${fileName}`, JSON.stringify(state));
+  private static async writeStore(fileName: string, content: string): Promise<void> {
+    await writeFile(`${FileStore.DIRECTORY}/${fileName}`, content);
   }
 
   async getState(): Promise<State> {
-    return await FileStore.readStore(this.fileName);
+    return JSON.parse(await FileStore.readStore(this.fileName));
   }
 
   async setState(state: State): Promise<void> {
-    const prevState = await FileStore.readStore(this.fileName);
-
-    await FileStore.writeStore(this.fileName, { ...prevState, ...state });
+    await FileStore.writeStore(this.fileName, JSON.stringify(state));
   }
 }
