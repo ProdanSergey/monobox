@@ -3,31 +3,37 @@ import * as express from "express";
 
 import { queryParser } from "express-query-parser";
 
-import { InMemoryStore } from "./adapters/in-memory-store";
-import { errorHandlingMiddleware } from "./middlewares/error-handling";
-import { AppointmentController } from "./app/appointment/controller";
-
 dotenv.config();
 
-const { PORT = 3000 } = process.env;
+import { InMemoryAppointmentRepository } from "./adapters/cache/appointment-repository";
+import { errorHandlingMiddleware } from "./middlewares/error-handling";
 
-const app = express();
+import { AppointmentController } from "./app/appointment/controller";
+import { ConsoleLogger } from "./adapters/console-logger";
 
-app.use(express.json());
+const { PORT } = process.env;
 
-app.use(
-  queryParser({
-    parseNull: true,
-    parseUndefined: true,
-    parseBoolean: true,
-    parseNumber: true,
-  })
-);
+const bootstrap = (app: express.Express) => {
+  const logger = new ConsoleLogger();
 
-app.use("/appointment", new AppointmentController(InMemoryStore).process());
+  app.use(express.json());
 
-app.use(errorHandlingMiddleware);
+  app.use(
+    queryParser({
+      parseNull: true,
+      parseUndefined: true,
+      parseBoolean: true,
+      parseNumber: true,
+    })
+  );
 
-app.listen(PORT, () => {
-  console.log(`App listening at http://localhost:${PORT}`);
-});
+  app.use("/appointment", new AppointmentController(new InMemoryAppointmentRepository()).process());
+
+  app.use(errorHandlingMiddleware);
+
+  app.listen(PORT, () => {
+    logger.print(`App listening at http://localhost:${PORT}`);
+  });
+};
+
+bootstrap(express());

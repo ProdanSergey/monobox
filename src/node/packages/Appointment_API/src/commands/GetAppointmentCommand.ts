@@ -1,16 +1,16 @@
-import { Store } from "../ports/store";
 import { Appointment } from "../domain/appointment";
 import { NotFoundError } from "../domain/error";
+import { AppointmentRepository } from "../ports/repository/appointment";
 
 type GetAppointmentCommandParams = {
   id: string;
 };
 
 export class GetAppointmentCommand {
-  constructor(private readonly store: Store) {}
+  constructor(private readonly appointmentRepository: AppointmentRepository) {}
 
-  execute({ id }: GetAppointmentCommandParams): Appointment {
-    const appointment = Array.from(this.store.values()).find((entity) => entity.id === id);
+  async execute({ id }: GetAppointmentCommandParams): Promise<Appointment> {
+    const appointment = await this.appointmentRepository.findOne(id);
 
     if (!appointment) {
       throw new NotFoundError();
