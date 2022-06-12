@@ -1,7 +1,7 @@
 export enum CLICommand {
   CREATE = "create",
   GET = "get",
-  COMPLETE = "complete",
+  UPDATE = "update",
   DELETE = "delete",
   LIST = "list",
   CLEAR = "clear",

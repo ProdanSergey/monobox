@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { BaseController, route } from "../../infra/express";
 import { Appointment, AppointmentRecord } from "../../domain/appointment";
-import { Store } from "../../ports/store";
+import { AppointmentRepository } from "../../ports/repository/appointment";
 import { GetAppointmentCommand } from "../../commands/GetAppointmentCommand";
 import { CreateAppointmentCommand } from "../../commands/CreateAppointmentCommand";
 import {
@@ -16,7 +16,7 @@ import { UpdateAppointmentCommand, UpdateAppointmentCommandParams } from "../../
 import { DeleteAppointmentCommand } from "../../commands/DeleteAppointmentCommand";
 import { ListAppointmentCommand } from "../../commands/ListAppointmentCommand";
 export class AppointmentController extends BaseController {
-  constructor(private readonly store: Store) {
+  constructor(private readonly appointmentRepository: AppointmentRepository) {
     super();
 
     this.router.get("/", route(this.handleList));
@@ -27,7 +27,7 @@ export class AppointmentController extends BaseController {
   }
 
   handleCreate = async (_req: Request, res: Response) => {
-    const response = new CreateAppointmentCommand(this.store).execute();
+    const response = await new CreateAppointmentCommand(this.appointmentRepository).execute();
 
     res.status(201);
 
@@ -37,7 +37,7 @@ export class AppointmentController extends BaseController {
   handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>) => {
     const { id } = req.params;
 
-    const response = new GetAppointmentCommand(this.store).execute({ id });
+    const response = await new GetAppointmentCommand(this.appointmentRepository).execute({ id });
 
     return Appointment.toRecord(response);
   };
@@ -46,9 +46,9 @@ export class AppointmentController extends BaseController {
     const { id } = req.params;
     const { completed } = req.body;
 
-    const command: UpdateAppointmentCommandParams = { id, partial: { completed } };
+    const command: UpdateAppointmentCommandParams = { id, completed };
 
-    const response = new UpdateAppointmentCommand(this.store).execute(command);
+    const response = await new UpdateAppointmentCommand(this.appointmentRepository).execute(command);
 
     return Appointment.toRecord(response);
   };
@@ -56,7 +56,7 @@ export class AppointmentController extends BaseController {
   handleDelete = async (req: Request<AppointmentDeleteParams, unknown>, res: Response) => {
     const { id } = req.params;
 
-    new DeleteAppointmentCommand(this.store).execute({ id });
+    await new DeleteAppointmentCommand(this.appointmentRepository).execute({ id });
 
     res.status(204);
   };
@@ -64,8 +64,8 @@ export class AppointmentController extends BaseController {
   handleList = async (req: Request<unknown, AppointmentRecord[], unknown, AppointmentListQuery>) => {
     const { completed, limit } = req.query;
 
-    const response = new ListAppointmentCommand(this.store).execute({ completed, limit });
+    const response = await new ListAppointmentCommand(this.appointmentRepository).execute({ completed, limit });
 
-    return response.map((appointment) => Appointment.toRecord(appointment));
+    return response.map(Appointment.toRecord);
   };
 }

@@ -33,7 +33,7 @@ export class Appointment {
   }
 
   update(partial: Partial<Appointment>) {
-    this.record = { ...this.record, ...partial };
+    this.record = { ...this.record, ...partial, updated_at: dayjs().format() };
   }
 
   static create() {
@@ -57,5 +57,9 @@ export class Appointment {
       created_at: appointment.created_at,
       updated_at: appointment.updated_at,
     };
+  }
+
+  static toModel(appointment: Appointment): Appointment {
+    return new Appointment(appointment.record);
   }
 }

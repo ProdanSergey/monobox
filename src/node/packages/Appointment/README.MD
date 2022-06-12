@@ -8,9 +8,9 @@
 
 `npm run get [id=string]`
 
-3. Complete an Appointment:
+3. Update an Appointment:
 
-`npm run complete [id=string]`
+`npm run update [id=string&completed=boolean]`
 
 5. Delete an Appointment:
 
@@ -18,8 +18,4 @@
 
 6. List Appointments:
 
-`npm run list [status?=false|true&search?=string&limit?=number]`
-
-8. Clear Appointments:
-
-`npm run clear`
+`npm run list [completed?=boolean&limit?=number]`

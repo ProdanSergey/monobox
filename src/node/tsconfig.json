@@ -10,7 +10,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+		"types": ["node"]
   },
   "watchOptions": {
     "excludeDirectories": ["node_modules", "dist"]

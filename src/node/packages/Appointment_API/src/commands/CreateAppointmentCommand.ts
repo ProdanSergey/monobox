@@ -1,14 +1,10 @@
-import { Store } from "../ports/store";
 import { Appointment } from "../domain/appointment";
+import { AppointmentRepository } from "../ports/repository/appointment";
 
 export class CreateAppointmentCommand {
-  constructor(private readonly store: Store) {}
+  constructor(private readonly repository: AppointmentRepository) {}
 
-  execute(): Appointment {
-    const appointment = Appointment.create();
-
-    this.store.set(appointment.id, appointment);
-
-    return appointment;
+  async execute(): Promise<Appointment> {
+    return await this.repository.create(Appointment.create());
   }
 }
