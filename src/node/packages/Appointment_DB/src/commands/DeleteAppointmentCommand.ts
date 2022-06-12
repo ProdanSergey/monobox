@@ -6,9 +6,9 @@ export type DeleteAppointmentCommandParams = {
 };
 
 export class DeleteAppointmentCommand {
-  constructor(private readonly appointmentRepository: AppointmentRepository) {}
+  constructor(private readonly repository: AppointmentRepository) {}
 
   async execute({ id }: DeleteAppointmentCommandParams): Promise<void> {
-    await this.appointmentRepository.remove(id);
+    await this.repository.remove(id);
   }
 }

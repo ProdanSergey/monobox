@@ -1,12 +1,14 @@
 import { ConsoleLogger } from "./adapters/console-logger";
-import { FileStore } from "./adapters/file-store";
+import { AppointmentFile } from "./adapters/filesystem/appointment-file";
+import { FileAppointmentRepository } from "./adapters/filesystem/appointment-repository";
 import { NodeCLI } from "./adapters/node-cli";
 import { AppointmentController } from "./app/appointment/controller";
 
 const bootstrap = async () => {
   const logger = new ConsoleLogger();
   const nodeCli = new NodeCLI(logger);
-  const store = await FileStore.initStore();
+  const appointmentFile = await AppointmentFile.initStore();
+  const appointmentRepository = new FileAppointmentRepository(appointmentFile);
 
   const handleError = (error: unknown) => {
     const message = error instanceof Error ? error.message : (error as string);
@@ -19,7 +21,7 @@ const bootstrap = async () => {
   process.on("uncaughtException", handleError);
   process.on("unhandledRejection", handleError);
 
-  await new AppointmentController(nodeCli, logger, store).process();
+  await new AppointmentController(nodeCli, logger, appointmentRepository).process();
 };
 
 bootstrap();

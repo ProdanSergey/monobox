@@ -7,9 +7,9 @@ export type ListAppointmentCommandParams = {
 };
 
 export class ListAppointmentCommand {
-  constructor(private readonly appointmentRepository: AppointmentRepository) {}
+  constructor(private readonly repository: AppointmentRepository) {}
 
   async execute({ completed, limit }: ListAppointmentCommandParams): Promise<Appointment[]> {
-    return await this.appointmentRepository.findMany({ completed, limit });
+    return await this.repository.findMany({ completed, limit });
   }
 }

@@ -8,10 +8,10 @@ export type UpdateAppointmentCommandParams = {
 };
 
 export class UpdateAppointmentCommand {
-  constructor(private readonly appointmentRepository: AppointmentRepository) {}
+  constructor(private readonly repository: AppointmentRepository) {}
 
   async execute({ id, completed }: UpdateAppointmentCommandParams): Promise<Appointment> {
-    const appointment = await this.appointmentRepository.findOne(id);
+    const appointment = await this.repository.findOne(id);
 
     if (!appointment) {
       throw new NotFoundError();
@@ -19,6 +19,6 @@ export class UpdateAppointmentCommand {
 
     appointment.update({ completed });
 
-    return appointment;
+    return this.repository.update(appointment);
   }
 }

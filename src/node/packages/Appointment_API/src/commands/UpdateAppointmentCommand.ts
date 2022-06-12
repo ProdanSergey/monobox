@@ -1,6 +1,6 @@
-import { Store } from "../ports/store";
 import { Appointment, AppointmentId } from "../domain/appointment";
 import { NotFoundError } from "../domain/error";
+import { AppointmentRepository } from "../ports/repository/appointment";
 
 export type UpdateAppointmentCommandParams = {
   id: AppointmentId;
@@ -8,10 +8,10 @@ export type UpdateAppointmentCommandParams = {
 };
 
 export class UpdateAppointmentCommand {
-  constructor(private readonly store: Store) {}
+  constructor(private readonly appointmentRepository: AppointmentRepository) {}
 
-  execute({ id, completed }: UpdateAppointmentCommandParams): Appointment {
-    const appointment = this.store.get(id);
+  async execute({ id, completed }: UpdateAppointmentCommandParams): Promise<Appointment> {
+    const appointment = await this.appointmentRepository.findOne(id);
 
     if (!appointment) {
       throw new NotFoundError();

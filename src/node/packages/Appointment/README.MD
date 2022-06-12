@@ -19,7 +19,3 @@
 6. List Appointments:
 
 `npm run list [completed?=boolean&limit?=number]`
-
-8. Clear Appointments:
-
-`npm run clear`

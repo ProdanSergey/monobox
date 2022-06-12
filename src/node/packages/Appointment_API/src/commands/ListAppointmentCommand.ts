@@ -1,6 +1,5 @@
-import { Store } from "../ports/store";
 import { Appointment } from "../domain/appointment";
-import { isUndefined } from "lodash";
+import { AppointmentRepository } from "../ports/repository/appointment";
 
 export type ListAppointmentCommandParams = {
   completed?: boolean;
@@ -8,19 +7,9 @@ export type ListAppointmentCommandParams = {
 };
 
 export class ListAppointmentCommand {
-  constructor(private readonly store: Store) {}
+  constructor(private readonly appointmentRepository: AppointmentRepository) {}
 
-  execute({ completed, limit }: ListAppointmentCommandParams): Appointment[] {
-    let appointments = Array.from(this.store.values());
-
-    if (!isUndefined(completed)) {
-      appointments = appointments.filter((entity) => entity.completed === completed);
-    }
-
-    if (!isUndefined(limit) && isFinite(limit)) {
-      appointments = appointments.slice(0, limit);
-    }
-
-    return appointments;
+  async execute({ completed, limit }: ListAppointmentCommandParams): Promise<Appointment[]> {
+    return await this.appointmentRepository.findMany({ completed, limit });
   }
 }

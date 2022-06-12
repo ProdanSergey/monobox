@@ -31,7 +31,7 @@ export class AppointmentController extends BaseController {
 
     res.status(201);
 
-    return response;
+    return Appointment.toRecord(response);
   };
 
   handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>) => {

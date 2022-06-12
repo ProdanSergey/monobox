@@ -10,7 +10,6 @@
     "update": "npm run start -- --update",
     "delete": "npm run start -- --delete",
     "list": "npm run start -- --list",
-    "clear": "npm run start -- --clear",
     "watch": "tsc --watch",
     "build": "tsc"
   },

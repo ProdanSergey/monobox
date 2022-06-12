@@ -1,19 +1,14 @@
-import { Store } from "../ports/store";
 import { AppointmentId } from "../domain/appointment";
-import { NotFoundError } from "../domain/error";
+import { AppointmentRepository } from "../ports/repository/appointment";
 
 export type DeleteAppointmentCommandParams = {
   id: AppointmentId;
 };
 
 export class DeleteAppointmentCommand {
-  constructor(private readonly store: Store) {}
+  constructor(private readonly appointmentRepository: AppointmentRepository) {}
 
-  execute({ id }: DeleteAppointmentCommandParams): void {
-    if (!this.store.has(id)) {
-      throw new NotFoundError();
-    }
-
-    this.store.delete(id);
+  async execute({ id }: DeleteAppointmentCommandParams): Promise<void> {
+    await this.appointmentRepository.remove(id);
   }
 }

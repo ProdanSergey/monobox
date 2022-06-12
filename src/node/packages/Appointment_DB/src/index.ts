@@ -5,16 +5,22 @@ import { queryParser } from "express-query-parser";
 
 dotenv.config();
 
-import { InMemoryAppointmentRepository } from "./adapters/cache/appointment-repository";
+import { connect } from "./infra/mongo";
 import { errorHandlingMiddleware } from "./middlewares/error-handling";
 
-import { AppointmentController } from "./app/appointment/controller";
 import { ConsoleLogger } from "./adapters/console-logger";
+import { MongoDBAppointmentRepository } from "./adapters/mongo/appointment-repository";
+
+import { AppointmentController } from "./app/appointment/controller";
 
 const { PORT } = process.env;
 
-const bootstrap = (app: express.Express) => {
+const bootstrap = async (app: express.Express) => {
   const logger = new ConsoleLogger();
+
+  await connect();
+
+  logger.print("DB Connected");
 
   app.use(express.json());
 
@@ -27,7 +33,7 @@ const bootstrap = (app: express.Express) => {
     })
   );
 
-  app.use("/appointment", new AppointmentController(new InMemoryAppointmentRepository()).process());
+  app.use("/appointment", new AppointmentController(new MongoDBAppointmentRepository()).process());
 
   app.use(errorHandlingMiddleware);
 
