@@ -6,12 +6,12 @@
     display: flex;
     justify-content: space-between;
   }
-  
+
   &__repeat-action {
     display: block;
     cursor: pointer;
   }
-  
+
   &__repeat-input {
     position: fixed;
     width: 0;
@@ -20,17 +20,16 @@
     left: -10000;
     right: -10000;
   }
-  
+
   &__action--neutral {
     color: var(--feedback-neutral);
   }
-  
+
   &__action--negative {
     color: var(--feedback-negative);
   }
-  
+
   &__action--positive {
     color: var(--feedback-positive);
   }
 }
-
