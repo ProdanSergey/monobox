@@ -1,5 +1,9 @@
 {
-  "private": true,
+	"author": "Serhii Prodan <sergey.prodan.od@gmail.com> (https://www.linkedin.com/in/sergey-prodan/)",
+  "name": "s-wonderbox",
+	"license": "GPL-3.0",
+	"repository": "github:ProdanSergey/wonderbox",
+	"private": true,
   "scripts": {
     "lint": "npx eslint . --ext .js --ext .jsx --ext .ts --ext .tsx --fix",
     "format": "prettier --write ."
