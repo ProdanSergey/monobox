@@ -8,6 +8,7 @@ export type AppointmentDocument = AppointmentRecord & Document<AppointmentId>;
 const schema = new Schema<AppointmentDocument>(
   {
     _id: String,
+    assignee: { fullName: String, email: String },
     completed: {
       type: Boolean,
       required: true,

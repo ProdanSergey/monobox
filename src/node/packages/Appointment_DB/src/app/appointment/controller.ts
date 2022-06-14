@@ -5,6 +5,8 @@ import { AppointmentRepository } from "../../ports/repository/appointment";
 import { GetAppointmentCommand } from "../../commands/GetAppointmentCommand";
 import { CreateAppointmentCommand } from "../../commands/CreateAppointmentCommand";
 import {
+  AppointmentCreateBody,
+  appointmentCreateBodySchema,
   AppointmentDeleteParams,
   AppointmentGetParams,
   AppointmentListQuery,
@@ -21,13 +23,20 @@ export class AppointmentController extends BaseController {
 
     this.router.get("/", route(this.handleList));
     this.router.get("/:id", route(this.handleGet));
-    this.router.post("/", route(this.handleCreate));
+    this.router.post("/", route(this.handleCreate, appointmentCreateBodySchema));
     this.router.put("/:id", route(this.handleUpdate, appointmentUpdateBodySchema));
     this.router.delete("/:id", route(this.handleDelete));
   }
 
-  handleCreate = async (_req: Request, res: Response) => {
-    const response = await new CreateAppointmentCommand(this.appointmentRepository).execute();
+  handleCreate = async (req: Request<unknown, AppointmentRecord, AppointmentCreateBody>, res: Response) => {
+    const { fullName, email } = req.body;
+
+    const response = await new CreateAppointmentCommand(this.appointmentRepository).execute({
+      assignee: {
+        fullName,
+        email,
+      },
+    });
 
     res.status(201);
 

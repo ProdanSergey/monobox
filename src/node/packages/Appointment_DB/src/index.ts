@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 import * as express from "express";
+import * as cors from "cors";
 
 import { queryParser } from "express-query-parser";
 
@@ -23,6 +24,13 @@ const bootstrap = async (app: express.Express) => {
   logger.print("DB Connected");
 
   app.use(express.json());
+  app.use(
+    cors({
+      origin: ["http://localhost:3030", "http://localhost:8080"],
+      methods: ["GET", "PUT", "POST", "DELETE"],
+      allowedHeaders: ["Accept", "Content-Type"],
+    })
+  );
 
   app.use(
     queryParser({

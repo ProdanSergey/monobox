@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HotModuleReplacementPlugin = require("webpack").HotModuleReplacementPlugin;
 const createStyledComponentsTransformer = require("typescript-plugin-styled-components").default;
 
 const styledComponentsTransformer = createStyledComponentsTransformer();
@@ -19,6 +20,7 @@ module.exports = (env) => {
     devtool: IS_DEV ? "eval-source-map" : "source-map",
     devServer: {
       static: path.resolve(__dirname, "dist"),
+      hot: true,
     },
     entry: {
       main: path.resolve(__dirname, "src", "index.tsx"),
@@ -90,6 +92,7 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, "public", "index.html"),
       }),
+      new HotModuleReplacementPlugin(),
     ],
   };
 };

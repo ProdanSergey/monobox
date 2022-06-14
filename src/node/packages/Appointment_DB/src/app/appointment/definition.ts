@@ -4,6 +4,14 @@ type AppointmentBaseParams = {
   id: string;
 };
 
+export type AppointmentCreateBody = { fullName: string; email: string };
+export const appointmentCreateBodySchema = yup.object().shape({
+  body: yup.object().shape({
+    fullName: yup.string().required(),
+    email: yup.string().email().required(),
+  }),
+});
+
 export type AppointmentGetParams = AppointmentBaseParams;
 
 export type AppointmentUpdateParams = AppointmentBaseParams;
