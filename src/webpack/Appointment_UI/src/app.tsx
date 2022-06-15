@@ -7,7 +7,7 @@ export const App = () => {
   return (
     <>
       <header>
-        <h1>Your are welcome here!</h1>
+        <h1>You are welcome here!</h1>
       </header>
       <main>
         <Routes>

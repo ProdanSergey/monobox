@@ -45,19 +45,19 @@ const mapErrors = (values: CreateAppointmentFormValues): CreateAppointmentFormEr
   }, {});
 };
 
-const mockedAppointment: Appointment = {
-  _id: "AP/222/22/22/22",
-  assignee: {
-    fullName: "John Doe",
-    email: "example@app.io",
-  },
-  completed: false,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-};
+// const mockedAppointment: Appointment = {
+//   _id: "AP/222/22/22/22",
+//   assignee: {
+//     fullName: "John Doe",
+//     email: "example@app.io",
+//   },
+//   completed: false,
+//   created_at: new Date().toISOString(),
+//   updated_at: new Date().toISOString(),
+// };
 
 export const CreateAppointmentPage: FunctionComponent = () => {
-  const [appointment, setAppointment] = useState<Appointment | null>(mockedAppointment);
+  const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [formValues, setValue] = useState<CreateAppointmentFormValues>({
     fullName: "",
     email: "",

@@ -21,7 +21,7 @@ export const StyledInputError = styled.span.attrs({
   role: "alert",
 })`
   font-size: 12px;
-  color: red;
+  color: tomato;
 `;
 
 export const StyledButton = styled(Button)`

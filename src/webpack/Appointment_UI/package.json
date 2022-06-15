@@ -7,14 +7,13 @@
   "scripts": {
     "build": "webpack --env mode=production",
     "watch": "webpack --watch --env mode=production",
-    "start": "webpack serve --open --env mode=development"
+    "start": "webpack serve --env mode=development"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.5",
     "validator": "^13.7.0"

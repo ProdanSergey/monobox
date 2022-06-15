@@ -8,8 +8,9 @@ const BASE_HEADERS = (() => {
 })();
 
 type JSONResponse<Data> = {
-  data: Data;
   status: number;
+  message?: string;
+  data?: Data;
 };
 
 const request = (method: Request["method"]) => {
@@ -21,7 +22,13 @@ const request = (method: Request["method"]) => {
     });
 
     if (response.ok) {
-      const { data } = (await response.json()) as JSONResponse<Data>;
+      const jsonResponse: JSONResponse<Data> = await response.json();
+
+      const { data, message } = jsonResponse;
+
+      if (!data || message) {
+        throw new Error(message);
+      }
 
       return data;
     }

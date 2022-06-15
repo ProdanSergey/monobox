@@ -8,7 +8,7 @@ export type CreateAppointmentBody = {
   email: string;
 };
 
-export const createAppointment = async (body: CreateAppointmentBody): Promise<Appointment> => {
+export const createAppointment = async (body: CreateAppointmentBody) => {
   return post<Appointment>(CREATE_APPOINTMENT_PREFIX, body);
 };
 
@@ -17,5 +17,5 @@ export type GetAppointmentParams = {
 };
 
 export const getAppointment = async ({ id }: GetAppointmentParams) => {
-  return get<Appointment>(`${CREATE_APPOINTMENT_PREFIX}/${id}`);
+  return get<Appointment>(`${CREATE_APPOINTMENT_PREFIX}/${encodeURIComponent(id)}`);
 };
