@@ -2,6 +2,22 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAppointment } from "../shared/api/appointment";
 import { Appointment } from "../shared/domain/appointment";
+import { StyledBlock, StyledWrapper } from "../shared/layout/layout.styled";
+import { QueuedAppointment } from "../templates/view-appointment/queued-appointment/queued-appointment";
+import { PickedAppointment } from "../templates/view-appointment/picked-appointment/picked-appointment";
+import { CompletedAppointment } from "../templates/view-appointment/completed-appointment/completed-appointment";
+
+const mapAppointmentOverview = (appointment: Appointment): React.ReactNode => {
+  if (appointment.completed) {
+    return <CompletedAppointment appointment={appointment} />;
+  }
+
+  if (appointment.operator) {
+    return <PickedAppointment appointment={appointment} />;
+  }
+
+  return <QueuedAppointment appointment={appointment} />;
+};
 
 type PageParams = {
   appointmentId: string;
@@ -14,7 +30,7 @@ export const ViewAppointmentPage: FunctionComponent = () => {
 
   const [appointment, setAppointment] = useState<Appointment | null>(null);
 
-  const request = async (id: string) => {
+  const request = async (id: Appointment["id"]) => {
     try {
       const response = await getAppointment({ id });
 
@@ -44,21 +60,9 @@ export const ViewAppointmentPage: FunctionComponent = () => {
     return null;
   }
 
-  if (appointment.completed) {
-    return (
-      <section>
-        <span>Your appointment completed</span>
-      </section>
-    );
-  }
-
   return (
-    <section>
-      <ul>
-        <li>{appointment._id}</li>
-        <li>{appointment.assignee.fullName}</li>
-        <li>{appointment.created_at}</li>
-      </ul>
-    </section>
+    <StyledWrapper>
+      <StyledBlock>{mapAppointmentOverview(appointment)}</StyledBlock>
+    </StyledWrapper>
   );
 };

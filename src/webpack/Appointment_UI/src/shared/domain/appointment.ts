@@ -1,6 +1,11 @@
 export type Appointment = {
-  _id: string;
+  id: string;
+  ticket: string;
   assignee: {
+    fullName: string;
+    email: string;
+  };
+  operator?: {
     fullName: string;
     email: string;
   };

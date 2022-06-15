@@ -4,17 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { Appointment } from "../../../shared/domain/appointment";
 import { StyledWrapper, StyledButton, StyledCopiedBadge, StyledUriText } from "./output.styled";
 
-export type CreateAppointmentOutputProps = {
+export type AppointmentOutputProps = {
   appointment: Appointment;
 };
 
-export const CreateAppointmentOutput: FunctionComponent<CreateAppointmentOutputProps> = ({ appointment }) => {
+export const AppointmentOutput: FunctionComponent<AppointmentOutputProps> = ({ appointment }) => {
   const [copied, setCopied] = useState(false);
 
   const navigate = useNavigate();
 
-  const appointmentId = encodeURIComponent(appointment._id);
-  const uri = `${window.location.origin}/${appointmentId}`;
+  const { id } = appointment;
+
+  const uri = `${window.location.origin}/${id}`;
 
   const handleCopy: PointerEventHandler<HTMLButtonElement> = () => {
     navigator.clipboard.writeText(uri);
@@ -22,7 +23,7 @@ export const CreateAppointmentOutput: FunctionComponent<CreateAppointmentOutputP
   };
 
   const handleNavigate: PointerEventHandler<HTMLButtonElement> = () => {
-    navigate(appointmentId);
+    navigate(id);
   };
 
   return (

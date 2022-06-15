@@ -7,14 +7,20 @@ const BASE_HEADERS = (() => {
   return headers;
 })();
 
-type JSONResponse<Data> = {
+type JSONSuccessResponse<Data> = {
   status: number;
-  message?: string;
-  data?: Data;
+  data: Data;
 };
 
+type JSONFailedResponse = {
+  status: number;
+  message: string;
+};
+
+type JSONResponse<Data> = JSONSuccessResponse<Data> | JSONFailedResponse;
+
 const request = (method: Request["method"]) => {
-  return async <Data>(resource: string, body?: Record<string, unknown>): Promise<Data> => {
+  return async <Data = undefined>(resource: string, body?: Record<string, unknown>): Promise<Data> => {
     const response = await fetch(`${BASE_URL}/${resource}`, {
       method,
       body: body ? JSON.stringify(body) : null,
@@ -24,13 +30,11 @@ const request = (method: Request["method"]) => {
     if (response.ok) {
       const jsonResponse: JSONResponse<Data> = await response.json();
 
-      const { data, message } = jsonResponse;
-
-      if (!data || message) {
-        throw new Error(message);
+      if ("message" in jsonResponse) {
+        throw new Error(jsonResponse.message);
       }
 
-      return data;
+      return jsonResponse.data;
     }
 
     throw new Error(response.statusText);

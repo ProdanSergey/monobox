@@ -3,22 +3,22 @@ import validator from "validator";
 import { StyledSpacerM } from "../components/spacer.styled";
 import { createAppointment } from "../shared/api/appointment";
 import { Appointment } from "../shared/domain/appointment";
+import { StyledBlock, StyledWrapper } from "../shared/layout/layout.styled";
 import {
-  CreateAppointmentForm,
-  CreateAppointmentFormErrors,
-  CreateAppointmentFormValues,
+  AppointmentForm,
+  AppointmentFormErrors,
+  AppointmentFormValues,
 } from "../templates/create-appointment/form/form";
-import { CreateAppointmentOutput } from "../templates/create-appointment/output/output";
-import { StyledBlock, StyledWrapper } from "./create-appointment.styled";
+import { AppointmentOutput } from "../templates/create-appointment/output/output";
 
-type Messages = Record<keyof CreateAppointmentFormValues, string>;
+type Messages = Record<keyof AppointmentFormValues, string>;
 
 const messages: Messages = {
   fullName: "Full Name is required",
   email: "Email is required and must have proper format",
 };
 
-type Validators = Record<keyof CreateAppointmentFormValues, (value: unknown) => boolean>;
+type Validators = Record<keyof AppointmentFormValues, (value: unknown) => boolean>;
 
 const validators: Validators = {
   fullName: (value) => {
@@ -29,13 +29,13 @@ const validators: Validators = {
   },
 };
 
-const hasError = (errors: CreateAppointmentFormErrors): boolean => {
+const hasError = (errors: AppointmentFormErrors): boolean => {
   return Object.keys(errors).length > 0;
 };
 
-const mapErrors = (values: CreateAppointmentFormValues): CreateAppointmentFormErrors => {
+const mapErrors = (values: AppointmentFormValues): AppointmentFormErrors => {
   return Object.entries(validators).reduce((errors, [name, validator]) => {
-    const key = name as keyof CreateAppointmentFormValues;
+    const key = name as keyof AppointmentFormValues;
 
     if (!validator(values[key])) {
       return { ...errors, [name]: messages[key] };
@@ -45,29 +45,18 @@ const mapErrors = (values: CreateAppointmentFormValues): CreateAppointmentFormEr
   }, {});
 };
 
-// const mockedAppointment: Appointment = {
-//   _id: "AP/222/22/22/22",
-//   assignee: {
-//     fullName: "John Doe",
-//     email: "example@app.io",
-//   },
-//   completed: false,
-//   created_at: new Date().toISOString(),
-//   updated_at: new Date().toISOString(),
-// };
-
 export const CreateAppointmentPage: FunctionComponent = () => {
   const [appointment, setAppointment] = useState<Appointment | null>(null);
-  const [formValues, setValue] = useState<CreateAppointmentFormValues>({
+  const [formValues, setValue] = useState<AppointmentFormValues>({
     fullName: "",
     email: "",
   });
-  const [errors, setErrors] = useState<CreateAppointmentFormErrors>({});
+  const [errors, setErrors] = useState<AppointmentFormErrors>({});
 
   return (
     <StyledWrapper>
       <StyledBlock>
-        <CreateAppointmentForm
+        <AppointmentForm
           errors={errors}
           onChange={(name, value) => {
             if (hasError(errors)) {
@@ -96,7 +85,7 @@ export const CreateAppointmentPage: FunctionComponent = () => {
         <>
           <StyledSpacerM />
           <StyledBlock>
-            <CreateAppointmentOutput appointment={appointment} />
+            <AppointmentOutput appointment={appointment} />
           </StyledBlock>
         </>
       )}

@@ -2,29 +2,25 @@ import React, { ChangeEventHandler, FormEventHandler } from "react";
 import { FunctionComponent } from "react";
 import { StyledForm, StyledButton, StyledInputError, StyledInputField, StyledInputLabel } from "./form.styled";
 
-export type CreateAppointmentFormValues = {
+export type AppointmentFormValues = {
   fullName: string;
   email: string;
 };
 
-export type CreateAppointmentFormErrors = {
+export type AppointmentFormErrors = {
   fullName?: string;
   email?: string;
 };
 
-export type CreateAppointmentFormProps = {
-  errors?: CreateAppointmentFormErrors;
-  onChange: (name: keyof CreateAppointmentFormValues, value: string) => void;
+export type AppointmentFormProps = {
+  errors?: AppointmentFormErrors;
+  onChange: (name: keyof AppointmentFormValues, value: string) => void;
   onSubmit: () => void;
 };
 
-export const CreateAppointmentForm: FunctionComponent<CreateAppointmentFormProps> = ({
-  errors,
-  onChange,
-  onSubmit,
-}) => {
+export const AppointmentForm: FunctionComponent<AppointmentFormProps> = ({ errors, onChange, onSubmit }) => {
   const handleChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
-    onChange(name as keyof CreateAppointmentFormValues, value);
+    onChange(name as keyof AppointmentFormValues, value);
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
