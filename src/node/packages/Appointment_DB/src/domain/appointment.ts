@@ -2,8 +2,22 @@ import * as dayjs from "dayjs";
 
 export type AppointmentId = string;
 
+export type AppointmentAssignee = {
+  fullName: string;
+  email: string;
+};
+
+export type AppointmentOperator = {
+  fullName: string;
+  email: string;
+};
+
 export type AppointmentRecord = {
-  _id: AppointmentId;
+  id: AppointmentId;
+  ticket: string;
+  assignee: AppointmentAssignee;
+  operator?: AppointmentOperator;
+  resolution?: string;
   completed: boolean;
   created_at: string;
   updated_at: string;
@@ -12,12 +26,24 @@ export type AppointmentRecord = {
 export class Appointment {
   private record: AppointmentRecord;
 
-  constructor(record: AppointmentRecord) {
+  private constructor(record: AppointmentRecord) {
     this.record = record;
   }
 
   get id() {
-    return this.record._id;
+    return this.record.id;
+  }
+
+  get ticket() {
+    return this.record.ticket;
+  }
+
+  get assignee() {
+    return this.record.assignee;
+  }
+
+  get operator() {
+    return this.record.operator;
   }
 
   get completed() {
@@ -32,19 +58,26 @@ export class Appointment {
     return this.record.updated_at;
   }
 
-  update(partial: Partial<AppointmentRecord>) {
-    this.record = { ...this.record, ...partial };
+  pick(operator: AppointmentOperator) {
+    this.update({ operator });
   }
 
-  static create() {
+  complete() {
+    this.update({ completed: true });
+  }
+
+  private update(record: Partial<AppointmentRecord>) {
+    this.record = { ...this.record, ...record };
+  }
+
+  static create(assignee: AppointmentAssignee): Partial<AppointmentRecord> {
     const now = dayjs();
 
-    return new Appointment({
-      _id: Appointment.generateId(now),
+    return {
+      ticket: Appointment.generateId(now),
+      assignee,
       completed: false,
-      created_at: "",
-      updated_at: "",
-    });
+    };
   }
 
   private static generateId(date: dayjs.Dayjs): AppointmentId {
@@ -53,7 +86,10 @@ export class Appointment {
 
   static toRecord(appointment: Appointment): AppointmentRecord {
     return {
-      _id: appointment.id,
+      id: appointment.id,
+      ticket: appointment.ticket,
+      assignee: appointment.assignee,
+      operator: appointment.operator,
       completed: appointment.completed,
       created_at: appointment.created_at,
       updated_at: appointment.updated_at,

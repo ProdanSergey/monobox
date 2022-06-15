@@ -7,19 +7,26 @@
   "scripts": {
     "build": "webpack --env mode=production",
     "watch": "webpack --watch --env mode=production",
-    "dev": "webpack serve --open --env mode=development"
+    "start": "webpack serve --env mode=development"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dayjs": "^1.11.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "styled-components": "^5.3.5"
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5",
+    "uuid": "^8.3.2",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.5",
     "@types/styled-components": "^5.1.25",
+    "@types/uuid": "^8.3.4",
+    "@types/validator": "^13.7.3",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.5.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",

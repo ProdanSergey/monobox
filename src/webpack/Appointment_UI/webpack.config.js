@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const createStyledComponentsTransformer = require("typescript-plugin-styled-components").default;
+const CopyPlugin = require("copy-webpack-plugin");
 
 const styledComponentsTransformer = createStyledComponentsTransformer();
 
@@ -19,6 +20,9 @@ module.exports = (env) => {
     devtool: IS_DEV ? "eval-source-map" : "source-map",
     devServer: {
       static: path.resolve(__dirname, "dist"),
+      hot: false,
+      historyApiFallback: true,
+      open: true,
     },
     entry: {
       main: path.resolve(__dirname, "src", "index.tsx"),
@@ -72,7 +76,9 @@ module.exports = (env) => {
           use: {
             loader: "ts-loader",
             options: {
-              getCustomTransformers: () => ({ before: [styledComponentsTransformer] }),
+              getCustomTransformers: () => ({
+                before: [styledComponentsTransformer],
+              }),
             },
           },
           exclude: /node_modules/,
@@ -80,16 +86,18 @@ module.exports = (env) => {
       ],
     },
     plugins: [
-      ...(IS_PROD
-        ? [
-            new MiniCssExtractPlugin({
-              filename: "[name].[contenthash].css",
-            }),
-          ]
-        : []),
+      IS_PROD &&
+        new MiniCssExtractPlugin({
+          filename: "[name].[contenthash].css",
+        }),
+      new CopyPlugin({
+        patterns: [
+          { from: path.resolve(__dirname, "public", "assets"), to: path.resolve(__dirname, "dist", "assets") },
+        ],
+      }),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, "public", "index.html"),
       }),
-    ],
+    ].filter(Boolean),
   };
 };

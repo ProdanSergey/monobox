@@ -1,15 +1,21 @@
 import { Request, Response, NextFunction } from "express";
-import { NotFoundError, UnauthorizedError } from "../domain/error";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../domain/error";
+
+const mapStatusCodeFromError = (err: Error): number => {
+  if (err instanceof BadRequestError) return 400;
+  if (err instanceof UnauthorizedError) return 403;
+  if (err instanceof NotFoundError) return 404;
+
+  return 500;
+};
 
 export const errorHandlingMiddleware = (err: Error, _req: Request, res: Response, next: NextFunction): void => {
-  if (err instanceof UnauthorizedError) {
-    res.status(401);
-  } else if (err instanceof NotFoundError) {
-    res.status(404);
-  } else res.status(500);
+  const status = mapStatusCodeFromError(err);
+
+  res.status(status);
 
   res.json({
-    status: res.statusCode,
+    status,
     message: err.message,
   });
 
