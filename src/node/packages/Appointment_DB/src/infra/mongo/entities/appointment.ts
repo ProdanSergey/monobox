@@ -1,14 +1,26 @@
-import { Document, model, Schema } from "mongoose";
-import { AppointmentRecord, AppointmentId } from "../../../domain/appointment";
+import { model, Schema } from "mongoose";
+import { AppointmentRecord } from "../../../domain/appointment";
 
 const ENTITY = "Appointment";
 
-export type AppointmentDocument = AppointmentRecord & Document<AppointmentId>;
+export type AppointmentDocument = Omit<AppointmentRecord, "id">;
 
 const schema = new Schema<AppointmentDocument>(
   {
-    _id: String,
-    assignee: { fullName: String, email: String },
+    ticket: {
+      type: String,
+      required: true,
+    },
+    assignee: {
+      type: { fullName: String, email: String },
+      required: true,
+      _id: false,
+    },
+    operator: {
+      type: { fullName: String, email: String },
+      required: false,
+      _id: false,
+    },
     completed: {
       type: Boolean,
       required: true,
