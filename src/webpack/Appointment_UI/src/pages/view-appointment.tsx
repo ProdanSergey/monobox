@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAppointment } from "../shared/api/appointment";
 import { Appointment } from "../shared/domain/appointment";
-import { StyledBlock, StyledWrapper } from "../shared/layout/layout.styled";
+import { StyledBlock, StyledWrapper } from "../components/layout.styled";
 import { QueuedAppointment } from "../templates/view-appointment/queued-appointment/queued-appointment";
 import { PickedAppointment } from "../templates/view-appointment/picked-appointment/picked-appointment";
 import { CompletedAppointment } from "../templates/view-appointment/completed-appointment/completed-appointment";
@@ -30,7 +30,7 @@ export const ViewAppointmentPage: FunctionComponent = () => {
 
   const [appointment, setAppointment] = useState<Appointment | null>(null);
 
-  const request = async (id: Appointment["id"]) => {
+  const fetchAppointment = async (id: Appointment["id"]) => {
     try {
       const response = await getAppointment({ id });
 
@@ -39,7 +39,7 @@ export const ViewAppointmentPage: FunctionComponent = () => {
       }
 
       if (!response.completed) {
-        timerRef.current = setTimeout(request, 15 * 1000, id);
+        timerRef.current = setTimeout(fetchAppointment, 15 * 1000, id);
       }
     } catch (error) {
       console.error(error);
@@ -49,7 +49,7 @@ export const ViewAppointmentPage: FunctionComponent = () => {
   useEffect(() => {
     if (!appointmentId) return undefined;
 
-    request(appointmentId);
+    fetchAppointment(appointmentId);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);

@@ -1,9 +1,9 @@
 import React, { useState, FunctionComponent } from "react";
 import validator from "validator";
-import { StyledSpacerM } from "../components/spacer.styled";
+import { StyledSpacer } from "../components/spacer.styled";
 import { createAppointment } from "../shared/api/appointment";
 import { Appointment } from "../shared/domain/appointment";
-import { StyledBlock, StyledWrapper } from "../shared/layout/layout.styled";
+import { StyledBlock, StyledWrapper } from "../components/layout.styled";
 import {
   AppointmentForm,
   AppointmentFormErrors,
@@ -83,7 +83,7 @@ export const CreateAppointmentPage: FunctionComponent = () => {
       </StyledBlock>
       {appointment && (
         <>
-          <StyledSpacerM />
+          <StyledSpacer size="m" />
           <StyledBlock>
             <AppointmentOutput appointment={appointment} />
           </StyledBlock>

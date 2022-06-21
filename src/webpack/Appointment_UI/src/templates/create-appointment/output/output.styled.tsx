@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ButtonStyles, StyledButton as Button } from "../../../components/button.styled";
+import { ButtonCSS, StyledButton as Button } from "../../../components/button.styled";
 
 export const StyledWrapper = styled.output`
   display: flex;
@@ -11,7 +11,7 @@ export const StyledButton = styled(Button)`
 `;
 
 export const StyledCopiedBadge = styled.span`
-  ${ButtonStyles};
+  ${ButtonCSS};
   margin-right: 6px;
   background-color: deepskyblue;
 `;
