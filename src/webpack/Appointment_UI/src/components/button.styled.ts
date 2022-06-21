@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const ButtonStyles = css`
+export const ButtonCSS = css`
   display: inline-flex;
   padding: 6px;
   border: 1px solid black;
@@ -9,6 +9,6 @@ export const ButtonStyles = css`
 `;
 
 export const StyledButton = styled.button`
-  ${ButtonStyles};
+  ${ButtonCSS};
   cursor: pointer;
 `;
