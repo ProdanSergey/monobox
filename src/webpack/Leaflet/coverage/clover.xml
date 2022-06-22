@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1655929442528" clover="3.2.0">
+  <project timestamp="1655929442528" name="All files">
+    <metrics statements="75" coveredstatements="75" conditionals="31" coveredconditionals="30" methods="11" coveredmethods="11" elements="117" coveredelements="116" complexity="0" loc="75" ncloc="75" packages="6" files="15" classes="15"/>
+    <package name="src">
+      <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+      <file name="app.styled.ts" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/app.styled.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="1" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="app.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/app.tsx">
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="5" type="stmt"/>
+        <line num="19" count="10" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components">
+      <metrics statements="38" coveredstatements="38" conditionals="15" coveredconditionals="14" methods="5" coveredmethods="5"/>
+      <file name="download-track-button.styled.ts" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/components/download-track-button.styled.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="download-track-button.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/components/download-track-button.tsx">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+      </file>
+      <file name="map.styled.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/components/map.styled.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="map.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/components/map.tsx">
+        <metrics statements="11" coveredstatements="11" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="10" count="5" type="cond" truecount="0" falsecount="1"/>
+        <line num="12" count="5" type="stmt"/>
+        <line num="17" count="5" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="24" count="5" type="stmt"/>
+      </file>
+      <file name="track-breakdown.styled.ts" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/components/track-breakdown.styled.ts">
+        <metrics statements="6" coveredstatements="6" conditionals="10" coveredconditionals="10" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="2" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="track-breakdown.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/components/track-breakdown.tsx">
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="12" count="17" type="stmt"/>
+        <line num="13" count="17" type="stmt"/>
+        <line num="29" count="7" type="stmt"/>
+        <line num="30" count="7" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.icons">
+      <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <file name="bucket.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/icons/bucket.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="8" count="17" type="stmt"/>
+        <line num="9" count="17" type="stmt"/>
+      </file>
+      <file name="menu.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/icons/menu.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="8" count="17" type="stmt"/>
+        <line num="9" count="17" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.shared.layout">
+      <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
+      <file name="button.styled.ts" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/shared/layout/button.styled.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="cond" truecount="2" falsecount="0"/>
+      </file>
+    </package>
+    <package name="src.templates.content">
+      <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <file name="content.styled.ts" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/templates/content/content.styled.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="content.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/templates/content/content.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="6" count="5" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.templates.sidebar">
+      <metrics statements="9" coveredstatements="9" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+      <file name="sidebar.styled.ts" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/templates/sidebar/sidebar.styled.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="8" coveredconditionals="8" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="2" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="sidebar.tsx" path="/Users/serhii_prodan/Documents/Projects/wonderbox/src/webpack/Leaflet/src/templates/sidebar/sidebar.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="8" count="6" type="stmt"/>
+        <line num="9" count="6" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
