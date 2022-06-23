@@ -15,10 +15,15 @@ export const DownloadTrackButton: FunctionComponent<DownloadTrackButtonProps> = 
     const pom = document.createElement("a");
     const blob = new Blob([gpx], { type: "text/plain" });
 
+    const href = URL.createObjectURL(blob);
     pom.setAttribute("href", URL.createObjectURL(blob));
     pom.setAttribute("download", filename);
 
     pom.click();
+
+    queueMicrotask(() => {
+      URL.revokeObjectURL(href);
+    });
   };
 
   const handleClick = () => {
