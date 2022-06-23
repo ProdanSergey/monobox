@@ -1,13 +1,8 @@
-import React from "react";
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 
-type MenuIconProps = {
-  testId?: string;
-};
-
-export const MenuIcon: FunctionComponent<MenuIconProps> = ({ testId }) => {
+export const MenuIcon: FunctionComponent = () => {
   return (
-    <svg data-test-id={testId} viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
       <g>
         <rect height="1" width="11" x="0.5" y="5.5" />
         <rect height="1" width="11" x="0.5" y="2.5" />

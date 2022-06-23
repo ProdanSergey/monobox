@@ -1,4 +1,5 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { StyledIcon as Icon } from "./icon.styled";
 
 export const StyledList = styled.ul`
   margin-top: 64px;
@@ -9,33 +10,20 @@ export const StyledItem = styled.li`
   align-items: center;
   color: #fff;
   font-weight: bold;
+  margin-bottom: 6px;
 `;
 
-export const ButtonCSS = css`
-  width: 32px;
-  height: 32px;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  svg {
-    width: 100%;
-    height: 1000%;
-  }
-
-  path,
-  rect {
-    fill: rgba(0, 0, 0, 0.7);
-  }
+export const StyledIcon = styled(Icon)`
+  width: 24px;
+  height: 24px;
+  color: rgba(0, 0, 0, 0.7);
 `;
 
-export const StyledOrderIcon = styled.div`
-  ${ButtonCSS};
+export const StyledTitle = styled.span`
+  padding: 0 6px;
 `;
 
-export const StyledDeleteIcon = styled.button`
-  ${ButtonCSS};
+export const StyledRemoveButton = styled.button`
   font-size: 0;
   margin-left: auto;
   background: none;
