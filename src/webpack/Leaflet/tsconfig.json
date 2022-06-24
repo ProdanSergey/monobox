@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+		"outDir": "./dist",
+    "target": "es5",
+    "module": "es6",
+		"moduleResolution": "Node",
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+		"jsx": "react",
+		"allowSyntheticDefaultImports": true,
+		"types": ["jest"],
+		"lib": ["dom", "esnext"],
+		"esModuleInterop": true
+  },
+  "include": ["jest-setup.ts", "./src/**/*"],
+  "exclude": ["node_modules"]
+}
