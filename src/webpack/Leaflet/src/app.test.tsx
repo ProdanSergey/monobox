@@ -1,5 +1,15 @@
 import { render, RenderResult, within } from "@testing-library/react";
 import React from "react";
+import { mock, mockClear } from "jest-mock-extended";
+import leaflet from "leaflet";
+
+const mockedMap = mock<leaflet.Map>({
+  on: jest.fn().mockReturnThis(),
+  off: jest.fn().mockReturnThis(),
+  remove: jest.fn().mockReturnThis(),
+});
+jest.spyOn(leaflet, "map").mockImplementation(() => mockedMap);
+
 import { App } from "./app";
 import { BUTTON_TEXT } from "./components/download-track-button";
 import { TRACK_BREAKDOWN_TEST_ID } from "./components/track-breakdown";
@@ -18,6 +28,10 @@ describe("Application", () => {
   const getContentArea = () => {
     return queries.container.querySelector("main");
   };
+
+  beforeEach(() => {
+    mockClear(mockedMap);
+  });
 
   describe("SideBar Area", () => {
     it("should render sidebar area", () => {
@@ -47,17 +61,19 @@ describe("Application", () => {
     });
   });
 
-  it("should render content area", () => {
-    renderComponent();
+  describe("Content Area", () => {
+    it("should render content area", () => {
+      renderComponent();
 
-    expect(getContentArea()).toBeInTheDocument();
-  });
+      expect(getContentArea()).toBeInTheDocument();
+    });
 
-  it("should render map component into the content area", () => {
-    renderComponent();
+    it("should render map component into the content area", () => {
+      renderComponent();
 
-    const content = getContentArea();
+      const content = getContentArea();
 
-    expect(within(content as HTMLElement).getByTestId("map")).toBeInTheDocument();
+      expect(within(content as HTMLElement).getByTestId("map")).toBeInTheDocument();
+    });
   });
 });

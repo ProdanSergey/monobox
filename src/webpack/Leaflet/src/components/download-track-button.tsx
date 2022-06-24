@@ -2,11 +2,12 @@ import React, { FunctionComponent } from "react";
 import leaflet from "leaflet";
 import togpx from "togpx";
 import { StyledButton } from "./download-track-button.styled";
+import { Position } from "../shared/domain/waypoint";
 
 export const BUTTON_TEXT = "Download your Route";
 
 type DownloadTrackButtonProps = {
-  markers: leaflet.Layer[];
+  points: Position[];
 };
 
 export const download = (gpx: string): void => {
@@ -25,9 +26,10 @@ export const download = (gpx: string): void => {
   });
 };
 
-export const DownloadTrackButton: FunctionComponent<DownloadTrackButtonProps> = ({ markers }) => {
+export const DownloadTrackButton: FunctionComponent<DownloadTrackButtonProps> = ({ points }) => {
   const handleClick = () => {
-    const group = leaflet.layerGroup(markers);
+    const markers = points.map(({ lat, lng }) => leaflet.marker([lat, lng]));
+    const group = leaflet.featureGroup(markers);
     const json = group.toGeoJSON();
     const gpx = togpx(json);
     download(gpx);

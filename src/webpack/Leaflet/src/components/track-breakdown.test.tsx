@@ -1,18 +1,19 @@
 import { render, RenderResult, within } from "@testing-library/react";
 import React from "react";
-import { Waypoint } from "../shared/domain/waypoint";
 import { TrackBreakdown, TrackWaypoint, TRACK_WAYPOINT_REMOVE_TEXT, TRACK_WAYPOINT_TEST_ID } from "./track-breakdown";
 
 describe("Track Breakdown", () => {
   let queries: RenderResult;
 
-  const mockedWaypoints: Waypoint[] = [{ title: "Waypoint 1" }, { title: "Waypoint 2" }];
+  const mockedWaypoints: { title: string }[] = [{ title: "Waypoint 1" }, { title: "Waypoint 2" }];
 
   const renderComponent = () => {
     queries = render(
       <TrackBreakdown>
         {mockedWaypoints.map(({ title }, index) => (
-          <TrackWaypoint key={index}>{title}</TrackWaypoint>
+          <TrackWaypoint key={index} index={index}>
+            {title}
+          </TrackWaypoint>
         ))}
       </TrackBreakdown>
     );
@@ -42,10 +43,10 @@ describe("Track Breakdown", () => {
 describe("Track Waypoint", () => {
   let queries: RenderResult;
 
-  const mockedWaypoint: Waypoint = { title: "Waypoint 1" };
+  const mockedWaypoint: { title: string } = { title: "Waypoint 1" };
 
   const renderComponent = () => {
-    queries = render(<TrackWaypoint>{mockedWaypoint.title}</TrackWaypoint>);
+    queries = render(<TrackWaypoint index={1}>{mockedWaypoint.title}</TrackWaypoint>);
   };
 
   it("should render a waypoint title", () => {
