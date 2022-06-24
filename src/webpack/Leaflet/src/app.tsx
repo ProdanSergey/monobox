@@ -22,7 +22,7 @@ const createMarker = ({ lat, lng }: leaflet.LatLng) => {
   });
 };
 
-const createPolyline = (latlng: leaflet.LatLng[]) => {
+const renderPolyline = (latlng: leaflet.LatLng[]) => {
   return leaflet.polyline(latlng, { color: "var(--color-secondary)" });
 };
 
@@ -57,7 +57,7 @@ export const App: FunctionComponent = () => {
           zoom={9}
           tileLayer={tileLayer}
           markers={markers}
-          renderPolyline={createPolyline}
+          renderPolyline={renderPolyline}
           onClick={handleMarkerAdd}
         ></Map>
       </Content>

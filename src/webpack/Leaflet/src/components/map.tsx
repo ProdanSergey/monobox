@@ -5,7 +5,7 @@ import { StyledMap } from "./map.styled";
 
 type Marker = leaflet.Marker | leaflet.CircleMarker;
 
-type MapProps = {
+export type MapProps = {
   center?: leaflet.LatLngExpression;
   zoom?: number;
   tileLayer: leaflet.TileLayer;
@@ -30,7 +30,9 @@ export const Map: FunctionComponent<MapProps> = ({
 
     if (!leafletMap) return;
 
-    markers.forEach((marker) => marker.addTo(leafletMap));
+    markers.forEach((marker) => {
+      leafletMap.addLayer(marker);
+    });
   };
 
   const setPolyline = (polyline: leaflet.Polyline): void => {
@@ -38,7 +40,7 @@ export const Map: FunctionComponent<MapProps> = ({
 
     if (!leafletMap) return;
 
-    polyline.addTo(leafletMap);
+    leafletMap.addLayer(polyline);
   };
 
   useEffect(() => {

@@ -9,23 +9,23 @@ type DownloadTrackButtonProps = {
   markers: leaflet.Layer[];
 };
 
+export const download = (gpx: string): void => {
+  const filename = "track.gpx";
+  const pom = document.createElement("a");
+  const blob = new Blob([gpx], { type: "text/plain" });
+
+  const href = URL.createObjectURL(blob);
+  pom.setAttribute("href", href);
+  pom.setAttribute("download", filename);
+
+  pom.click();
+
+  queueMicrotask(() => {
+    URL.revokeObjectURL(href);
+  });
+};
+
 export const DownloadTrackButton: FunctionComponent<DownloadTrackButtonProps> = ({ markers }) => {
-  const download = (gpx: string): void => {
-    const filename = "track.gpx";
-    const pom = document.createElement("a");
-    const blob = new Blob([gpx], { type: "text/plain" });
-
-    const href = URL.createObjectURL(blob);
-    pom.setAttribute("href", URL.createObjectURL(blob));
-    pom.setAttribute("download", filename);
-
-    pom.click();
-
-    queueMicrotask(() => {
-      URL.revokeObjectURL(href);
-    });
-  };
-
   const handleClick = () => {
     const group = leaflet.layerGroup(markers);
     const json = group.toGeoJSON();
