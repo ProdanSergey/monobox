@@ -11,7 +11,9 @@ describe("Track Breakdown", () => {
     queries = render(
       <TrackBreakdown>
         {mockedWaypoints.map(({ title }, index) => (
-          <TrackWaypoint key={index}>{title}</TrackWaypoint>
+          <TrackWaypoint key={index} index={index}>
+            {title}
+          </TrackWaypoint>
         ))}
       </TrackBreakdown>
     );
@@ -44,7 +46,7 @@ describe("Track Waypoint", () => {
   const mockedWaypoint: { title: string } = { title: "Waypoint 1" };
 
   const renderComponent = () => {
-    queries = render(<TrackWaypoint>{mockedWaypoint.title}</TrackWaypoint>);
+    queries = render(<TrackWaypoint index={1}>{mockedWaypoint.title}</TrackWaypoint>);
   };
 
   it("should render a waypoint title", () => {

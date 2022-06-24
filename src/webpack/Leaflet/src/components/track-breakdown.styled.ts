@@ -10,7 +10,7 @@ export const StyledItem = styled.li`
   align-items: center;
   color: #fff;
   font-weight: bold;
-  margin-bottom: 6px;
+  padding: 6px 0;
 `;
 
 export const StyledIcon = styled(Icon)`
@@ -20,7 +20,8 @@ export const StyledIcon = styled(Icon)`
 `;
 
 export const StyledTitle = styled.span`
-  padding: 0 6px;
+  padding: 0 12px;
+  text-transform: capitalize;
 `;
 
 export const StyledRemoveButton = styled.button`

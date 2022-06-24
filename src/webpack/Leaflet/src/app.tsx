@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback, useState } from "react";
 import uniqid from "uniqid";
+import randomWords from "random-words";
 import { Waypoint } from "./shared/domain/waypoint";
 import { Content } from "./templates/content/content";
 import { Sidebar } from "./templates/sidebar/sidebar";
@@ -21,35 +22,49 @@ const TILE_OPTIONS = {
 const MAP_CENTER: [number, number] = [48.713, 23.2149];
 
 export const App: FunctionComponent = () => {
-  const [markers, setMarkers] = useState<Waypoint[]>([]);
+  const [waypoints, setWaypoints] = useState<Waypoint[]>([]);
 
   const handleMarkerAdd = useCallback(({ lat, lng }: Waypoint["position"]) => {
-    setMarkers((markers) => [
+    setWaypoints((markers) => [
       ...markers,
       {
         id: uniqid(),
-        title: `Waypoint`,
+        title: randomWords(1)[0],
         position: { lat, lng },
       },
     ]);
   }, []);
 
-  const handleMarketRemove = (id: string) => {
-    setMarkers((markers) => markers.filter((marker) => marker.id !== id));
+  const handleMarkerRemove = (id: string) => {
+    setWaypoints((markers) => markers.filter((marker) => marker.id !== id));
   };
+
+  const handleMarkerSort = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const dragItem = waypoints[dragIndex];
+      const hoverItem = waypoints[hoverIndex];
+      setWaypoints((markers) => {
+        const sorted = [...markers];
+        sorted[dragIndex] = hoverItem;
+        sorted[hoverIndex] = dragItem;
+        return sorted;
+      });
+    },
+    [waypoints]
+  );
 
   return (
     <StyledGrid>
       <Sidebar title="Route Builder">
         <StyledSidebarContainer>
           <TrackBreakdown>
-            {markers.map(({ id, title }, index) => (
-              <TrackWaypoint key={id} onRemove={() => handleMarketRemove(id)}>
-                {title} {index + 1}
+            {waypoints.map(({ id, title }, index) => (
+              <TrackWaypoint key={id} index={index} onRemove={() => handleMarkerRemove(id)} onDrop={handleMarkerSort}>
+                {title}
               </TrackWaypoint>
             ))}
           </TrackBreakdown>
-          <DownloadTrackButton points={markers.map(mapWaypointToPosition)} />
+          <DownloadTrackButton points={waypoints.map(mapWaypointToPosition)} />
         </StyledSidebarContainer>
       </Sidebar>
       <Content>
@@ -57,7 +72,7 @@ export const App: FunctionComponent = () => {
           {(map) => (
             <>
               <Tile map={map} url={TILE_URL} options={TILE_OPTIONS} />
-              {markers.map(({ id, position }, index) => (
+              {waypoints.map(({ id, position }, index) => (
                 <Marker
                   key={id}
                   map={map}
@@ -66,7 +81,7 @@ export const App: FunctionComponent = () => {
                   color="var(--color-secondary)"
                 />
               ))}
-              <Polyline map={map} points={markers.map(mapWaypointToPosition)} color="var(--color-secondary)" />
+              <Polyline map={map} points={waypoints.map(mapWaypointToPosition)} color="var(--color-secondary)" />
             </>
           )}
         </Map>

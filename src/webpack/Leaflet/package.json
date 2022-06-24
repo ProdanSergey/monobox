@@ -9,14 +9,17 @@
     "watch": "webpack --watch --env mode=production",
     "start": "webpack serve --env mode=development",
     "test": "jest",
-		"test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage",
     "test:watch": "jest --watchAll"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "leaflet": "^1.8.0",
+    "random-words": "^1.2.0",
     "react": "18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.5",
