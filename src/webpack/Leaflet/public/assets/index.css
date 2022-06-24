@@ -1,20 +1,22 @@
 :root {
-	box-sizing: border-box;
+  box-sizing: border-box;
 
-	--color-primary: #02c39a;
-	--color-secondary: #023047;
+  --color-primary: #02c39a;
+  --color-secondary: #023047;
 }
 
-*, *::before, *::after {
-	box-sizing: inherit;
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 body {
-	margin: 0;
+  margin: 0;
 }
 
 ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
