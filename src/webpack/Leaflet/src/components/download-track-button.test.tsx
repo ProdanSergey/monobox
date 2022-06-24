@@ -1,8 +1,8 @@
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
-import leaflet from "leaflet";
 
 import * as componentModule from "./download-track-button";
+import { Position } from "../shared/domain/waypoint";
 
 jest.spyOn(componentModule, "download");
 
@@ -15,20 +15,16 @@ Object.defineProperty(window, "URL", {
 
 const { DownloadTrackButton, download } = componentModule;
 
-const createMockedMarker = ({ lat, lng }: { lat: number; lng: number }): leaflet.CircleMarker => {
-  return leaflet.circleMarker([lat, lng]);
-};
-
 describe("Download Track Button", () => {
   let queries: RenderResult;
 
-  const mockedMarkers: leaflet.CircleMarker[] = [
-    createMockedMarker({ lat: 1, lng: 1 }),
-    createMockedMarker({ lat: 1, lng: 1 }),
+  const mockedMarkers: Position[] = [
+    { lat: 1, lng: 1 },
+    { lat: 2, lng: 2 },
   ];
 
   const renderComponent = () => {
-    queries = render(<DownloadTrackButton markers={mockedMarkers} />);
+    queries = render(<DownloadTrackButton points={mockedMarkers} />);
   };
 
   it("should render a download track button", () => {
