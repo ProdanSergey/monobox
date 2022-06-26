@@ -31,7 +31,6 @@ export const Map: FunctionComponent<MapProps> = ({ zoom, center, children, onCli
     if (!map) return;
 
     const handleClick: LeafletMouseEventHandlerFn = ({ latlng: { lat, lng } }) => {
-      console.log("HERE");
       onClick?.({ lat, lng });
     };
 

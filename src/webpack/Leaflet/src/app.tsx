@@ -57,7 +57,7 @@ export const App: FunctionComponent = () => {
         <StyledSidebarContainer>
           <TrackBreakdown>
             {waypoints.map(({ id, title }, index) => (
-              <TrackWaypoint key={id} index={index} onRemove={() => handleMarkerRemove(id)} onDrop={handleMarkerSort}>
+              <TrackWaypoint key={id} index={index} onRemove={() => handleMarkerRemove(id)} onSort={handleMarkerSort}>
                 {title}
               </TrackWaypoint>
             ))}
