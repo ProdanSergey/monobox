@@ -3,7 +3,7 @@
     "outDir": "./dist",
     "target": "es5",
     "module": "es6",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
@@ -13,7 +13,8 @@
     "allowSyntheticDefaultImports": true,
     "types": ["jest"],
     "lib": ["dom", "esnext"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "allowJs": true
   },
   "include": ["jest-setup.ts", "./src/**/*"],
   "exclude": ["node_modules"]
