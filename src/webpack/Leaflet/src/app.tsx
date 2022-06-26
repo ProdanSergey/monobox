@@ -39,19 +39,17 @@ export const App: FunctionComponent = () => {
     setWaypoints((markers) => markers.filter((marker) => marker.id !== id));
   };
 
-  const handleMarkerSort = useCallback(
-    (dragIndex: number, hoverIndex: number) => {
+  const handleMarkerSort = (dragIndex: number, hoverIndex: number) => {
+    setWaypoints((waypoints) => {
       const dragItem = waypoints[dragIndex];
       const hoverItem = waypoints[hoverIndex];
-      setWaypoints((markers) => {
-        const sorted = [...markers];
-        sorted[dragIndex] = hoverItem;
-        sorted[hoverIndex] = dragItem;
-        return sorted;
-      });
-    },
-    [waypoints]
-  );
+
+      const sorted = [...waypoints];
+      sorted[dragIndex] = hoverItem;
+      sorted[hoverIndex] = dragItem;
+      return sorted;
+    });
+  };
 
   return (
     <StyledGrid>

@@ -1,11 +1,18 @@
 import { render, RenderResult, within } from "@testing-library/react";
 import React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { WaypointBuilder } from "../shared/builders/waypoint";
+import { Waypoint } from "../shared/domain/waypoint";
 import { TrackBreakdown, TrackWaypoint, TRACK_WAYPOINT_REMOVE_TEXT, TRACK_WAYPOINT_TEST_ID } from "./track-breakdown";
 
 describe("Track Breakdown", () => {
   let queries: RenderResult;
 
-  const mockedWaypoints: { title: string }[] = [{ title: "Waypoint 1" }, { title: "Waypoint 2" }];
+  const mockedWaypoints: Waypoint[] = [
+    new WaypointBuilder({ lat: 1, lng: 2 }).build(),
+    new WaypointBuilder({ lat: 3, lng: 4 }).build(),
+  ];
 
   const renderComponent = () => {
     queries = render(
@@ -46,7 +53,11 @@ describe("Track Waypoint", () => {
   const mockedWaypoint: { title: string } = { title: "Waypoint 1" };
 
   const renderComponent = () => {
-    queries = render(<TrackWaypoint index={1}>{mockedWaypoint.title}</TrackWaypoint>);
+    queries = render(
+      <DndProvider backend={HTML5Backend}>
+        <TrackWaypoint index={1}>{mockedWaypoint.title}</TrackWaypoint>
+      </DndProvider>
+    );
   };
 
   it("should render a waypoint title", () => {
