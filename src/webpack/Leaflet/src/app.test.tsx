@@ -1,14 +1,14 @@
 import { render, RenderResult, within } from "@testing-library/react";
 import React from "react";
-// import { mock, mockClear } from "jest-mock-extended";
-// import leaflet from "leaflet";
+import { mock, mockClear } from "jest-mock-extended";
+import leaflet from "leaflet";
 
-// const mockedMap = mock<leaflet.Map>({
-//   on: jest.fn().mockReturnThis(),
-//   off: jest.fn().mockReturnThis(),
-//   remove: jest.fn().mockReturnThis(),
-// });
-// jest.spyOn(leaflet, "map").mockImplementation(() => mockedMap);
+const mockedMap = mock<leaflet.Map>({
+  on: jest.fn().mockReturnThis(),
+  off: jest.fn().mockReturnThis(),
+  remove: jest.fn().mockReturnThis(),
+});
+jest.spyOn(leaflet, "map").mockImplementation(() => mockedMap);
 
 import { App } from "./app";
 import { BUTTON_TEXT } from "./components/download-track-button";
@@ -29,9 +29,9 @@ describe("Application", () => {
     return queries.container.querySelector("main");
   };
 
-  // beforeEach(() => {
-  //   mockClear(mockedMap);
-  // });
+  beforeEach(() => {
+    mockClear(mockedMap);
+  });
 
   describe("SideBar Area", () => {
     it("should render sidebar area", () => {
