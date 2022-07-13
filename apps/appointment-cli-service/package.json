@@ -1,0 +1,27 @@
+{
+  "name": "@appointment/cli-service",
+  "version": "1.0.0",
+  "description": "Just get your appointment ticket!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "create": "npm run start -- --create",
+    "get": "npm run start -- --get",
+    "update": "npm run start -- --update",
+    "delete": "npm run start -- --delete",
+    "list": "npm run start -- --list",
+    "watch": "tsc --watch",
+    "build": "tsc"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Serhii Prodan",
+  "license": "ISC",
+  "dependencies": {
+    "dayjs": "^1.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.3"
+  }
+}

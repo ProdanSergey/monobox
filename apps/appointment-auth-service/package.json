@@ -1,0 +1,31 @@
+{
+  "name": "@appointment/auth-service",
+  "version": "1.0.0",
+  "description": "Appointment Auth Service",
+  "author": "Serhii Prodan",
+  "license": "ISC",
+  "keywords": [],
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@monobox/appointment-contract": "^0.0.1",
+    "@monobox/infra": "^0.0.1",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.2",
+    "dotenv": "^16.0.1",
+    "express": "^4.17.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.3.6",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.5",
+    "@types/node": "^18.0.3"
+  }
+}

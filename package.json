@@ -1,0 +1,29 @@
+{
+  "author": "Serhii Prodan <sergey.prodan.od@gmail.com> (https://www.linkedin.com/in/sergey-prodan/)",
+  "name": "monobox",
+  "license": "GPL-3.0",
+  "repository": "github:ProdanSergey/monobox",
+  "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "lint": "npx eslint . --ext .js --ext .jsx --ext .ts --ext .tsx --fix",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.5.1",
+    "lerna": "^5.1.1"
+  },
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  }
+}
