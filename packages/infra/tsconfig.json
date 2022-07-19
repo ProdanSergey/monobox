@@ -4,9 +4,9 @@
     "outDir": "./dist",
     "declaration": true,
     "declarationDir": "./dist",
-    "module": "esnext",
     "target": "es5",
     "types": ["node"],
+    "sourceMap": true
   },
   "include": ["./src"]
 }

@@ -5,7 +5,6 @@
     "jsx": "react",
     "types": ["jest"],
     "lib": ["dom", "esnext"],
-    "esModuleInterop": true,
     "allowJs": true
   },
   "include": ["jest-setup.ts", "./src"]
