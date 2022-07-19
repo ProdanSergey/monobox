@@ -1,11 +1,12 @@
 import React, { FunctionComponent, useContext } from "react";
 import { Navigate } from "react-router-dom";
+
+import { StyledAlert, StyledButton } from "@monobox/appointment-library";
+
 import { AppointmentCard } from "../../../components/appointment-card";
 import { UserContext } from "../../../context/user";
 import { pickAppointment } from "../../../shared/api/appointment";
 import { Appointment } from "../../../shared/domain/appointment";
-import { StyledAlert } from "../../../shared/elements/alert.styled";
-import { StyledButton } from "../../../shared/elements/button.styled";
 import { useDataHandler } from "../../../shared/hooks/use-data-handler";
 import { StyledItem, StyledList, StyledCardContainer } from "./incoming-appointments.styled";
 

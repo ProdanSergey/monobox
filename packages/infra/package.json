@@ -8,14 +8,17 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
-  },
-  "dependencies": {
-    "express": "^4.17.2",
-    "yup": "^0.32.11"
+    "build": "rollup -c"
   },
   "devDependencies": {
     "@types/node": "18.0.3",
-    "@types/express": "^4.17.13"
+    "@types/express": "^4.17.13",
+    "rollup": "^3.0.0-2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.32.1"
+  },
+  "peerDependencies": {
+    "express": "^4.17.2",
+    "yup": "^0.32.11"
   }
 }

@@ -6,7 +6,7 @@
     "declarationDir": "./dist",
     "module": "esnext",
     "target": "es5",
-    "types": ["node"],
+    "jsx": "react"
   },
   "include": ["./src"]
 }

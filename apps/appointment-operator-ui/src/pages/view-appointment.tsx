@@ -1,9 +1,10 @@
 import React, { FunctionComponent, useCallback } from "react";
 import { useParams } from "react-router-dom";
+
+import { StyledAlert, StyledContainer, StyledSection } from "@monobox/appointment-library";
+
 import { useData } from "../shared/hooks/use-data";
 import { getAppointment } from "../shared/api/appointment";
-import { StyledSection, StyledContainer } from "../shared/elements/layout.styled";
-import { StyledAlert } from "../shared/elements/alert.styled";
 import { PickedAppointment } from "../templates/view-appointment/picked-appointment/picked-appointment";
 import { Appointment } from "../shared/domain/appointment";
 import { CompletedAppointment } from "../templates/view-appointment/completed-appointment/completed-appointment";

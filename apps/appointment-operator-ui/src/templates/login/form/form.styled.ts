@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { StyledButton as Button } from "../../../shared/elements/button.styled";
+
+import { StyledButton as Button } from "@monobox/appointment-library";
 
 export const StyledForm = styled.form`
   display: flex;

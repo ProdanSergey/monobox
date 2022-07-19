@@ -1,7 +1,9 @@
 import React, { FunctionComponent, useContext } from "react";
 import { Navigate } from "react-router-dom";
+
+import { StyledContainer, StyledSection } from "@monobox/appointment-library";
+
 import { UserContext } from "../context/user";
-import { StyledSection, StyledContainer } from "../shared/elements/layout.styled";
 import { UserForm } from "../templates/login/form/form";
 
 export const LoginPage: FunctionComponent = () => {

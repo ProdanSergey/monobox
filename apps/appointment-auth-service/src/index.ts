@@ -1,7 +1,7 @@
-import * as dotenv from "dotenv";
-import * as express from "express";
-import * as cors from "cors";
-import * as session from "express-session";
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import session from "express-session";
 
 import { errorHandling } from "@monobox/infra";
 

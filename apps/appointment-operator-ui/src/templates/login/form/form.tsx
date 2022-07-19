@@ -1,7 +1,8 @@
 import React, { FunctionComponent } from "react";
 import validator from "validator";
-import { Form, ValidateCallback } from "../../../components/form";
-import { StyledAlert } from "../../../shared/elements/alert.styled";
+
+import { StyledAlert, Form, ValidateCallback } from "@monobox/appointment-library";
+
 import { StyledForm, StyledButton, StyledField } from "./form.styled";
 
 type UserFormValues = {

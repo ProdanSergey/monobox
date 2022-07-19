@@ -1,22 +1,31 @@
 {
-  "name": "@monobox/appointment-contract",
+  "name": "@monobox/appointment-library",
   "version": "0.0.1",
-  "description": "@appointment app contract",
+  "description": "@appointment app library",
   "author": "Serhii Prodan",
   "license": "ISC",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rollup -c"
   },
   "devDependencies": {
+    "@types/react": "^18.0.12",
+    "@types/react-dom": "^18.0.5",
+    "@types/styled-components": "^5.1.25",
     "rollup": "^3.0.0-2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.32.1",
     "typescript": "4.7.4"
   },
   "peerDependencies": {
-    "yup": "^0.32.11"
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2",
+    "styled-components": "^5.3.5"
   }
 }
