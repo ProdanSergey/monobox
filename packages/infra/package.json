@@ -11,8 +11,8 @@
     "build": "rollup -c"
   },
   "devDependencies": {
-    "@types/node": "18.0.3",
     "@types/express": "^4.17.13",
+    "@types/node": "18.0.3",
     "rollup": "^3.0.0-2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-typescript2": "^0.32.1"

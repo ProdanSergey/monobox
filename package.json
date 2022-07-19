@@ -19,9 +19,10 @@
     "prettier": "^2.5.1"
   },
   "workspaces": {
-    "packages":  [
+    "packages": [
       "apps/*",
       "packages/*"
     ]
-  }
+  },
+  "packageManager": "yarn@3.2.1"
 }

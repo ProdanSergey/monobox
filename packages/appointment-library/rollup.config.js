@@ -1,4 +1,5 @@
-import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import external from "rollup-plugin-peer-deps-external";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
 
@@ -12,5 +13,5 @@ export default {
       preserveModules: true,
     },
   ],
-  plugins: [peerDepsExternal(), typescript({ useTsconfigDeclarationDir: true }), postcss()],
+  plugins: [external(), nodeResolve(), typescript({ useTsconfigDeclarationDir: true }), postcss()],
 };
