@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BaseController, route } from "@monobox/infra";
+import { BaseController, serialize, validate } from "@monobox/infra";
 import { AuthorizationSessionBody } from "@monobox/appointment-contract";
 
 import { postSessionBodySchema } from "./definition";
@@ -8,7 +8,7 @@ export class AuthorizationController extends BaseController {
   constructor() {
     super();
 
-    this.router.post("/session", route(this.handleSession, postSessionBodySchema));
+    this.router.post("/session", validate(postSessionBodySchema), serialize(this.handleSession));
   }
 
   handleSession = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {

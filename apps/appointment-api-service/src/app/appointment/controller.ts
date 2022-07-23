@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 
-import { BaseController, route } from "@monobox/infra";
+import { BaseController, serialize, validate } from "@monobox/infra";
 
 import {
   AppointmentCompleteParams,
@@ -28,12 +28,12 @@ export class AppointmentController extends BaseController {
   constructor(private readonly appointmentRepository: AppointmentRepository) {
     super();
 
-    this.router.get("/", route(this.handleList));
-    this.router.get("/:id", route(this.handleGet));
-    this.router.post("/", route(this.handleCreate, appointmentCreateBodySchema));
-    this.router.delete("/:id", route(this.handleDelete));
-    this.router.post("/:id/pick", route(this.handlePick, appointmentPickBodySchema));
-    this.router.post("/:id/complete", route(this.handleComplete));
+    this.router.get("/", serialize(this.handleList));
+    this.router.get("/:id", serialize(this.handleGet));
+    this.router.post("/", validate(appointmentCreateBodySchema), serialize(this.handleCreate));
+    this.router.delete("/:id", serialize(this.handleDelete));
+    this.router.post("/:id/pick", validate(appointmentPickBodySchema), serialize(this.handlePick));
+    this.router.post("/:id/complete", serialize(this.handleComplete));
   }
 
   handleCreate = async (req: Request<unknown, AppointmentRecord, AppointmentCreateBody>, res: Response) => {

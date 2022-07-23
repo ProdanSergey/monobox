@@ -1,6 +1,5 @@
 import { CLI, CLICommand } from "../../ports/cli";
 import { Logger } from "../../ports/logger";
-import { Store } from "../../ports/store";
 import { CreateAppointmentCommand } from "../../commands/CreateAppointmentCommand";
 import { GetAppointmentCommand } from "../../commands/GetAppointmentCommand";
 import { DeleteAppointmentCommand } from "../../commands/DeleteAppointmentCommand";
@@ -8,9 +7,14 @@ import { DeleteQuery, GetQuery, ListQuery, UpdateQuery } from "./definition";
 import { Appointment } from "../../domain/appointment";
 import { UpdateAppointmentCommand } from "../../commands/UpdateAppointmentCommand";
 import { ListAppointmentCommand } from "../../commands/ListAppointmentCommand";
+import { AppointmentRepository } from "../../ports/repository/appointment";
 
 export class AppointmentController {
-  constructor(private readonly cliService: CLI, private readonly logger: Logger, private readonly store: Store) {}
+  constructor(
+    private readonly cliService: CLI,
+    private readonly logger: Logger,
+    private readonly appointmentRepository: AppointmentRepository
+  ) {}
 
   async process() {
     switch (this.cliService.getCommand()) {
@@ -33,7 +37,7 @@ export class AppointmentController {
   }
 
   private async handleCreate() {
-    const command = new CreateAppointmentCommand(this.store);
+    const command = new CreateAppointmentCommand(this.appointmentRepository);
 
     const appointment = await command.execute();
 
@@ -43,7 +47,7 @@ export class AppointmentController {
   private async handleGet() {
     const { id } = this.cliService.getQuery<GetQuery>();
 
-    const command = new GetAppointmentCommand(this.store);
+    const command = new GetAppointmentCommand(this.appointmentRepository);
 
     const appointment = await command.execute({ id });
 
@@ -55,7 +59,7 @@ export class AppointmentController {
   private async handleDelete() {
     const { id } = this.cliService.getQuery<DeleteQuery>();
 
-    const command = new DeleteAppointmentCommand(this.store);
+    const command = new DeleteAppointmentCommand(this.appointmentRepository);
 
     await command.execute({ id });
 
@@ -65,7 +69,7 @@ export class AppointmentController {
   private async handleUpdate() {
     const { id, completed } = this.cliService.getQuery<UpdateQuery>();
 
-    const command = new UpdateAppointmentCommand(this.store);
+    const command = new UpdateAppointmentCommand(this.appointmentRepository);
 
     const appointment = await command.execute({ id, completed });
 
@@ -77,7 +81,7 @@ export class AppointmentController {
   private async handleList() {
     const { completed, limit } = this.cliService.getQuery<ListQuery>();
 
-    const command = new ListAppointmentCommand(this.store);
+    const command = new ListAppointmentCommand(this.appointmentRepository);
 
     const appointments = await command.execute({ completed, limit });
 
