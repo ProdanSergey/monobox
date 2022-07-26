@@ -2,22 +2,20 @@ import { Request, Response } from "express";
 import { BaseController, serialize, validate } from "@monobox/infra";
 import { AuthorizationSessionBody } from "@monobox/appointment-contract";
 
-import { postSessionBodySchema } from "./definition";
+import { postSignInBodySchema, postSignUpBodySchema } from "./definition";
 
 export class AuthorizationController extends BaseController {
   constructor() {
     super();
 
-    this.router.post("/session", validate(postSessionBodySchema), serialize(this.handleSession));
+    this.router.post("/sign-up", validate(postSignUpBodySchema), serialize(this.handleSignUp));
+    this.router.post("/sign-in", validate(postSignInBodySchema), serialize(this.handleSignIn));
+    this.router.post("/sign-in/verify", validate(postSignUpBodySchema), serialize(this.handleSignInVerify));
   }
 
-  handleSession = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {
-    if (!req.session.user) {
-      const { fullName, email } = req.body;
+  handleSignUp = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {};
 
-      req.session.user = { fullName, email };
-    }
+  handleSignIn = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {};
 
-    res.status(201);
-  };
+  handleSignInVerify = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {};
 }

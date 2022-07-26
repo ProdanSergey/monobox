@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
+import { BadRequestError, NotFoundError, UnauthorizedError, ValidationError } from "../errors";
 
 const mapStatusCodeFromError = (err: Error): number => {
-  if (err instanceof BadRequestError) return 400;
+  if (err instanceof BadRequestError || err instanceof ValidationError) return 400;
   if (err instanceof UnauthorizedError) return 403;
   if (err instanceof NotFoundError) return 404;
 

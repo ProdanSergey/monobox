@@ -15,6 +15,7 @@ import { ConsoleLogger } from "./adapters/console-logger";
 import { MongoDBAppointmentRepository } from "./adapters/mongo/appointment-repository";
 
 import { AppointmentController } from "./app/appointment/controller";
+import { MongoDBSessionRepository } from "./adapters/mongo/session-repository";
 
 const { PORT } = process.env;
 
@@ -28,7 +29,7 @@ const bootstrap = async (app: express.Express) => {
   app.use(
     cors({
       origin: function (origin, callback) {
-        if (origin?.includes("localhost")) {
+        if (!origin) {
           callback(null, true);
         } else {
           callback(new Error("Not allowed by CORS"));
@@ -50,7 +51,10 @@ const bootstrap = async (app: express.Express) => {
     })
   );
 
-  app.use("/appointment", new AppointmentController(new MongoDBAppointmentRepository()).process());
+  app.use(
+    "/appointment",
+    new AppointmentController(new MongoDBAppointmentRepository(), new MongoDBSessionRepository()).process()
+  );
 
   app.use(errorHandling);
 

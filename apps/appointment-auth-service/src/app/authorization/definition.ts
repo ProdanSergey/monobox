@@ -1,7 +1,15 @@
-import * as yup from "yup";
+import yup from "yup";
 
-import { sessionSchema } from "@monobox/appointment-contract";
+import { signUpSchema, signInSchema, signInVerifySchema } from "@monobox/appointment-contract";
 
-export const postSessionBodySchema = yup.object().shape({
-  body: sessionSchema,
+export const postSignUpBodySchema = yup.object().shape({
+  body: signUpSchema,
+});
+
+export const postSignInBodySchema = yup.object().shape({
+  body: signInSchema,
+});
+
+export const postSignInVerifyBodySchema = yup.object().shape({
+  body: signInVerifySchema,
 });

@@ -5,7 +5,7 @@ import { NotFoundError } from "@monobox/infra";
 
 import { AppointmentDocument, AppointmentEntity } from "../../infra/mongo/entities/appointment";
 import { AppointmentRepository } from "../../ports/repository/appointment";
-import { Appointment } from "../../domain/appointment";
+import { Appointment, AppointmentRecord } from "../../domain/appointment";
 
 const mapAppointmentToDocument = (appointment: Appointment): { _id: Types.ObjectId } & AppointmentDocument => {
   const { id, ...record } = Appointment.toRecord(appointment);
@@ -26,32 +26,32 @@ const mapDocumentToAppointment = (document: Document<Types.ObjectId, unknown, Ap
 };
 
 export class MongoDBAppointmentRepository implements AppointmentRepository {
-  async create(appointment: Appointment): Promise<Appointment> {
-    const record = await AppointmentEntity.create(mapAppointmentToDocument(appointment));
+  async create(record: Partial<AppointmentRecord>): Promise<Appointment> {
+    const document = await AppointmentEntity.create(record);
 
-    return mapDocumentToAppointment(record);
+    return mapDocumentToAppointment(document);
   }
 
   async update(appointment: Appointment): Promise<Appointment> {
-    const record = await AppointmentEntity.findByIdAndUpdate(appointment.id, mapAppointmentToDocument(appointment), {
+    const document = await AppointmentEntity.findByIdAndUpdate(appointment.id, mapAppointmentToDocument(appointment), {
       new: true,
     }).exec();
 
-    if (!record) {
+    if (!document) {
       throw new NotFoundError();
     }
 
-    return mapDocumentToAppointment(record);
+    return mapDocumentToAppointment(document);
   }
 
   async findOne(id: string): Promise<Appointment | undefined> {
-    const record = await AppointmentEntity.findById(id).exec();
+    const document = await AppointmentEntity.findById(id).exec();
 
-    if (!record) {
+    if (!document) {
       return undefined;
     }
 
-    return mapDocumentToAppointment(record);
+    return mapDocumentToAppointment(document);
   }
 
   async findMany({ completed, limit = 100 }: { completed?: boolean; limit?: number }): Promise<Appointment[]> {
@@ -61,15 +61,15 @@ export class MongoDBAppointmentRepository implements AppointmentRepository {
       filter.completed = completed;
     }
 
-    const records = await AppointmentEntity.find(filter).limit(limit).exec();
+    const documents = await AppointmentEntity.find(filter).limit(limit).exec();
 
-    return records.map(mapDocumentToAppointment);
+    return documents.map(mapDocumentToAppointment);
   }
 
   async remove(id: string): Promise<void> {
-    const record = await AppointmentEntity.findByIdAndDelete(id).exec();
+    const document = await AppointmentEntity.findByIdAndDelete(id).exec();
 
-    if (!record) {
+    if (!document) {
       throw new NotFoundError();
     }
   }

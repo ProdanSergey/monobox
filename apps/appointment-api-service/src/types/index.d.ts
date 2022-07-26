@@ -1,5 +1,6 @@
 declare namespace Express {
   export interface Request {
-    user: import("../domain/appointment").AppointmentOperator | null;
+    operator?: import("../domain/appointment").AppointmentOperator;
+    token?: string;
   }
 }

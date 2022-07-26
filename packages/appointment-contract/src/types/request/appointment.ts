@@ -12,6 +12,4 @@ export type AppointmentListQuery = Partial<{ completed: boolean; limit: number }
 
 export type AppointmentPickParams = AppointmentBaseParams;
 
-export type AppointmentPickBody = { fullName: string; email: string };
-
 export type AppointmentCompleteParams = AppointmentBaseParams;

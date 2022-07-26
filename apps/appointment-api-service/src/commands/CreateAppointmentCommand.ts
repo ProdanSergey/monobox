@@ -9,6 +9,6 @@ export class CreateAppointmentCommand {
   constructor(private readonly repository: AppointmentRepository) {}
 
   async execute({ assignee }: CreateAppointmentCommandParams): Promise<Appointment> {
-    return await this.repository.create(Appointment.create(assignee));
+    return await this.repository.create(Appointment.create({ assignee }));
   }
 }
