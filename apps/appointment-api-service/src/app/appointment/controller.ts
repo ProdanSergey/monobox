@@ -5,9 +5,12 @@ import { BaseController, serialize, UnauthorizedError, validate } from "@monobox
 import {
   AppointmentCompleteParams,
   AppointmentCreateBody,
+  AppointmentCreateResponse,
   AppointmentDeleteParams,
   AppointmentGetParams,
+  AppointmentGetResponse,
   AppointmentListQuery,
+  AppointmentListResponse,
   AppointmentPickParams,
 } from "@monobox/appointment-contract";
 
@@ -44,7 +47,10 @@ export class AppointmentController extends BaseController {
     this.router.post("/:id/complete", new Strategy(asOperator).next(), serialize(this.handleComplete));
   }
 
-  handleCreate = async (req: Request<unknown, AppointmentRecord, AppointmentCreateBody>, res: Response) => {
+  handleCreate = async (
+    req: Request<unknown, AppointmentRecord, AppointmentCreateBody>,
+    res: Response
+  ): Promise<AppointmentCreateResponse> => {
     const { fullName, email } = req.body;
 
     const response = await new CreateAppointmentCommand(this.appointmentRepository).execute({
@@ -63,7 +69,7 @@ export class AppointmentController extends BaseController {
     return Appointment.toRecord(response);
   };
 
-  handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>) => {
+  handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>): Promise<AppointmentGetResponse> => {
     const { id } = req.params;
 
     const session = await new FindUserSessionCommand(this.sessionRepository).execute({ token: req.token! });
@@ -77,7 +83,9 @@ export class AppointmentController extends BaseController {
     return Appointment.toRecord(response);
   };
 
-  handleGetByOperator = async (req: Request<AppointmentGetParams, AppointmentRecord>) => {
+  handleGetByOperator = async (
+    req: Request<AppointmentGetParams, AppointmentRecord>
+  ): Promise<AppointmentGetResponse> => {
     const { id } = req.params;
 
     const response = await this.getAppointmentById(id);
@@ -89,7 +97,7 @@ export class AppointmentController extends BaseController {
     return await new GetAppointmentCommand(this.appointmentRepository).execute({ id });
   }
 
-  handleDelete = async (req: Request<AppointmentDeleteParams>, res: Response) => {
+  handleDelete = async (req: Request<AppointmentDeleteParams>, res: Response): Promise<void> => {
     const { id } = req.params;
 
     await new DeleteAppointmentCommand(this.appointmentRepository).execute({ id });
@@ -97,7 +105,9 @@ export class AppointmentController extends BaseController {
     res.status(204);
   };
 
-  handleList = async (req: Request<unknown, AppointmentRecord[], unknown, AppointmentListQuery>) => {
+  handleList = async (
+    req: Request<unknown, AppointmentRecord[], unknown, AppointmentListQuery>
+  ): Promise<AppointmentListResponse> => {
     const { completed, limit } = req.query;
 
     const response = await new ListAppointmentCommand(this.appointmentRepository).execute({ completed, limit });
@@ -105,7 +115,7 @@ export class AppointmentController extends BaseController {
     return response.map(Appointment.toRecord);
   };
 
-  handlePick = async (req: Request<AppointmentPickParams>) => {
+  handlePick = async (req: Request<AppointmentPickParams>): Promise<void> => {
     const { id } = req.params;
     const { fullName, email } = req.operator!;
 
@@ -118,7 +128,7 @@ export class AppointmentController extends BaseController {
     });
   };
 
-  handleComplete = async (req: Request<AppointmentCompleteParams>) => {
+  handleComplete = async (req: Request<AppointmentCompleteParams>): Promise<void> => {
     const { id } = req.params;
 
     await new CompleteAppointmentCommand(this.appointmentRepository).execute({ id });

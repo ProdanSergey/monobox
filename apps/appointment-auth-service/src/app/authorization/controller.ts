@@ -1,6 +1,12 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { BaseController, serialize, validate } from "@monobox/infra";
-import { AuthorizationSessionBody } from "@monobox/appointment-contract";
+import {
+  AuthorizationSignUpBody,
+  AuthorizationSignUpResponseData,
+  AuthorizationSignInBody,
+  AuthorizationSignInVerifyBody,
+  AuthorizationSignInVerifyResponseData,
+} from "@monobox/appointment-contract";
 
 import { postSignInBodySchema, postSignUpBodySchema } from "./definition";
 
@@ -13,9 +19,32 @@ export class AuthorizationController extends BaseController {
     this.router.post("/sign-in/verify", validate(postSignUpBodySchema), serialize(this.handleSignInVerify));
   }
 
-  handleSignUp = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {};
+  handleSignUp = async (
+    req: Request<unknown, unknown, AuthorizationSignUpBody>
+  ): Promise<AuthorizationSignUpResponseData> => {
+    const { fullName, email } = req.body;
 
-  handleSignIn = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {};
+    const otp = await CreateOperatorCommand().execute({ fullName, email });
 
-  handleSignInVerify = async (req: Request<unknown, unknown, AuthorizationSessionBody>, res: Response) => {};
+    return { otp };
+  };
+
+  handleSignIn = async (req: Request<unknown, unknown, AuthorizationSignInBody>): Promise<void> => {
+    const { email } = req.body;
+
+    await SendOperatorOTPEmailCommand().execute({ email });
+  };
+
+  handleSignInVerify = async (
+    req: Request<unknown, unknown, AuthorizationSignInVerifyBody>
+  ): Promise<AuthorizationSignInVerifyResponseData> => {
+    const { email, otp } = req.body;
+
+    const operator = GetOperatorCommand().execute({ email, otp });
+
+    return {
+      fullName: operator.fullName,
+      email: operator.email,
+    };
+  };
 }

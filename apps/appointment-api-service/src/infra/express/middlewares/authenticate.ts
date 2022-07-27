@@ -1,35 +1,29 @@
-import type { RequestHandler } from "express";
-import jwt from "jsonwebtoken";
+import type { Request, RequestHandler } from "express";
 
-import { UnauthorizedError, InternalError } from "@monobox/infra";
-import { AuthorizationOperatorJwtPayload } from "@monobox/appointment-contract";
+import { UnauthorizedError } from "@monobox/infra";
+import { JwtToken } from "@monobox/appointment-core";
 
-const assertJwtPayload = (payload: string | jwt.JwtPayload): AuthorizationOperatorJwtPayload => {
-  if (typeof payload !== "object" || (!payload.fullName && !payload.email)) {
-    throw new InternalError();
-  }
-
-  return {
-    fullName: payload.fullName,
-    email: payload.email,
-  };
+export type JwtTokenPayload = {
+  id: string;
+  fullName: string;
+  email: string;
 };
 
-export const asOperator: RequestHandler = (req, _res, next) => {
-  const authToken = req.header("x-auth-token");
+export type RequestGuard = <Req extends Request>(req: Req) => void;
 
-  if (!authToken) {
+export const asOperator: RequestGuard = async (req) => {
+  const jwtToken = req.header("x-auth-token");
+
+  if (!jwtToken) {
     throw new UnauthorizedError();
   }
 
-  const { JWT_SECRET } = process.env;
+  const jwt = new JwtToken();
 
-  const payload = jwt.verify(authToken, JWT_SECRET);
-  req.operator = assertJwtPayload(payload);
-  next();
+  req.operator = await jwt.verify<JwtTokenPayload>(jwtToken);
 };
 
-export const asAssignee: RequestHandler = (req, _res, next) => {
+export const asAssignee: RequestGuard = (req) => {
   const userToken = req.header("x-user-token");
 
   if (!userToken) {
@@ -37,16 +31,16 @@ export const asAssignee: RequestHandler = (req, _res, next) => {
   }
 
   req.token = userToken;
-  next();
 };
 
 export class Strategy {
-  constructor(private readonly requestHandler: RequestHandler) {}
+  constructor(private readonly guard: RequestGuard) {}
 
   next(nextArg: "route" | "router" | Error = new UnauthorizedError()): RequestHandler {
-    return (req, res, next) => {
+    return (req, _res, next) => {
       try {
-        this.requestHandler(req, res, next);
+        this.guard(req);
+        next();
       } catch (error) {
         next(nextArg);
       }
