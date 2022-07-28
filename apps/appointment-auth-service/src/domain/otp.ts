@@ -19,6 +19,10 @@ export class Otp {
     this.record = record;
   }
 
+  get id() {
+    return this.record.id;
+  }
+
   get email() {
     return this.record.email;
   }
@@ -41,6 +45,10 @@ export class Otp {
       },
       otp,
     ];
+  }
+
+  static async compare(otp: string, password: string): Promise<boolean> {
+    return await bcrypt.compare(otp, password);
   }
 
   static toRecord(otp: Otp): OtpRecord {

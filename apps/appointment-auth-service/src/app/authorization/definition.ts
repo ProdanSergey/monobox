@@ -1,4 +1,4 @@
-import yup from "yup";
+import * as yup from "yup";
 
 import { signUpSchema, signInSchema, signInVerifySchema } from "@monobox/appointment-contract";
 

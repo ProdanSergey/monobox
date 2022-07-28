@@ -1,38 +1,54 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import { BaseController, serialize, validate } from "@monobox/infra";
 import {
   AuthorizationSignUpBody,
-  AuthorizationSignUpResponseData,
   AuthorizationSignInBody,
   AuthorizationSignInVerifyBody,
   AuthorizationSignInVerifyResponseData,
 } from "@monobox/appointment-contract";
 
-import { postSignInBodySchema, postSignUpBodySchema } from "./definition";
+import { OperatorRepository } from "../../ports/repository/operator";
+import { OtpRepository } from "../../ports/repository/otp";
+
+import { CreateOperatorCommand } from "../../commands/CreateOperatorCommand";
+import { SendOperatorOTPByEmailCommand } from "../../commands/SendOperatorOTPByEmailCommand";
+
+import { postSignInBodySchema, postSignInVerifyBodySchema, postSignUpBodySchema } from "./definition";
+import { GetOperatorTokensCommand } from "../../commands/GetOperatorTokenCommand";
+import { Mailer } from "@monobox/appointment-core";
 
 export class AuthorizationController extends BaseController {
-  constructor() {
+  constructor(
+    private readonly operatorRepository: OperatorRepository,
+    private readonly otpRepository: OtpRepository,
+    private readonly mailer: Mailer
+  ) {
     super();
 
     this.router.post("/sign-up", validate(postSignUpBodySchema), serialize(this.handleSignUp));
     this.router.post("/sign-in", validate(postSignInBodySchema), serialize(this.handleSignIn));
-    this.router.post("/sign-in/verify", validate(postSignUpBodySchema), serialize(this.handleSignInVerify));
+    this.router.post("/sign-in/verify", validate(postSignInVerifyBodySchema), serialize(this.handleSignInVerify));
   }
 
-  handleSignUp = async (
-    req: Request<unknown, unknown, AuthorizationSignUpBody>
-  ): Promise<AuthorizationSignUpResponseData> => {
+  handleSignUp = async (req: Request<unknown, unknown, AuthorizationSignUpBody>, res: Response): Promise<void> => {
     const { fullName, email } = req.body;
 
-    const otp = await CreateOperatorCommand().execute({ fullName, email });
+    console.log(fullName, email);
 
-    return { otp };
+    await new CreateOperatorCommand(this.operatorRepository).execute({
+      fullName,
+      email,
+    });
+
+    res.status(201);
   };
 
   handleSignIn = async (req: Request<unknown, unknown, AuthorizationSignInBody>): Promise<void> => {
     const { email } = req.body;
 
-    await SendOperatorOTPEmailCommand().execute({ email });
+    await new SendOperatorOTPByEmailCommand(this.operatorRepository, this.otpRepository, this.mailer).execute({
+      email,
+    });
   };
 
   handleSignInVerify = async (
@@ -40,11 +56,13 @@ export class AuthorizationController extends BaseController {
   ): Promise<AuthorizationSignInVerifyResponseData> => {
     const { email, otp } = req.body;
 
-    const operator = GetOperatorCommand().execute({ email, otp });
+    const { accessToken } = await new GetOperatorTokensCommand(this.operatorRepository, this.otpRepository).execute({
+      email,
+      otp,
+    });
 
     return {
-      fullName: operator.fullName,
-      email: operator.email,
+      accessToken,
     };
   };
 }

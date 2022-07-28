@@ -15,6 +15,10 @@ export class Operator {
     this.record = record;
   }
 
+  get id() {
+    return this.record.id;
+  }
+
   get fullName() {
     return this.record.fullName;
   }

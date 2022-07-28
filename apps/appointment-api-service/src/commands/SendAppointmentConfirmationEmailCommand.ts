@@ -1,9 +1,18 @@
+import { Mailer } from "@monobox/appointment-core";
+
 type SendAppointmentConfirmationEmailCommandParams = {
+  email: string;
   token: string;
 };
 
 export class SendAppointmentConfirmationEmailCommand {
-  execute({ token }: SendAppointmentConfirmationEmailCommandParams): void {
-    console.log("USER TOKEN:", token);
+  constructor(private readonly mailer: Mailer) {}
+
+  execute({ email, token }: SendAppointmentConfirmationEmailCommandParams): void {
+    this.mailer.send({
+      address: email,
+      subject: "USER TOKEN",
+      body: token,
+    });
   }
 }

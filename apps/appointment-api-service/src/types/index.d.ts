@@ -1,6 +1,6 @@
 declare namespace Express {
   export interface Request {
-    operator?: import("../infra/express/middlewares/authenticate").JwtTokenPayload;
+    operator?: import("@monobox/appointment-contract").OperatorTokenPayload;
     token?: string;
   }
 }

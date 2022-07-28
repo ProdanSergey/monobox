@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 
-const { DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+const { DB_CONNECT_URL } = process.env;
 
 export const connect = async () => {
-  await mongoose.connect(
-    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_NAME}.1hr0l.mongodb.net/?retryWrites=true&w=majority`
-  );
+  await mongoose.connect(DB_CONNECT_URL);
 };

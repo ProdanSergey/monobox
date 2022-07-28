@@ -30,11 +30,13 @@ import { SendAppointmentConfirmationEmailCommand } from "../../commands/SendAppo
 import { FindUserSessionCommand } from "../../commands/FindUserSessionCommand";
 
 import { appointmentCreateBodySchema } from "./definition";
+import { Mailer } from "@monobox/appointment-core";
 
 export class AppointmentController extends BaseController {
   constructor(
     private readonly appointmentRepository: AppointmentRepository,
-    private readonly sessionRepository: SessionRepository
+    private readonly sessionRepository: SessionRepository,
+    private readonly mailer: Mailer
   ) {
     super();
 
@@ -62,7 +64,7 @@ export class AppointmentController extends BaseController {
 
     const session = await new CreateSessionCommand(this.sessionRepository).execute({ appointmentId: response.id });
 
-    new SendAppointmentConfirmationEmailCommand().execute({ token: session.token });
+    new SendAppointmentConfirmationEmailCommand(this.mailer).execute({ email, token: session.token });
 
     res.status(201);
 
