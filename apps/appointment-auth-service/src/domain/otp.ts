@@ -8,6 +8,7 @@ export type OtpRecord = {
   id: OtpId;
   email: string;
   password: string;
+  expire_at: Date;
   created_at: string;
   updated_at: string;
 };
@@ -56,6 +57,7 @@ export class Otp {
       id: otp.record.id,
       password: otp.record.password,
       email: otp.record.email,
+      expire_at: otp.record.expire_at,
       created_at: otp.record.created_at,
       updated_at: otp.record.updated_at,
     };

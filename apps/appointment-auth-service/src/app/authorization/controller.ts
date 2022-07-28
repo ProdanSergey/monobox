@@ -33,8 +33,6 @@ export class AuthorizationController extends BaseController {
   handleSignUp = async (req: Request<unknown, unknown, AuthorizationSignUpBody>, res: Response): Promise<void> => {
     const { fullName, email } = req.body;
 
-    console.log(fullName, email);
-
     await new CreateOperatorCommand(this.operatorRepository).execute({
       fullName,
       email,

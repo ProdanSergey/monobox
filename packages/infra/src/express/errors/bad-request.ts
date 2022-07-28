@@ -1,4 +1,6 @@
-export class BadRequestError extends Error {
+import { DomainError } from "./domain-error";
+
+export class BadRequestError extends DomainError {
   name = "BadRequestError";
 
   constructor(message: string) {

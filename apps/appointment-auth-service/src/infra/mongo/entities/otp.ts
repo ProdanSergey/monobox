@@ -15,6 +15,11 @@ const schema = new Schema<OtpDocument>(
       type: String,
       required: true,
     },
+    expire_at: {
+      type: Date,
+      default: Date.now,
+      index: { expires: "1m" },
+    },
   },
   {
     timestamps: {

@@ -14,6 +14,7 @@ const schema = new Schema<OperatorDocument>(
     email: {
       type: String,
       required: true,
+      index: { unique: true },
     },
   },
   {

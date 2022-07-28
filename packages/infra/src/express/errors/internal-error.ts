@@ -1,4 +1,6 @@
-export class InternalError extends Error {
+import { DomainError } from "./domain-error";
+
+export class InternalError extends DomainError {
   name = "InternalError";
 
   constructor() {
