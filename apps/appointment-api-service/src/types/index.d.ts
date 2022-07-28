@@ -1,5 +1,6 @@
 declare namespace Express {
   export interface Request {
-    user: import("../domain/appointment").AppointmentOperator | null;
+    operator?: import("@monobox/appointment-contract").OperatorTokenPayload;
+    token?: string;
   }
 }

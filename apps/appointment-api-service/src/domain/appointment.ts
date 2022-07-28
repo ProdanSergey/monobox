@@ -70,7 +70,7 @@ export class Appointment {
     this.record = { ...this.record, ...record };
   }
 
-  static create(assignee: AppointmentAssignee): Partial<AppointmentRecord> {
+  static create({ assignee }: { assignee: AppointmentAssignee }): Partial<AppointmentRecord> {
     const now = dayjs();
 
     return {

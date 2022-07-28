@@ -1,15 +1,24 @@
 import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
-import session from "express-session";
-
-import { errorHandling } from "@monobox/infra";
-
-import { AuthorizationController } from "./app/authorization/controller";
-
 dotenv.config();
 
+import express from "express";
+import cors from "cors";
+
+import { ConsoleLogger, FakeMailer } from "@monobox/appointment-core";
+import { errorHandling } from "@monobox/infra";
+
+import { connect } from "./infra/mongo";
+import { MongoDBOperatorRepository } from "./adapters/mongo/operator-repository";
+import { MongoDBOtpRepository } from "./adapters/mongo/otp-repository";
+import { AuthorizationController } from "./app/authorization/controller";
+
 const bootstrap = async (app: express.Express) => {
+  const logger = new ConsoleLogger();
+
+  await connect();
+
+  logger.print("DB Connected");
+
   app.use(
     cors({
       origin: "*",
@@ -18,29 +27,20 @@ const bootstrap = async (app: express.Express) => {
     })
   );
 
-  const { SESSION_SECRET } = process.env;
-
-  const sessionConfig: session.SessionOptions = {
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-    },
-  };
-
-  app.use(session(sessionConfig));
-
   app.use(express.json());
 
-  app.use("/authorization", new AuthorizationController().process());
+  const operatorRepository = new MongoDBOperatorRepository();
+  const otpRepository = new MongoDBOtpRepository();
+  const mailer = new FakeMailer(logger);
+
+  app.use("/authorization", new AuthorizationController(operatorRepository, otpRepository, mailer).process());
 
   app.use(errorHandling);
 
   const { PORT } = process.env;
 
   app.listen(PORT, () => {
-    console.log(`App listening at http://localhost:${PORT}`);
+    logger.print(`App listening at http://localhost:${PORT}`);
   });
 };
 
