@@ -87,6 +87,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@appointment/cli-service@workspace:apps/appointment-cli-service"
   dependencies:
+    "@monobox/appointment-core": "workspace:^"
     "@types/lodash": ^4.14.182
     "@types/node": ^18.0.3
     dayjs: ^1.11.2

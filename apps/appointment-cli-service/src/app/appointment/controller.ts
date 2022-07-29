@@ -1,5 +1,6 @@
+import { Logger } from "@monobox/appointment-core";
+
 import { CLI, CLICommand } from "../../ports/cli";
-import { Logger } from "../../ports/logger";
 import { CreateAppointmentCommand } from "../../commands/CreateAppointmentCommand";
 import { GetAppointmentCommand } from "../../commands/GetAppointmentCommand";
 import { DeleteAppointmentCommand } from "../../commands/DeleteAppointmentCommand";

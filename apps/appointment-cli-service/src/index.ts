@@ -1,4 +1,5 @@
-import { ConsoleLogger } from "./adapters/console-logger";
+import { ConsoleLogger } from "@monobox/appointment-core";
+
 import { AppointmentFile } from "./adapters/filesystem/appointment-file";
 import { FileAppointmentRepository } from "./adapters/filesystem/appointment-repository";
 import { NodeCLI } from "./adapters/node-cli";
