@@ -1,11 +1,16 @@
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
-import { AppointmentsPage } from "./pages/appointments";
-import { ViewAppointmentPage } from "./pages/view-appointment";
-import { LoginPage } from "./pages/login";
+
+import { capitalize } from "@monobox/appointment-library";
+
 import { AuthorizedRoute, DeAuthorizedRoute } from "./components/route";
 import { UserContext } from "./context/user";
-import { capitalize } from "./shared/helpers/string.capitalize";
+import { AppointmentsPage } from "./pages/appointments";
+import { ViewAppointmentPage } from "./pages/view-appointment";
+import { SignUpPage } from "./pages/sign-up";
+import { SignInPage } from "./pages/sign-in";
+import { SignInVerifyPage } from "./pages/sign-in-verify";
+import { NotFoundPage } from "./pages/not-found-page";
 
 const AppComponent = () => {
   const { user } = useContext(UserContext);
@@ -36,13 +41,30 @@ const AppComponent = () => {
             />
           </Route>
           <Route
-            path="/login"
+            path="/sign-up"
             element={
               <DeAuthorizedRoute>
-                <LoginPage />
+                <SignUpPage />
               </DeAuthorizedRoute>
             }
           />
+          <Route
+            path="/sign-in"
+            element={
+              <DeAuthorizedRoute>
+                <SignInPage />
+              </DeAuthorizedRoute>
+            }
+          />
+          <Route
+            path="/sign-in/verify"
+            element={
+              <DeAuthorizedRoute>
+                <SignInVerifyPage />
+              </DeAuthorizedRoute>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
     </>

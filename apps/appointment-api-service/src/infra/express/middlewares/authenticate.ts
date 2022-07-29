@@ -2,7 +2,7 @@ import type { Request, RequestHandler } from "express";
 
 import { UnauthorizedError } from "@monobox/infra";
 import { JwtToken } from "@monobox/appointment-core";
-import { OperatorTokenPayload } from "@monobox/appointment-contract";
+import { OperatorJwtTokenPayload } from "@monobox/appointment-contract";
 
 export type RequestGuard = <Req extends Request>(req: Req) => void | Promise<void>;
 
@@ -15,7 +15,7 @@ export const asOperator: RequestGuard = async (req) => {
 
   const jwt = new JwtToken();
 
-  req.operator = await jwt.verify<OperatorTokenPayload>(jwtToken);
+  req.operator = await jwt.verify<OperatorJwtTokenPayload>(jwtToken);
 };
 
 export const asAssignee: RequestGuard = (req) => {

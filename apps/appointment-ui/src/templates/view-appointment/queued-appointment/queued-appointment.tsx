@@ -1,10 +1,10 @@
 import React, { useState, FunctionComponent, useEffect } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-
 dayjs.extend(relativeTime);
 
-import { Appointment } from "../../../shared/domain/appointment";
+import { Appointment } from "@monobox/appointment-contract";
+
 import { StyledCountdown, StyledLabel, StyledOutput } from "./queued-appointment.styled";
 
 const formatMoment = (start: string, moment: dayjs.Dayjs): string => {

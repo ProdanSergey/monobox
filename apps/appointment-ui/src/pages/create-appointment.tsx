@@ -1,24 +1,32 @@
 import React, { FunctionComponent } from "react";
-import { Appointment } from "../shared/domain/appointment";
-import { createAppointment, CreateAppointmentBody } from "../shared/api/appointment";
-import { StyledSection, StyledContainer } from "../shared/elements/layout.styled";
-import { StyledSpacer } from "../shared/elements/spacer.styled";
-import { StyledAlert } from "../shared/elements/alert.styled";
-import { useAsyncHandler } from "../shared/hooks/use-async-handler";
+
+import { AppointmentCreateBody, AppointmentCreateResponseData } from "@monobox/appointment-contract";
+import {
+  ApiError,
+  StyledAlert,
+  StyledContainer,
+  StyledSection,
+  StyledSpacer,
+  useDataHandler,
+} from "@monobox/appointment-library";
+
+import { createAppointment } from "../shared/api/appointment";
 import { AppointmentForm } from "../templates/create-appointment/form/form";
 import { AppointmentOutput } from "../templates/create-appointment/output/output";
 
 export const CreateAppointmentPage: FunctionComponent = () => {
-  const { data, error, isLoading, asyncHandler } = useAsyncHandler<Appointment, Error, CreateAppointmentBody>(
-    ({ fullName, email }) => {
-      return createAppointment({ fullName, email });
-    }
-  );
+  const { data, error, isLoading, dataHandler } = useDataHandler<
+    AppointmentCreateResponseData,
+    ApiError,
+    AppointmentCreateBody
+  >(({ fullName, email }) => {
+    return createAppointment({ fullName, email });
+  });
 
   return (
     <StyledContainer>
       <StyledSection>
-        <AppointmentForm isLoading={isLoading} onSubmit={({ fullName, email }) => asyncHandler({ fullName, email })} />
+        <AppointmentForm isLoading={isLoading} onSubmit={({ fullName, email }) => dataHandler({ fullName, email })} />
       </StyledSection>
 
       {error && (

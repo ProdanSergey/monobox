@@ -1,6 +1,8 @@
 import React, { useState, PointerEventHandler } from "react";
 import { FunctionComponent } from "react";
-import { Appointment } from "../../../shared/domain/appointment";
+
+import { Appointment } from "@monobox/appointment-contract";
+
 import { StyledWrapper, StyledNavigationLink, StyledCopiedBadge, StyledCopyButton, StyledUri } from "./output.styled";
 
 export type AppointmentOutputProps = {

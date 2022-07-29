@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-
 dayjs.extend(relativeTime);
-import { Appointment } from "../shared/domain/appointment";
+
+import { Appointment } from "@monobox/appointment-contract";
+
 import { StyledItem, StyledList } from "./appointment-card.styled";
 
 export type AppointmentCardProps = {

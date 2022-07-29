@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { Appointment } from "../../../shared/domain/appointment";
+
+import { Appointment } from "@monobox/appointment-contract";
 
 export type PickedAppointmentProps = {
   appointment: Appointment;
