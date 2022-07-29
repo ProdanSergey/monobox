@@ -1,4 +1,4 @@
-import { OperatorTokenPayload } from "@monobox/appointment-contract";
+import { OperatorJwtTokenPayload } from "@monobox/appointment-contract";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "@monobox/infra";
 import { JwtToken } from "@monobox/appointment-core";
 
@@ -35,7 +35,7 @@ export class GetOperatorTokensCommand {
 
     const jwt = new JwtToken();
 
-    const accessToken = await jwt.sign<OperatorTokenPayload>({
+    const accessToken = await jwt.sign<OperatorJwtTokenPayload>({
       id: operator.id,
       fullName: operator.fullName,
       email: operator.email,

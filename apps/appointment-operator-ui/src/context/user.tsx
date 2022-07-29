@@ -1,9 +1,10 @@
 import React, { createContext, FunctionComponent, PropsWithChildren, useState } from "react";
-import { User } from "../shared/domain/user";
+
+import { OperatorJwtTokenPayload } from "@monobox/appointment-contract";
 
 type UserContextValue = {
-  user: User | null;
-  setUser: (user: User) => void;
+  user: OperatorJwtTokenPayload | null;
+  setUser: (user: OperatorJwtTokenPayload) => void;
 };
 
 export const UserContext = createContext<UserContextValue>({
@@ -12,7 +13,7 @@ export const UserContext = createContext<UserContextValue>({
 });
 
 export const UserProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<OperatorJwtTokenPayload | null>(null);
 
   return (
     <UserContext.Provider

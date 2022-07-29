@@ -1,13 +1,11 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent } from "react";
 import { Navigate } from "react-router-dom";
 
-import { StyledAlert, StyledButton } from "@monobox/appointment-library";
+import { Appointment } from "@monobox/appointment-contract";
+import { ApiError, StyledAlert, StyledButton, useDataHandler } from "@monobox/appointment-library";
 
 import { AppointmentCard } from "../../../components/appointment-card";
-import { UserContext } from "../../../context/user";
 import { pickAppointment } from "../../../shared/api/appointment";
-import { Appointment } from "../../../shared/domain/appointment";
-import { useDataHandler } from "../../../shared/hooks/use-data-handler";
 import { StyledItem, StyledList, StyledCardContainer } from "./incoming-appointments.styled";
 
 export type IncomingAppointmentsProps = {
@@ -19,19 +17,10 @@ type IncomingAppointmentProps = {
 };
 
 const IncomingAppointment: FunctionComponent<IncomingAppointmentProps> = ({ appointment }) => {
-  const { user } = useContext(UserContext);
-
-  const { data, error, isLoading, dataHandler } = useDataHandler<undefined, Error>(async () => {
-    if (!user) {
-      throw new Error("Not Authorized");
-    }
-
-    return pickAppointment(
-      {
-        id: appointment.id,
-      },
-      user
-    );
+  const { data, error, isLoading, dataHandler } = useDataHandler<undefined, ApiError>(async () => {
+    return pickAppointment({
+      id: appointment.id,
+    });
   });
 
   if (data !== null) {
@@ -42,7 +31,7 @@ const IncomingAppointment: FunctionComponent<IncomingAppointmentProps> = ({ appo
     <StyledItem>
       <StyledCardContainer>
         <AppointmentCard appointment={appointment} />
-        <StyledButton disabled={isLoading} onClick={dataHandler}>
+        <StyledButton disabled={isLoading} onClick={() => dataHandler()}>
           Pick
         </StyledButton>
       </StyledCardContainer>

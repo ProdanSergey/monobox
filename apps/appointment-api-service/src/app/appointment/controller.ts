@@ -5,12 +5,12 @@ import { BaseController, serialize, UnauthorizedError, validate } from "@monobox
 import {
   AppointmentCompleteParams,
   AppointmentCreateBody,
-  AppointmentCreateResponse,
+  AppointmentCreateResponseData,
   AppointmentDeleteParams,
   AppointmentGetParams,
-  AppointmentGetResponse,
+  AppointmentGetResponseData,
   AppointmentListQuery,
-  AppointmentListResponse,
+  AppointmentListResponseData,
   AppointmentPickParams,
 } from "@monobox/appointment-contract";
 
@@ -52,7 +52,7 @@ export class AppointmentController extends BaseController {
   handleCreate = async (
     req: Request<unknown, AppointmentRecord, AppointmentCreateBody>,
     res: Response
-  ): Promise<AppointmentCreateResponse> => {
+  ): Promise<AppointmentCreateResponseData> => {
     const { fullName, email } = req.body;
 
     const response = await new CreateAppointmentCommand(this.appointmentRepository).execute({
@@ -71,7 +71,7 @@ export class AppointmentController extends BaseController {
     return Appointment.toRecord(response);
   };
 
-  handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>): Promise<AppointmentGetResponse> => {
+  handleGet = async (req: Request<AppointmentGetParams, AppointmentRecord>): Promise<AppointmentGetResponseData> => {
     const { id } = req.params;
 
     const session = await new FindUserSessionCommand(this.sessionRepository).execute({ token: req.token! });
@@ -87,7 +87,7 @@ export class AppointmentController extends BaseController {
 
   handleGetByOperator = async (
     req: Request<AppointmentGetParams, AppointmentRecord>
-  ): Promise<AppointmentGetResponse> => {
+  ): Promise<AppointmentGetResponseData> => {
     const { id } = req.params;
 
     const response = await this.getAppointmentById(id);
@@ -109,7 +109,7 @@ export class AppointmentController extends BaseController {
 
   handleList = async (
     req: Request<unknown, AppointmentRecord[], unknown, AppointmentListQuery>
-  ): Promise<AppointmentListResponse> => {
+  ): Promise<AppointmentListResponseData> => {
     const { completed, limit } = req.query;
 
     const response = await new ListAppointmentCommand(this.appointmentRepository).execute({ completed, limit });

@@ -1,21 +1,26 @@
-import { Appointment } from "../domain/appointment";
-import { get, post } from "./request";
+import {
+  AppointmentCreateBody,
+  AppointmentCreateResponseData,
+  AppointmentGetParams,
+  AppointmentGetResponseData,
+  X_USER_TOKEN,
+} from "@monobox/appointment-contract";
+import { get, post } from "@monobox/appointment-library";
 
-const CREATE_APPOINTMENT_PREFIX = "appointment";
+const RESOURCE = "appointment";
 
-export type CreateAppointmentBody = {
-  fullName: string;
-  email: string;
+export const createAppointment = async ({ fullName, email }: AppointmentCreateBody) => {
+  return post<AppointmentCreateResponseData>(RESOURCE, {
+    baseUrl: process.env.API_SERVICE_URL,
+    body: { fullName, email },
+  });
 };
 
-export const createAppointment = async (body: CreateAppointmentBody) => {
-  return post<Appointment>(CREATE_APPOINTMENT_PREFIX, body);
-};
-
-export type GetAppointmentParams = {
-  id: string;
-};
-
-export const getAppointment = async ({ id }: GetAppointmentParams) => {
-  return get<Appointment>(`${CREATE_APPOINTMENT_PREFIX}/${encodeURIComponent(id)}`);
+export const getAppointment = async ({ id }: AppointmentGetParams, token: string) => {
+  return get<AppointmentGetResponseData>(`${RESOURCE}/${encodeURIComponent(id)}`, {
+    baseUrl: process.env.API_SERVICE_URL,
+    headers: {
+      [X_USER_TOKEN]: token,
+    },
+  });
 };

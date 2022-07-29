@@ -17,7 +17,6 @@ export type AppointmentRecord = {
   ticket: string;
   assignee: AppointmentAssignee;
   operator?: AppointmentOperator;
-  resolution?: string;
   completed: boolean;
   created_at: string;
   updated_at: string;

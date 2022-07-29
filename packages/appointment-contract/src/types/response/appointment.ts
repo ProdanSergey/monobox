@@ -1,4 +1,4 @@
-type Appointment = {
+export type Appointment = {
   id: string;
   ticket: string;
   assignee: {
@@ -9,12 +9,11 @@ type Appointment = {
     fullName: string;
     email: string;
   };
-  resolution?: string;
   completed: boolean;
   created_at: string;
   updated_at: string;
 };
 
-export type AppointmentCreateResponse = Appointment;
-export type AppointmentGetResponse = Appointment;
-export type AppointmentListResponse = Appointment[];
+export type AppointmentCreateResponseData = Appointment;
+export type AppointmentGetResponseData = Appointment;
+export type AppointmentListResponseData = Appointment[];

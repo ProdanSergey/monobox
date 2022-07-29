@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import dayjs from "dayjs";
-import { Appointment } from "../../../shared/domain/appointment";
+
+import { Appointment } from "@monobox/appointment-contract";
 
 const formatMoment = (finish: string) => {
   return `${dayjs(finish).format("DD/MM/YYYY")} at ${dayjs(finish).format("HH:mm:ss")}`;

@@ -1,41 +1,58 @@
-import { Appointment } from "../domain/appointment";
-import { get, post } from "./request";
+import {
+  AppointmentGetParams,
+  AppointmentGetResponseData,
+  AppointmentPickParams,
+  AppointmentCompleteParams,
+  AppointmentListQuery,
+  AppointmentListResponseData,
+  X_AUTH_TOKEN,
+} from "@monobox/appointment-contract";
+import { ApiError, get, post } from "@monobox/appointment-library";
 
-const CREATE_APPOINTMENT_PREFIX = "appointment";
+const RESOURCE = "appointment";
 
-export type GetAppointmentParams = {
-  id: string;
+const getAuthToken = (): string => {
+  const token = localStorage.getItem("accessToken");
+
+  if (!token) {
+    throw new ApiError("Missing access token");
+  }
+
+  return token;
 };
 
-export const getAppointment = async ({ id }: GetAppointmentParams) => {
-  return get<Appointment>(`${CREATE_APPOINTMENT_PREFIX}/${encodeURIComponent(id)}`);
+export const getAppointment = async ({ id }: AppointmentGetParams) => {
+  return get<AppointmentGetResponseData>(`${RESOURCE}/${encodeURIComponent(id)}`, {
+    baseUrl: process.env.API_SERVICE_URL,
+    headers: {
+      [X_AUTH_TOKEN]: getAuthToken(),
+    },
+  });
 };
 
-export type PickAppointmentParams = {
-  id: string;
+export const pickAppointment = async ({ id }: AppointmentPickParams) => {
+  return post<undefined>(`${RESOURCE}/${encodeURIComponent(id)}/pick`, {
+    baseUrl: process.env.API_SERVICE_URL,
+    headers: {
+      [X_AUTH_TOKEN]: getAuthToken(),
+    },
+  });
 };
 
-export type PickAppointmentBody = {
-  fullName: string;
-  email: string;
+export const completeAppointment = async ({ id }: AppointmentCompleteParams) => {
+  return post<undefined>(`${RESOURCE}/${encodeURIComponent(id)}/complete`, {
+    baseUrl: process.env.API_SERVICE_URL,
+    headers: {
+      [X_AUTH_TOKEN]: getAuthToken(),
+    },
+  });
 };
 
-export const pickAppointment = async ({ id }: PickAppointmentParams, { fullName, email }: PickAppointmentBody) => {
-  return post<undefined>(`${CREATE_APPOINTMENT_PREFIX}/${encodeURIComponent(id)}/pick`, { fullName, email });
-};
-
-export type CompleteAppointmentParams = {
-  id: string;
-};
-
-export const completeAppointment = async ({ id }: CompleteAppointmentParams) => {
-  return post<undefined>(`${CREATE_APPOINTMENT_PREFIX}/${encodeURIComponent(id)}/complete`);
-};
-
-export type GetAppointmentsQuery = {
-  completed: boolean;
-};
-
-export const getAppointments = async ({ completed }: GetAppointmentsQuery) => {
-  return get<Appointment[]>(`${CREATE_APPOINTMENT_PREFIX}?completed=${completed}`);
+export const getAppointments = async ({ completed }: AppointmentListQuery) => {
+  return get<AppointmentListResponseData>(`${RESOURCE}?completed=${completed}`, {
+    baseUrl: process.env.API_SERVICE_URL,
+    headers: {
+      [X_AUTH_TOKEN]: getAuthToken(),
+    },
+  });
 };

@@ -1,12 +1,11 @@
 import React, { FunctionComponent, useCallback } from "react";
 import { useParams } from "react-router-dom";
 
-import { StyledAlert, StyledContainer, StyledSection } from "@monobox/appointment-library";
+import { Appointment, AppointmentGetResponseData } from "@monobox/appointment-contract";
+import { ApiError, StyledAlert, StyledContainer, StyledSection, useData } from "@monobox/appointment-library";
 
-import { useData } from "../shared/hooks/use-data";
 import { getAppointment } from "../shared/api/appointment";
 import { PickedAppointment } from "../templates/view-appointment/picked-appointment/picked-appointment";
-import { Appointment } from "../shared/domain/appointment";
 import { CompletedAppointment } from "../templates/view-appointment/completed-appointment/completed-appointment";
 
 const mapAppointmentOverview = (appointment: Appointment): React.ReactNode => {
@@ -26,12 +25,12 @@ export const ViewAppointmentPage: FunctionComponent = () => {
 
   const fetchAppointment = useCallback(() => {
     if (!appointmentId) {
-      throw new Error("Id is not available");
+      throw new ApiError("Id is not available");
     }
     return getAppointment({ id: appointmentId });
   }, [appointmentId]);
 
-  const { data, error } = useData<Appointment, Error>(fetchAppointment);
+  const { data, error } = useData<AppointmentGetResponseData, ApiError>(fetchAppointment);
 
   return (
     <StyledContainer>

@@ -1,6 +1,6 @@
 {
   "name": "@monobox/appointment-library",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "@appointment app library",
   "author": "Serhii Prodan",
   "license": "ISC",
@@ -29,5 +29,8 @@
     "react": ">= 16.8.0",
     "react-dom": ">= 16.8.0",
     "styled-components": "^5.3.5"
+  },
+  "dependencies": {
+    "@monobox/appointment-contract": "workspace:^"
   }
 }

@@ -19,6 +19,7 @@
   "author": "Serhii Prodan",
   "license": "ISC",
   "dependencies": {
+    "@monobox/appointment-core": "workspace:^",
     "dayjs": "^1.11.2",
     "lodash": "^4.17.21"
   },

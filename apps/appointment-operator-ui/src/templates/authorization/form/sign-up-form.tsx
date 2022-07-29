@@ -1,28 +1,27 @@
 import React, { FunctionComponent } from "react";
 import validator from "validator";
 
-import { ValidateCallback, Form, StyledAlert } from "@monobox/appointment-library";
+import { StyledAlert, Form, ValidateCallback } from "@monobox/appointment-library";
 
 import { StyledForm, StyledButton, StyledField } from "./form.styled";
 
-type AppointmentFormValues = {
+type UserFormValues = {
   fullName: string;
   email: string;
 };
 
-type AppointmentFormErrors = {
+type UserFormErrors = {
   fullName: string;
   email: string;
 };
 
-export type AppointmentFormProps = {
-  isLoading: boolean;
-  onSubmit: (values: AppointmentFormValues) => void;
+export type UserFormProps = {
+  onSubmit: (values: UserFormValues) => void;
 };
 
-export const AppointmentForm: FunctionComponent<AppointmentFormProps> = ({ isLoading, onSubmit }) => {
-  const validate: ValidateCallback<AppointmentFormValues, AppointmentFormErrors> = ({ fullName, email }) => {
-    const errors: Partial<AppointmentFormErrors> = {};
+export const SignUpForm: FunctionComponent<UserFormProps> = ({ onSubmit }) => {
+  const validate: ValidateCallback<UserFormValues, UserFormErrors> = ({ fullName, email }) => {
+    const errors: Partial<UserFormErrors> = {};
 
     if (fullName.length < 1) {
       errors.fullName = "Full Name is required";
@@ -36,7 +35,7 @@ export const AppointmentForm: FunctionComponent<AppointmentFormProps> = ({ isLoa
   };
 
   return (
-    <Form<AppointmentFormValues, AppointmentFormErrors>
+    <Form<UserFormValues, UserFormErrors>
       initialValues={{
         fullName: "",
         email: "",
@@ -73,9 +72,7 @@ export const AppointmentForm: FunctionComponent<AppointmentFormProps> = ({ isLoa
               />
               {errors.email && <StyledAlert size="s">{errors.email}</StyledAlert>}
             </StyledField>
-            <StyledButton type="submit" disabled={isLoading}>
-              Get Appointment
-            </StyledButton>
+            <StyledButton type="submit">Sign Up</StyledButton>
           </StyledForm>
         );
       }}

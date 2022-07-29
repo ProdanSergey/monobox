@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const createStyledComponentsTransformer = require("typescript-plugin-styled-components").default;
 const CopyPlugin = require("copy-webpack-plugin");
+const DotEnv = require("dotenv-webpack");
 
 const styledComponentsTransformer = createStyledComponentsTransformer();
 
@@ -103,6 +104,7 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, "public", "index.html"),
       }),
+      new DotEnv(),
     ].filter(Boolean),
   };
 };

@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
-import { Appointment } from "../domain/appointment";
+
+import { Appointment } from "@monobox/appointment-contract";
 
 export class AppointmentBuilder {
   record: Appointment;
