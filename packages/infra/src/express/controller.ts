@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-export class BaseController {
+export class ExpressController {
   router: Router;
 
   constructor() {

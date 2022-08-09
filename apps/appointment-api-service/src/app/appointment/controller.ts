@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 
-import { BaseController, serialize, UnauthorizedError, validate } from "@monobox/infra";
+import { ExpressController } from "@monobox/infra/dist/express/controller";
+import { serialize, validate } from "@monobox/infra/dist/express/middlewares";
+import { UnauthorizedError } from "@monobox/infra/dist/express/errors";
 
 import {
   AppointmentCompleteParams,
@@ -32,7 +34,7 @@ import { FindUserSessionCommand } from "../../commands/FindUserSessionCommand";
 import { appointmentCreateBodySchema } from "./definition";
 import { Mailer } from "@monobox/appointment-core";
 
-export class AppointmentController extends BaseController {
+export class AppointmentController extends ExpressController {
   constructor(
     private readonly appointmentRepository: AppointmentRepository,
     private readonly sessionRepository: SessionRepository,

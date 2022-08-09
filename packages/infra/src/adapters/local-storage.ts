@@ -1,28 +1,23 @@
-export type StorageEventType = "set" | "remove";
+import { Storage, StorageEventDetail, StorageEventHandler, StorageEventType } from "../ports";
 
-export type StorageEventDetail<TValue> = {
-  key: string;
-  value: TValue;
-};
+export class LocalStorageError extends Error {
+  name = "LocalStorageError";
 
-export type StorageEvent<TValue> = {
-  type: StorageEventType;
-  detail: StorageEventDetail<TValue>;
-};
+  constructor(message?: string) {
+    super(message);
 
-export type StorageEventHandler<TValue> = (event: StorageEvent<TValue>) => void;
-
-export interface Storage<TValue> {
-  key: string;
-  get(): TValue;
-  set(value: TValue): void;
-  remove(): void;
-  subscribe(type: StorageEventType, handler: StorageEventHandler<TValue>): void;
-  unsubscribe(type: StorageEventType): void;
+    // Set the prototype explicitly.
+    Object.setPrototypeOf(this, LocalStorageError.prototype);
+  }
 }
 
+export type LocalStorageEventType = StorageEventType;
+export type LocalStorageEventHandler<TValue> = StorageEventHandler<TValue>;
+
+export type LocalStorageSubscribeHandler<TValue> = (event: CustomEvent<StorageEventDetail<TValue>>) => void;
+
 export class LocalStorage<TValue> implements Storage<TValue> {
-  private subs: Map<StorageEventType, EventListener[]> = new Map();
+  private subs: Map<StorageEventType, LocalStorageSubscribeHandler<TValue>[]> = new Map();
 
   constructor(public key: string) {
     this.throwWhenNotSupported();
@@ -60,8 +55,8 @@ export class LocalStorage<TValue> implements Storage<TValue> {
     localStorage.removeItem(this.key);
   }
 
-  subscribe(type: StorageEventType, handler: StorageEventHandler<TValue>): void {
-    const eventListener = (({ detail }: CustomEvent<StorageEventDetail<TValue>>) => {
+  subscribe(type: LocalStorageEventType, handler: LocalStorageEventHandler<TValue>): void {
+    const eventListener: LocalStorageSubscribeHandler<TValue> = ({ detail }) => {
       if (this.key !== detail.key) {
         return;
       }
@@ -70,16 +65,16 @@ export class LocalStorage<TValue> implements Storage<TValue> {
         type,
         detail,
       });
-    }) as EventListener;
+    };
 
-    window.addEventListener(`localstorage:${type}`, eventListener, false);
+    window.addEventListener(`localstorage:${type}`, eventListener as EventListener, false);
 
     const subs = this.subs.get(type) ?? [];
 
     this.subs.set(type, [...subs, eventListener]);
   }
 
-  unsubscribe(type: StorageEventType): void {
+  unsubscribe(type: LocalStorageEventType): void {
     const eventListeners = this.subs.get(type);
 
     if (!eventListeners) {
@@ -87,7 +82,7 @@ export class LocalStorage<TValue> implements Storage<TValue> {
     }
 
     for (const eventListener of eventListeners) {
-      window.removeEventListener(`localstorage:${type}`, eventListener, false);
+      window.removeEventListener(`localstorage:${type}`, eventListener as EventListener, false);
     }
   }
 
@@ -95,7 +90,7 @@ export class LocalStorage<TValue> implements Storage<TValue> {
     return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
   }
 
-  private dispatch(type: StorageEventType, value: TValue): void {
+  private dispatch(type: LocalStorageEventType, value: TValue): void {
     const detail: StorageEventDetail<TValue> = {
       key: this.key,
       value,
@@ -109,14 +104,14 @@ export class LocalStorage<TValue> implements Storage<TValue> {
   }
 
   private throwWhenNotSupported() {
-    if (!this.isSupported()) throw new Error("Local Storage is not supported on your environment");
+    if (!this.isSupported()) throw new LocalStorageError("Not supported on your environment");
   }
 
   private throwNotFound(): never {
-    throw new Error("Local Storage is not supported on your environment");
+    throw new LocalStorageError("Key could not be found");
   }
 
   private throwNotSerializable(): never {
-    throw new Error("Local Storage value could not be serialized");
+    throw new LocalStorageError("Value could not be serialized");
   }
 }

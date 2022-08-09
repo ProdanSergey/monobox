@@ -1,7 +1,13 @@
 import React, { FunctionComponent, useCallback } from "react";
 
 import { AppointmentListResponseData } from "@monobox/appointment-contract";
-import { ApiError, StyledAlert, StyledContainer, StyledSection, useDataPuller } from "@monobox/appointment-library";
+import {
+  NetworkClientError,
+  StyledAlert,
+  StyledContainer,
+  StyledSection,
+  useDataPuller,
+} from "@monobox/appointment-library";
 
 import { getAppointments } from "../shared/api/appointment";
 import { IncomingAppointments } from "../templates/appointments/incoming-appointments/incoming-appointments";
@@ -16,7 +22,7 @@ export const AppointmentsPage: FunctionComponent = () => {
     };
   }, []);
 
-  const { data, error } = useDataPuller<AppointmentListResponseData, ApiError>(pullAppointments);
+  const { data, error } = useDataPuller<AppointmentListResponseData, NetworkClientError>(pullAppointments);
 
   return (
     <StyledContainer>

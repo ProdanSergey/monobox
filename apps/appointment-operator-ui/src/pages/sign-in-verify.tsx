@@ -3,14 +3,14 @@ import { Navigate } from "react-router-dom";
 
 import { AuthorizationSignInVerifyBody, AuthorizationSignInVerifyResponseData } from "@monobox/appointment-contract";
 import {
-  ApiError,
-  LocalStorage,
+  NetworkClientError,
   StyledAlert,
   StyledContainer,
   StyledSection,
   StyledSpacer,
   useDataHandler,
 } from "@monobox/appointment-library";
+import { LocalStorage } from "@monobox/infra";
 
 import { AuthorizationStore, LocalStore } from "../types/local-store";
 import { signInVerifyOperator } from "../shared/api/authorization";
@@ -21,7 +21,7 @@ const ls = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
 export const SignInVerifyPage: FunctionComponent = () => {
   const { data, error, dataHandler } = useDataHandler<
     AuthorizationSignInVerifyResponseData,
-    ApiError,
+    NetworkClientError,
     AuthorizationSignInVerifyBody
   >(async ({ email, otp }) => {
     const response = await signInVerifyOperator({ email, otp });

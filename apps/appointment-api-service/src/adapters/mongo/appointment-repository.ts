@@ -1,7 +1,7 @@
 import { isUndefined } from "lodash";
 import { Document, FilterQuery, Types } from "mongoose";
 
-import { NotFoundError } from "@monobox/infra";
+import { NotFoundError } from "@monobox/infra/dist/express/errors";
 
 import { AppointmentDocument, AppointmentEntity } from "../../infra/mongo/entities/appointment";
 import { AppointmentRepository } from "../../ports/repository/appointment";

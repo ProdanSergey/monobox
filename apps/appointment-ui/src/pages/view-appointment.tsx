@@ -2,7 +2,13 @@ import React, { FunctionComponent, useCallback } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 
 import { Appointment } from "@monobox/appointment-contract";
-import { ApiError, StyledAlert, StyledContainer, StyledSection, useDataPuller } from "@monobox/appointment-library";
+import {
+  NetworkClientError,
+  StyledAlert,
+  StyledContainer,
+  StyledSection,
+  useDataPuller,
+} from "@monobox/appointment-library";
 
 import { getAppointment } from "../shared/api/appointment";
 import { QueuedAppointment } from "../templates/view-appointment/queued-appointment/queued-appointment";
@@ -31,13 +37,13 @@ export const ViewAppointmentPage: FunctionComponent = () => {
 
   const pullAppointment = useCallback(async () => {
     if (!appointmentId) {
-      throw new ApiError("Id is not provided");
+      throw new NetworkClientError("Id is not provided");
     }
 
     const token = search.get("token");
 
     if (!token) {
-      throw new ApiError("Token is not provided");
+      throw new NetworkClientError("Token is not provided");
     }
 
     const appointment = await getAppointment({ id: appointmentId }, token);

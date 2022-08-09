@@ -1,4 +1,4 @@
-import { UnauthorizedError } from "@monobox/infra";
+import { UnauthorizedError } from "@monobox/infra/dist/express/errors";
 import { Session } from "../domain/session";
 import { SessionRepository } from "../ports/repository/session";
 

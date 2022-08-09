@@ -5,7 +5,7 @@ import express from "express";
 import cors from "cors";
 
 import { ConsoleLogger, FakeMailer } from "@monobox/appointment-core";
-import { errorHandling } from "@monobox/infra";
+import { errorHandling } from "@monobox/infra/dist/express/middlewares";
 
 import { connect } from "./infra/mongo";
 import { MongoDBOperatorRepository } from "./adapters/mongo/operator-repository";

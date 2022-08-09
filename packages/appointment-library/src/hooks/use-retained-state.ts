@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { LocalStorage, StorageEvent, StorageEventType } from "../utils";
+
+import { LocalStorage, LocalStorageEventHandler, LocalStorageEventType } from "@monobox/infra";
 
 export type useRetainedStateResult<TValue> = {
   value: TValue | null;
@@ -28,7 +29,7 @@ export const useRetainedState = <TValue>(key: string, initialValue: TValue): use
   });
 
   useEffect(() => {
-    const handler = ({ type, detail }: StorageEvent<TValue>) => {
+    const handler: LocalStorageEventHandler<TValue> = ({ type, detail }) => {
       switch (type) {
         case "remove":
           setValue(null);
@@ -42,7 +43,7 @@ export const useRetainedState = <TValue>(key: string, initialValue: TValue): use
       }
     };
 
-    const types: StorageEventType[] = ["set", "remove"];
+    const types: LocalStorageEventType[] = ["set", "remove"];
 
     types.forEach((type) => ls.subscribe(type, handler));
 

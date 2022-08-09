@@ -4,27 +4,27 @@ import {
   AuthorizationSignInVerifyResponseData,
   AuthorizationSignUpBody,
 } from "@monobox/appointment-contract";
-import { post } from "@monobox/appointment-library";
+
+import { NetworkClient } from "@monobox/appointment-library";
 
 const RESOURCE = "authorization";
 
+const networkClient = new NetworkClient(process.env.API_SERVICE_URL);
+
 export const signUpOperator = async ({ fullName, email }: AuthorizationSignUpBody) => {
-  return post<undefined>(`${RESOURCE}/sign-up`, {
-    baseUrl: process.env.AUTH_SERVICE_URL,
+  return networkClient.post<undefined>(`${RESOURCE}/sign-up`, {
     body: { fullName, email },
   });
 };
 
 export const signInOperator = async ({ email }: AuthorizationSignInBody) => {
-  return post<undefined>(`${RESOURCE}/sign-in`, {
-    baseUrl: process.env.AUTH_SERVICE_URL,
+  return networkClient.post<undefined>(`${RESOURCE}/sign-in`, {
     body: { email },
   });
 };
 
 export const signInVerifyOperator = async ({ email, otp }: AuthorizationSignInVerifyBody) => {
-  return post<AuthorizationSignInVerifyResponseData>(`${RESOURCE}/sign-in/verify`, {
-    baseUrl: process.env.AUTH_SERVICE_URL,
+  return networkClient.post<AuthorizationSignInVerifyResponseData>(`${RESOURCE}/sign-in/verify`, {
     body: { email, otp },
   });
 };

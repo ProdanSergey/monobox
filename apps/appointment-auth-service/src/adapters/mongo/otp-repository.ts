@@ -3,7 +3,7 @@ import { Document, Types } from "mongoose";
 import { OtpDocument, OtpEntity } from "../../infra/mongo/entities/otp";
 import { OtpRepository } from "../../ports/repository/otp";
 import { Otp, OtpId, OtpRecord } from "../../domain/otp";
-import { NotFoundError } from "@monobox/infra";
+import { NotFoundError } from "@monobox/infra/dist/express/errors";
 
 const mapDocumentToOtp = (document: Document<Types.ObjectId, unknown, OtpDocument>): Otp => {
   const { _id, ...record } = document.toObject();

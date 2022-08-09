@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { BaseController, serialize, validate } from "@monobox/infra";
+import { ExpressController } from "@monobox/infra/dist/express/controller";
+import { serialize, validate } from "@monobox/infra/dist/express/middlewares";
 import {
   AuthorizationSignUpBody,
   AuthorizationSignInBody,
@@ -17,7 +18,7 @@ import { postSignInBodySchema, postSignInVerifyBodySchema, postSignUpBodySchema 
 import { GetOperatorTokensCommand } from "../../commands/GetOperatorTokenCommand";
 import { Mailer } from "@monobox/appointment-core";
 
-export class AuthorizationController extends BaseController {
+export class AuthorizationController extends ExpressController {
   constructor(
     private readonly operatorRepository: OperatorRepository,
     private readonly otpRepository: OtpRepository,
