@@ -7,18 +7,22 @@ import {
   AppointmentListResponseData,
   X_AUTH_TOKEN,
 } from "@monobox/appointment-contract";
-import { ApiError, get, post } from "@monobox/appointment-library";
+import { get, post, ApiError, LocalStorage } from "@monobox/appointment-library";
+
+import { AuthorizationStore, LocalStore } from "../../types/local-store";
 
 const RESOURCE = "appointment";
 
-const getAuthToken = (): string => {
-  const token = localStorage.getItem("accessToken");
+const ls = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
 
-  if (!token) {
+const getAuthToken = (): string => {
+  const { accessToken } = ls.get();
+
+  if (!accessToken) {
     throw new ApiError("Missing access token");
   }
 
-  return token;
+  return accessToken;
 };
 
 export const getAppointment = async ({ id }: AppointmentGetParams) => {

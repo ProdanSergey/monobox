@@ -16,7 +16,7 @@ export type UseDataHandlerResult<TData, TError, TParams> = {
 
 export const useDataHandler = <TData = unknown, TError = unknown, TParams = void>(
   handler: THandler<TData, TParams>
-) => {
+): UseDataHandlerResult<TData, TError, TParams> => {
   const [data, setData] = useState<TData | null>(null);
   const [error, setError] = useState<TError | null>(null);
   const [isLoading, setLoading] = useState<boolean>(false);

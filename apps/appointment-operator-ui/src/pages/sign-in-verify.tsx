@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import { AuthorizationSignInVerifyBody, AuthorizationSignInVerifyResponseData } from "@monobox/appointment-contract";
 import {
   ApiError,
+  LocalStorage,
   StyledAlert,
   StyledContainer,
   StyledSection,
@@ -11,16 +12,23 @@ import {
   useDataHandler,
 } from "@monobox/appointment-library";
 
+import { AuthorizationStore, LocalStore } from "../types/local-store";
 import { signInVerifyOperator } from "../shared/api/authorization";
 import { SignInVerifyForm } from "../templates/authorization/form/sign-in-verify-form";
+
+const ls = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
 
 export const SignInVerifyPage: FunctionComponent = () => {
   const { data, error, dataHandler } = useDataHandler<
     AuthorizationSignInVerifyResponseData,
     ApiError,
     AuthorizationSignInVerifyBody
-  >(({ email, otp }) => {
-    return signInVerifyOperator({ email, otp });
+  >(async ({ email, otp }) => {
+    const response = await signInVerifyOperator({ email, otp });
+
+    ls.set({ accessToken: response.accessToken });
+
+    return response;
   });
 
   return (

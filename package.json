@@ -24,8 +24,5 @@
       "packages/*"
     ]
   },
-  "packageManager": "yarn@3.2.1",
-  "installConfig": {
-    "pnp": true
-  }
+  "packageManager": "yarn@3.2.1"
 }
