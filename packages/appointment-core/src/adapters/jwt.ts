@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import isObject from "lodash/isObject";
+
+import { AnyObject, isObject } from "@monobox/toolkit";
 
 import { Token } from "../ports/token";
 export class JwtToken implements Token {
@@ -9,7 +10,7 @@ export class JwtToken implements Token {
     expiresIn: "1h",
   };
 
-  async sign<Payload>(payload: Payload): Promise<string> {
+  async sign<Payload extends AnyObject>(payload: Payload): Promise<string> {
     if (!isObject(payload)) {
       throw new Error("Payload must be an object");
     }
@@ -19,19 +20,19 @@ export class JwtToken implements Token {
     return jwt.sign(payload, JWT_SECRET, { ...JwtToken.defaultSignOptions, ...this.options?.sign });
   }
 
-  async verify<Payload>(token: string): Promise<Payload> {
+  async verify<Payload extends AnyObject>(token: string): Promise<Payload> {
     const { JWT_SECRET } = process.env;
 
     const payload = jwt.verify(token, JWT_SECRET, { ...JwtToken.defaultSignOptions, ...this.options?.verify });
 
-    return JwtToken.assertJwtPayload(payload);
+    return JwtToken.assertJwtPayload<Payload>(payload);
   }
 
-  private static assertJwtPayload<Payload>(payload: string | jwt.Jwt | jwt.JwtPayload): Payload {
-    if (!isObject(payload)) {
+  private static assertJwtPayload<Payload extends AnyObject>(payload: string | jwt.Jwt | jwt.JwtPayload): Payload {
+    if (!isObject<Payload>(payload)) {
       throw new Error("Error while parsing JWT payload");
     }
 
-    return payload as Payload;
+    return payload;
   }
 }

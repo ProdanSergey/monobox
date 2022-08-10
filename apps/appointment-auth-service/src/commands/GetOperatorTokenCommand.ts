@@ -1,5 +1,5 @@
 import { OperatorJwtTokenPayload } from "@monobox/appointment-contract";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "@monobox/infra/dist/express/errors";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "@monobox/infra";
 import { JwtToken } from "@monobox/appointment-core";
 
 import { OperatorRepository } from "../ports/repository/operator";

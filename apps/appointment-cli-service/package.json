@@ -11,6 +11,7 @@
     "delete": "npm run start -- --delete",
     "list": "npm run start -- --list",
     "watch": "tsc --watch",
+    "prebuild": "rm -rf ./dist",
     "build": "tsc"
   },
   "keywords": [
@@ -20,11 +21,10 @@
   "license": "ISC",
   "dependencies": {
     "@monobox/appointment-core": "workspace:^",
-    "dayjs": "^1.11.2",
-    "lodash": "^4.17.21"
+    "@monobox/toolkit": "workspace:^",
+    "dayjs": "^1.11.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.182",
     "@types/node": "^18.0.3",
     "typescript": "4.7.4"
   }

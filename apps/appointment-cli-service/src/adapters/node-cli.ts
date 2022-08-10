@@ -1,7 +1,7 @@
-import { isUndefined } from "lodash";
+import { isUndefined } from "@monobox/toolkit";
 import { DomainError } from "../domain/error";
 import { CLI, CLICommand } from "../ports/cli";
-import { Logger } from "../ports/logger";
+import { Logger } from "@monobox/appointment-core";
 
 export class NodeCLI implements CLI {
   constructor(private readonly logger: Logger) {}

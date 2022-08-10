@@ -1,10 +1,11 @@
 import { JSONResponse } from "@monobox/appointment-contract";
 
 import {
-  NetworkClient as AbstractNetworkClient,
+  NetworkClient,
   NetworkRequestMethod,
   NetworkRequestOptionsWithBody,
-} from "@monobox/infra";
+  NetworkClientError,
+} from "@monobox/toolkit";
 
 const BASE_HEADERS = (() => {
   const headers = {
@@ -15,18 +16,18 @@ const BASE_HEADERS = (() => {
   return headers;
 })();
 
-export class NetworkClientError extends Error {
-  name = "NetworkClientError";
+export class AppointmentNetworkClientError extends Error {
+  name = "AppointmentNetworkClientError";
 
   constructor(message?: string) {
     super(message);
 
     // Set the prototype explicitly.
-    Object.setPrototypeOf(this, NetworkClientError.prototype);
+    Object.setPrototypeOf(this, AppointmentNetworkClientError.prototype);
   }
 }
 
-export class NetworkClient extends AbstractNetworkClient {
+export class AppointmentNetworkClient extends NetworkClient {
   async request<TData = undefined>(
     method: NetworkRequestMethod,
     resource: string,

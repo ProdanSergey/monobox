@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { Navigate } from "react-router-dom";
 
 import { Appointment } from "@monobox/appointment-contract";
-import { NetworkClientError, StyledAlert, StyledButton, useDataHandler } from "@monobox/appointment-library";
+import { AppointmentNetworkClientError, StyledAlert, StyledButton, useDataHandler } from "@monobox/appointment-library";
 
 import { AppointmentCard } from "../../../components/appointment-card";
 import { completeAppointment } from "../../../shared/api/appointment";
@@ -12,7 +12,7 @@ export type PickedAppointmentProps = {
 };
 
 export const PickedAppointment: FunctionComponent<PickedAppointmentProps> = ({ appointment }) => {
-  const { data, error, isLoading, dataHandler } = useDataHandler<undefined, NetworkClientError>(() => {
+  const { data, error, isLoading, dataHandler } = useDataHandler<undefined, AppointmentNetworkClientError>(() => {
     return completeAppointment({ id: appointment.id });
   });
 

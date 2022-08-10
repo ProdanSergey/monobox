@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 
-import { StringFunctions } from "@monobox/infra";
+import { capitalize } from "@monobox/toolkit";
 
 import { AuthorizedRoute, DeAuthorizedRoute } from "./components/route";
 import { UserContext } from "./context/user";
@@ -18,7 +18,7 @@ const AppComponent = () => {
   return (
     <>
       <header>
-        <h1>Hello, {user ? StringFunctions.capitalize(user.fullName) : "Guest"}!</h1>
+        <h1>Hello, {user ? capitalize(user.fullName) : "Guest"}!</h1>
       </header>
       <main>
         <Routes>

@@ -5,11 +5,11 @@ import {
   AuthorizationSignUpBody,
 } from "@monobox/appointment-contract";
 
-import { NetworkClient } from "@monobox/appointment-library";
+import { AppointmentNetworkClient } from "@monobox/appointment-library";
 
 const RESOURCE = "authorization";
 
-const networkClient = new NetworkClient(process.env.API_SERVICE_URL);
+const networkClient = new AppointmentNetworkClient(process.env.API_SERVICE_URL);
 
 export const signUpOperator = async ({ fullName, email }: AuthorizationSignUpBody) => {
   return networkClient.post<undefined>(`${RESOURCE}/sign-up`, {

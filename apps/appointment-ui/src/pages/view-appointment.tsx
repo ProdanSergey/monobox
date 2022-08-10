@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 
 import { Appointment } from "@monobox/appointment-contract";
 import {
-  NetworkClientError,
+  AppointmentNetworkClientError,
   StyledAlert,
   StyledContainer,
   StyledSection,
@@ -37,13 +37,13 @@ export const ViewAppointmentPage: FunctionComponent = () => {
 
   const pullAppointment = useCallback(async () => {
     if (!appointmentId) {
-      throw new NetworkClientError("Id is not provided");
+      throw new AppointmentNetworkClientError("Id is not provided");
     }
 
     const token = search.get("token");
 
     if (!token) {
-      throw new NetworkClientError("Token is not provided");
+      throw new AppointmentNetworkClientError("Token is not provided");
     }
 
     const appointment = await getAppointment({ id: appointmentId }, token);

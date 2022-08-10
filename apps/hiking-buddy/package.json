@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/index.tsx",
   "scripts": {
+    "prebuild": "rm -rf ./dist",
     "build": "webpack --env mode=production",
     "watch": "webpack --watch --env mode=production",
     "start": "webpack serve --env mode=development",

@@ -1,4 +1,4 @@
-import { NotFoundError } from "@monobox/infra/dist/express/errors";
+import { NotFoundError } from "@monobox/infra";
 
 import { Appointment, AppointmentId } from "../domain/appointment";
 import { AppointmentRepository } from "../ports/repository/appointment";

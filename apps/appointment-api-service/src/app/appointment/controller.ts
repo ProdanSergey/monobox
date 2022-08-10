@@ -1,9 +1,5 @@
 import type { Request, Response } from "express";
 
-import { ExpressController } from "@monobox/infra/dist/express/controller";
-import { serialize, validate } from "@monobox/infra/dist/express/middlewares";
-import { UnauthorizedError } from "@monobox/infra/dist/express/errors";
-
 import {
   AppointmentCompleteParams,
   AppointmentCreateBody,
@@ -15,6 +11,8 @@ import {
   AppointmentListResponseData,
   AppointmentPickParams,
 } from "@monobox/appointment-contract";
+import { Mailer } from "@monobox/appointment-core";
+import { ExpressController, serialize, validate, UnauthorizedError } from "@monobox/infra";
 
 import { Appointment, AppointmentRecord } from "../../domain/appointment";
 import { AppointmentRepository } from "../../ports/repository/appointment";
@@ -32,7 +30,6 @@ import { SendAppointmentConfirmationEmailCommand } from "../../commands/SendAppo
 import { FindUserSessionCommand } from "../../commands/FindUserSessionCommand";
 
 import { appointmentCreateBodySchema } from "./definition";
-import { Mailer } from "@monobox/appointment-core";
 
 export class AppointmentController extends ExpressController {
   constructor(

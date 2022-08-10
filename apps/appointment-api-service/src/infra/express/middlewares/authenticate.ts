@@ -1,6 +1,6 @@
 import type { Request, RequestHandler } from "express";
 
-import { UnauthorizedError } from "@monobox/infra/dist/express/errors";
+import { UnauthorizedError } from "@monobox/infra";
 import { JwtToken } from "@monobox/appointment-core";
 import { OperatorJwtTokenPayload } from "@monobox/appointment-contract";
 

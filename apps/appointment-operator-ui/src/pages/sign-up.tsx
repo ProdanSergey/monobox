@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 
 import { AuthorizationSignUpBody } from "@monobox/appointment-contract";
 import {
-  NetworkClientError,
+  AppointmentNetworkClientError,
   StyledAlert,
   StyledContainer,
   StyledSection,
@@ -15,11 +15,13 @@ import { SignUpForm } from "../templates/authorization/form/sign-up-form";
 import { Link } from "react-router-dom";
 
 export const SignUpPage: FunctionComponent = () => {
-  const { data, error, dataHandler } = useDataHandler<undefined, NetworkClientError, AuthorizationSignUpBody>(
-    ({ fullName, email }) => {
-      return signUpOperator({ fullName, email });
-    }
-  );
+  const { data, error, dataHandler } = useDataHandler<
+    undefined,
+    AppointmentNetworkClientError,
+    AuthorizationSignUpBody
+  >(({ fullName, email }) => {
+    return signUpOperator({ fullName, email });
+  });
 
   return (
     <StyledContainer>

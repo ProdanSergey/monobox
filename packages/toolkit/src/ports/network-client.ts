@@ -1,3 +1,14 @@
+export class NetworkClientError extends Error {
+  name = "NetworkClientError";
+
+  constructor(message?: string) {
+    super(message);
+
+    // Set the prototype explicitly.
+    Object.setPrototypeOf(this, NetworkClientError.prototype);
+  }
+}
+
 export type NetworkRequestMethod = "get" | "post" | "put" | "patch" | "delete";
 
 export type NetworkClientBody = Record<PropertyKey, unknown>;

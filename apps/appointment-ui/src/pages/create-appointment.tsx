@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 
 import { AppointmentCreateBody, AppointmentCreateResponseData } from "@monobox/appointment-contract";
 import {
-  NetworkClientError,
+  AppointmentNetworkClientError,
   StyledAlert,
   StyledContainer,
   StyledSection,
@@ -17,7 +17,7 @@ import { AppointmentOutput } from "../templates/create-appointment/output/output
 export const CreateAppointmentPage: FunctionComponent = () => {
   const { data, error, isLoading, dataHandler } = useDataHandler<
     AppointmentCreateResponseData,
-    NetworkClientError,
+    AppointmentNetworkClientError,
     AppointmentCreateBody
   >(({ fullName, email }) => {
     return createAppointment({ fullName, email });

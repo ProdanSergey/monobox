@@ -5,11 +5,11 @@ import {
   AppointmentGetResponseData,
   X_USER_TOKEN,
 } from "@monobox/appointment-contract";
-import { NetworkClient } from "@monobox/appointment-library";
+import { AppointmentNetworkClient } from "@monobox/appointment-library";
 
 const RESOURCE = "appointment";
 
-const networkClient = new NetworkClient(process.env.API_SERVICE_URL);
+const networkClient = new AppointmentNetworkClient(process.env.API_SERVICE_URL);
 
 export const createAppointment = async ({ fullName, email }: AppointmentCreateBody) => {
   return networkClient.post<AppointmentCreateResponseData>(RESOURCE, {

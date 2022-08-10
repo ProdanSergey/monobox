@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 import { AuthorizationSignInBody } from "@monobox/appointment-contract";
 import {
-  NetworkClientError,
+  AppointmentNetworkClientError,
   StyledAlert,
   StyledContainer,
   StyledSection,
@@ -15,11 +15,13 @@ import { signInOperator } from "../shared/api/authorization";
 import { SignInForm } from "../templates/authorization/form/sign-in-form";
 
 export const SignInPage: FunctionComponent = () => {
-  const { data, error, dataHandler } = useDataHandler<undefined, NetworkClientError, AuthorizationSignInBody>(
-    ({ email }) => {
-      return signInOperator({ email });
-    }
-  );
+  const { data, error, dataHandler } = useDataHandler<
+    undefined,
+    AppointmentNetworkClientError,
+    AuthorizationSignInBody
+  >(({ email }) => {
+    return signInOperator({ email });
+  });
 
   return (
     <StyledContainer>

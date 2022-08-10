@@ -1,3 +1,3 @@
-export * as ExpressErrors from "./errors";
-export * as ExpressMiddlewares from "./middlewares";
+export * from "./errors";
+export * from "./middlewares";
 export * from "./controller";

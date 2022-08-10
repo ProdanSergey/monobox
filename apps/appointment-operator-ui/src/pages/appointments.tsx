@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback } from "react";
 
 import { AppointmentListResponseData } from "@monobox/appointment-contract";
 import {
-  NetworkClientError,
+  AppointmentNetworkClientError,
   StyledAlert,
   StyledContainer,
   StyledSection,
@@ -22,7 +22,7 @@ export const AppointmentsPage: FunctionComponent = () => {
     };
   }, []);
 
-  const { data, error } = useDataPuller<AppointmentListResponseData, NetworkClientError>(pullAppointments);
+  const { data, error } = useDataPuller<AppointmentListResponseData, AppointmentNetworkClientError>(pullAppointments);
 
   return (
     <StyledContainer>

@@ -7,21 +7,21 @@ import {
   AppointmentListResponseData,
   X_AUTH_TOKEN,
 } from "@monobox/appointment-contract";
-import { NetworkClient, NetworkClientError } from "@monobox/appointment-library";
-import { LocalStorage, GeneralFunctions } from "@monobox/infra";
+import { AppointmentNetworkClientError, AppointmentNetworkClient } from "@monobox/appointment-library";
+import { LocalStorage, isUndefined } from "@monobox/toolkit";
 
 import { AuthorizationStore, LocalStore } from "../../types/local-store";
 
 const RESOURCE = "appointment";
 
-const networkClient = new NetworkClient(process.env.API_SERVICE_URL);
+const networkClient = new AppointmentNetworkClient(process.env.API_SERVICE_URL);
 const ls = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
 
 const getAuthToken = (): string => {
   const { accessToken } = ls.get();
 
   if (!accessToken) {
-    throw new NetworkClientError("Missing access token");
+    throw new AppointmentNetworkClientError("Missing access token");
   }
 
   return accessToken;
@@ -56,6 +56,6 @@ export const getAppointments = async ({ completed }: AppointmentListQuery) => {
     headers: {
       [X_AUTH_TOKEN]: getAuthToken(),
     },
-    query: GeneralFunctions.isUndefined(completed) ? {} : { completed: String(completed) },
+    query: isUndefined(completed) ? {} : { completed: String(completed) },
   });
 };
