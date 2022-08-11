@@ -12,7 +12,10 @@ export class LocalStorage<TValue> implements Storage<TValue> {
   private listeners: Map<keyof StorageEventDetailMap<TValue>, Set<StorageEventHandler<TValue>>> = new Map();
 
   constructor(public key: string) {
-    this.throwWhenNotSupported();
+    if (!LocalStorage.isSupported()) {
+      LocalStorage.throwNotSupported();
+    }
+
     this.listen();
   }
 
@@ -26,7 +29,7 @@ export class LocalStorage<TValue> implements Storage<TValue> {
     try {
       return JSON.parse(item).value as TValue;
     } catch {
-      this.throwNotSerializable();
+      LocalStorage.throwNotSerializable();
     }
   }
 
@@ -39,7 +42,7 @@ export class LocalStorage<TValue> implements Storage<TValue> {
       localStorage.setItem(this.key, serializedValue);
       this.dispatch("change", this.composeChangeDetail(value));
     } catch {
-      this.throwNotSerializable();
+      LocalStorage.throwNotSerializable();
     }
   }
 
@@ -47,7 +50,7 @@ export class LocalStorage<TValue> implements Storage<TValue> {
     const item = localStorage.getItem(this.key);
 
     if (item === null) {
-      this.throwNotFound();
+      LocalStorage.throwNotFound();
     }
 
     localStorage.removeItem(this.key);
@@ -116,19 +119,19 @@ export class LocalStorage<TValue> implements Storage<TValue> {
     });
   }
 
-  private throwWhenNotSupported() {
-    if (!this.isSupported()) throw new StorageError("Not supported on your environment");
+  private static throwNotSupported() {
+    throw new StorageError("Not supported on your environment");
   }
 
-  private throwNotFound(): never {
+  private static throwNotFound(): never {
     throw new StorageError("Key could not be found");
   }
 
-  private throwNotSerializable(): never {
+  private static throwNotSerializable(): never {
     throw new StorageError("Value could not be serialized");
   }
 
-  private isSupported(): boolean {
+  private static isSupported(): boolean {
     return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
   }
 }

@@ -2,12 +2,12 @@ import type { Request, RequestHandler } from "express";
 
 import { UnauthorizedError } from "@monobox/infra";
 import { JwtToken } from "@monobox/appointment-core";
-import { OperatorJwtTokenPayload } from "@monobox/appointment-contract";
+import { OperatorJwtTokenPayload, X_AUTH_TOKEN, X_USER_TOKEN } from "@monobox/appointment-contract";
 
 export type RequestGuard = <Req extends Request>(req: Req) => void | Promise<void>;
 
 export const asOperator: RequestGuard = async (req) => {
-  const jwtToken = req.header("X-Auth-Token");
+  const jwtToken = req.header(X_AUTH_TOKEN);
 
   if (!jwtToken) {
     throw new UnauthorizedError();
@@ -19,7 +19,7 @@ export const asOperator: RequestGuard = async (req) => {
 };
 
 export const asAssignee: RequestGuard = (req) => {
-  const userToken = req.header("X-User-Token");
+  const userToken = req.header(X_USER_TOKEN);
 
   if (!userToken) {
     throw new UnauthorizedError();
