@@ -29,16 +29,17 @@ export type StorageEventDetailMap<TValue> = {
 
 export type StorageEventDetail<
   TValue,
-  T extends keyof StorageEventDetailMap<TValue>
+  T extends keyof StorageEventDetailMap<TValue> = keyof StorageEventDetailMap<TValue>
 > = StorageEventDetailMap<TValue>[T];
 
-export type StorageEventHandler<TValue, T extends keyof StorageEventDetailMap<TValue>> = (
-  detail: StorageEventDetailMap<TValue>[T]
-) => void;
+export type StorageEventHandler<
+  TValue,
+  T extends keyof StorageEventDetailMap<TValue> = keyof StorageEventDetailMap<TValue>
+> = (detail: StorageEventDetailMap<TValue>[T]) => void;
 
 export interface Storage<TValue> {
   key: string;
-  get(): TValue;
+  get(): TValue | undefined;
   set(value: TValue): void;
   remove(): void;
   subscribe<T extends keyof StorageEventDetailMap<TValue>>(type: T, listener: StorageEventHandler<TValue, T>): void;

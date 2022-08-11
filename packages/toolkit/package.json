@@ -10,7 +10,9 @@
   "scripts": {
     "prebuild": "rm -rf ./dist",
     "build": "rollup -c",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "yarn test --coverage",
+    "test:watch": "yarn test --watch"
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",

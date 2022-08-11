@@ -9,21 +9,18 @@ import {
 } from "../ports";
 
 export class LocalStorage<TValue> implements Storage<TValue> {
-  private listeners: Map<
-    keyof StorageEventDetailMap<TValue>,
-    StorageEventHandler<TValue, keyof StorageEventDetailMap<TValue>>[]
-  > = new Map();
+  private listeners: Map<keyof StorageEventDetailMap<TValue>, Set<StorageEventHandler<TValue>>> = new Map();
 
   constructor(public key: string) {
     this.throwWhenNotSupported();
     this.listen();
   }
 
-  get(): TValue {
+  get(): TValue | undefined {
     const item = localStorage.getItem(this.key);
 
     if (item === null) {
-      this.throwNotFound();
+      return undefined;
     }
 
     try {
@@ -40,8 +37,7 @@ export class LocalStorage<TValue> implements Storage<TValue> {
       });
 
       localStorage.setItem(this.key, serializedValue);
-      const detail = this.composeChangeDetail(value);
-      this.dispatch("change", detail);
+      this.dispatch("change", this.composeChangeDetail(value));
     } catch {
       this.throwNotSerializable();
     }
@@ -55,35 +51,23 @@ export class LocalStorage<TValue> implements Storage<TValue> {
     }
 
     localStorage.removeItem(this.key);
-    const detail = this.composeRemoveDetail();
-    this.dispatch("remove", detail);
+    this.dispatch("remove", this.composeRemoveDetail());
   }
 
   subscribe<T extends keyof StorageEventDetailMap<TValue>>(type: T, listener: StorageEventHandler<TValue, T>): void {
-    const listeners = this.listeners.get(type);
+    let listeners = this.listeners.get(type);
 
-    if (!listeners?.length) {
-      this.listeners.set(type, [listener as StorageEventHandler<TValue, keyof StorageEventDetailMap<TValue>>]);
-      return;
+    if (!listeners) {
+      this.listeners.set(type, (listeners = new Set()));
     }
 
-    this.listeners.set(type, [
-      ...listeners,
-      listener as StorageEventHandler<TValue, keyof StorageEventDetailMap<TValue>>,
-    ]);
+    listeners.add(listener as StorageEventHandler<TValue>);
   }
 
   unsubscribe<T extends keyof StorageEventDetailMap<TValue>>(type: T, listener: StorageEventHandler<TValue, T>): void {
     const listeners = this.listeners.get(type);
 
-    if (!listeners?.length) {
-      return;
-    }
-
-    this.listeners.set(
-      type,
-      listeners.filter((subscription) => subscription !== listener)
-    );
+    listeners?.delete(listener as StorageEventHandler<TValue>);
   }
 
   private composeChangeDetail(value: TValue): StorageChangeEventDetail<TValue> {
@@ -123,11 +107,7 @@ export class LocalStorage<TValue> implements Storage<TValue> {
 
           const listeners = this.listeners.get(type);
 
-          if (!listeners?.length) {
-            return;
-          }
-
-          listeners.forEach((listener) => {
+          listeners?.forEach((listener) => {
             listener(detail);
           });
         }) as EventListener,

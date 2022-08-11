@@ -3,15 +3,35 @@
  */
 
 import { LocalStorage } from "./local-storage";
-import { mockLocalStorage } from "../mocks/window";
+import { spyOnJSON, spyOnLocalStorage } from "../__mocks__/window";
 
 describe("Local Storage Adapter", () => {
   const testKey = "test_key";
 
-  const { setItemSpy, getItemSpy, removeItemSpy } = mockLocalStorage();
+  const { setItemSpy, getItemSpy, removeItemSpy } = spyOnLocalStorage();
 
   afterEach(() => {
     localStorage.clear();
+  });
+
+  it("should throw not supported error when browser environment not defined", () => {
+    const windowMock = jest.spyOn(global, "window", "get").mockReturnValue(undefined as never);
+
+    expect(() => {
+      new LocalStorage(testKey);
+    }).toThrowError(/Not supported on your environment/);
+
+    windowMock.mockRestore();
+  });
+
+  it("should throw not supported error when local storage is not supported by browser", () => {
+    const windowMock = jest.spyOn(global, "localStorage", "get").mockReturnValue(undefined as never);
+
+    expect(() => {
+      new LocalStorage(testKey);
+    }).toThrowError(/Not supported on your environment/);
+
+    windowMock.mockRestore();
   });
 
   it("should set the value to the local storage", () => {
@@ -23,6 +43,20 @@ describe("Local Storage Adapter", () => {
 
     expect(setItemSpy).toHaveBeenCalledTimes(1);
     expect(setItemSpy).toHaveBeenCalledWith(testKey, '{"value":"test_value"}');
+  });
+
+  it("should throw exception when setting value could not be serialized", () => {
+    const ls = new LocalStorage<unknown>(testKey);
+
+    const { JSONStringifySpy } = spyOnJSON();
+
+    JSONStringifySpy.mockImplementationOnce(() => {
+      throw new Error("parsing error");
+    });
+
+    expect(() => {
+      ls.set(() => void 0);
+    }).toThrowError(/Value could not be serialized/);
   });
 
   it("should get the value from the local storage", () => {
@@ -38,12 +72,20 @@ describe("Local Storage Adapter", () => {
     expect(persistedValue).toBe(value);
   });
 
-  it("should throw not found error when there was no item found", () => {
+  it("should return undefined when no item found", () => {
     const ls = new LocalStorage<string>(testKey);
+
+    expect(ls.get()).toBe(undefined);
+  });
+
+  it("should throw exception when getting value could not be serialized", () => {
+    const ls = new LocalStorage<string>(testKey);
+
+    getItemSpy.mockImplementationOnce(() => "wrong_value");
 
     expect(() => {
       ls.get();
-    }).toThrow(/Key could not be found/);
+    }).toThrowError(/Value could not be serialized/);
   });
 
   it("should remove the value from the local storage", () => {
@@ -53,14 +95,13 @@ describe("Local Storage Adapter", () => {
 
     ls.set(value);
     const persistedValue = ls.get();
+
     ls.remove();
 
     expect(removeItemSpy).toHaveBeenCalledTimes(1);
     expect(removeItemSpy).toHaveBeenCalledWith(testKey);
     expect(persistedValue).toBe(value);
-    expect(() => {
-      ls.get();
-    }).toThrowError(/Key could not be found/);
+    expect(ls.get()).toBe(undefined);
   });
 
   it("should throw not found error when there was no item found to be removed", () => {
