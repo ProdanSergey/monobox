@@ -1,3 +1,5 @@
+import { isUndefined } from "../functions";
+
 import {
   Storage,
   StorageEventHandler,
@@ -11,12 +13,20 @@ import {
 export class LocalStorage<TValue> implements Storage<TValue> {
   private listeners: Map<keyof StorageEventDetailMap<TValue>, Set<StorageEventHandler<TValue>>> = new Map();
 
-  constructor(public key: string) {
+  constructor(public key: string, initialValue?: TValue) {
     if (!LocalStorage.isSupported()) {
       LocalStorage.throwNotSupported();
     }
 
+    if (!isUndefined(initialValue) && !this.persisted()) {
+      localStorage.setItem(this.key, this.serialize(initialValue));
+    }
+
     this.listen();
+  }
+
+  persisted(): boolean {
+    return localStorage.getItem(this.key) !== null;
   }
 
   get(): TValue | undefined {
@@ -26,21 +36,27 @@ export class LocalStorage<TValue> implements Storage<TValue> {
       return undefined;
     }
 
+    return this.parse(item);
+  }
+
+  private parse(item: string): TValue {
     try {
-      return JSON.parse(item).value as TValue;
+      return JSON.parse(item).value;
     } catch {
       LocalStorage.throwNotSerializable();
     }
   }
 
   set(value: TValue): void {
+    localStorage.setItem(this.key, this.serialize(value));
+    this.dispatch("change", this.composeChangeDetail(value));
+  }
+
+  private serialize(value: TValue): string {
     try {
-      const serializedValue = JSON.stringify({
+      return JSON.stringify({
         value,
       });
-
-      localStorage.setItem(this.key, serializedValue);
-      this.dispatch("change", this.composeChangeDetail(value));
     } catch {
       LocalStorage.throwNotSerializable();
     }

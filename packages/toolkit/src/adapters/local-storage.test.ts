@@ -8,7 +8,7 @@ import { spyOnJSON, spyOnLocalStorage } from "../__mocks__/window";
 describe("Local Storage Adapter", () => {
   const testKey = "test_key";
 
-  const { setItemSpy, getItemSpy, removeItemSpy } = spyOnLocalStorage();
+  const { getItemSpy } = spyOnLocalStorage();
 
   afterEach(() => {
     localStorage.clear();
@@ -34,6 +34,28 @@ describe("Local Storage Adapter", () => {
     windowMock.mockRestore();
   });
 
+  it("should set initial value to local storage", () => {
+    const value = "test_value";
+
+    const ls = new LocalStorage<string>(testKey, value);
+
+    expect(ls.persisted()).toBe(true);
+  });
+
+  it("should return false when the local storage missing a key", () => {
+    const ls = new LocalStorage<string>(testKey);
+
+    expect(ls.persisted()).toBe(false);
+  });
+
+  it("should return true when the local storage has a key", () => {
+    const value = "test_value";
+
+    const ls = new LocalStorage<string>(testKey, value);
+
+    expect(ls.persisted()).toBe(true);
+  });
+
   it("should set the value to the local storage", () => {
     const value = "test_value";
 
@@ -41,8 +63,7 @@ describe("Local Storage Adapter", () => {
 
     ls.set(value);
 
-    expect(setItemSpy).toHaveBeenCalledTimes(1);
-    expect(setItemSpy).toHaveBeenCalledWith(testKey, '{"value":"test_value"}');
+    expect(ls.get()).toBe(value);
   });
 
   it("should throw exception when setting value could not be serialized", () => {
@@ -62,14 +83,9 @@ describe("Local Storage Adapter", () => {
   it("should get the value from the local storage", () => {
     const value = "test_value";
 
-    const ls = new LocalStorage<string>(testKey);
+    const ls = new LocalStorage<string>(testKey, value);
 
-    ls.set(value);
-    const persistedValue = ls.get();
-
-    expect(getItemSpy).toHaveBeenCalledTimes(1);
-    expect(getItemSpy).toHaveBeenCalledWith(testKey);
-    expect(persistedValue).toBe(value);
+    expect(ls.get()).toBe(value);
   });
 
   it("should return undefined when no item found", () => {
@@ -94,14 +110,10 @@ describe("Local Storage Adapter", () => {
     const ls = new LocalStorage<string>(testKey);
 
     ls.set(value);
-    const persistedValue = ls.get();
+    expect(ls.get()).toBe(value);
 
     ls.remove();
-
-    expect(removeItemSpy).toHaveBeenCalledTimes(1);
-    expect(removeItemSpy).toHaveBeenCalledWith(testKey);
-    expect(persistedValue).toBe(value);
-    expect(ls.get()).toBe(undefined);
+    expect(ls.persisted()).toBe(false);
   });
 
   it("should throw not found error when there was no item found to be removed", () => {
@@ -214,8 +226,7 @@ describe("Local Storage Adapter", () => {
     otherKeyInstance.set(value);
 
     expect(handler).toHaveBeenCalledTimes(0);
-    expect(setItemSpy).toHaveBeenCalledTimes(1);
-    expect(setItemSpy).toHaveBeenCalledWith(otherTestKey, '{"value":"test_value"}');
+    expect(otherKeyInstance.persisted()).toBe(true);
   });
 
   it("should execute the subscribed handler when event dispatched by other instance with the same key", () => {
@@ -230,5 +241,7 @@ describe("Local Storage Adapter", () => {
     otherInstance.set(value);
 
     expect(handler).toHaveBeenCalledTimes(1);
+    expect(ls.persisted()).toBe(true);
+    expect(otherInstance.persisted()).toBe(true);
   });
 });

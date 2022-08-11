@@ -39,6 +39,7 @@ export type StorageEventHandler<
 
 export interface Storage<TValue> {
   key: string;
+  persisted(): boolean;
   get(): TValue | undefined;
   set(value: TValue): void;
   remove(): void;
