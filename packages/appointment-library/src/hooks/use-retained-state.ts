@@ -3,30 +3,17 @@ import { useEffect, useMemo, useState } from "react";
 import { LocalStorage, StorageEventDetailMap, StorageEventHandler } from "@monobox/toolkit";
 
 export type useRetainedStateResult<TValue> = {
-  value: TValue | null;
+  value: TValue | undefined;
   set: (value: TValue) => void;
   remove: () => void;
 };
 
 export const useRetainedState = <TValue>(key: string, initialValue: TValue): useRetainedStateResult<TValue> => {
   const ls = useMemo(() => {
-    return new LocalStorage<TValue>(key);
-  }, [key]);
+    return new LocalStorage<TValue>(key, initialValue);
+  }, [key, initialValue]);
 
-  const [value, setValue] = useState<TValue | null>(() => {
-    const retainedValue = ls.get();
-
-    if (retainedValue === null && initialValue !== void 0) {
-      ls.set(initialValue);
-      return initialValue;
-    }
-
-    if (retainedValue === null) {
-      return null;
-    }
-
-    return retainedValue;
-  });
+  const [value, setValue] = useState<TValue | undefined>(() => ls.get());
 
   useEffect(() => {
     const handler: StorageEventHandler<TValue, keyof StorageEventDetailMap<TValue>> = (detail) => {
@@ -34,7 +21,7 @@ export const useRetainedState = <TValue>(key: string, initialValue: TValue): use
 
       switch (name) {
         case "remove":
-          setValue(null);
+          setValue(undefined);
           break;
         default: {
           const { value } = detail;

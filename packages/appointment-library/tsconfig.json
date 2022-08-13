@@ -4,9 +4,12 @@
     "outDir": "./dist",
     "declaration": true,
     "declarationDir": "./dist",
-    "target": "es5",
+    "sourceMap": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es6",
     "jsx": "react",
-    "sourceMap": true
   },
   "include": ["./src"]
 }

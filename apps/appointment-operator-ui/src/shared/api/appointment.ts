@@ -15,16 +15,16 @@ import { AuthorizationStore, LocalStore } from "../../types/local-store";
 const RESOURCE = "appointment";
 
 const networkClient = new AppointmentNetworkClient(process.env.API_SERVICE_URL);
-const ls = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
+const authStore = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
 
 const getAuthToken = (): string => {
-  const { accessToken } = ls.get();
+  const store = authStore.get();
 
-  if (!accessToken) {
+  if (!store?.accessToken) {
     throw new AppointmentNetworkClientError("Missing access token");
   }
 
-  return accessToken;
+  return store.accessToken;
 };
 
 export const getAppointment = async ({ id }: AppointmentGetParams) => {

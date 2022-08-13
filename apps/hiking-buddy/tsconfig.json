@@ -2,10 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es6",
     "jsx": "react",
+    "allowJs": true,
     "types": ["jest"],
-    "lib": ["dom", "esnext"],
-    "allowJs": true
   },
   "include": ["jest-setup.ts", "./src"]
 }
