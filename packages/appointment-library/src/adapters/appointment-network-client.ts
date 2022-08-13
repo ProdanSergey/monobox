@@ -27,7 +27,15 @@ export class AppointmentNetworkClientError extends Error {
   }
 }
 
+type NetworkRequestInterceptor = (req: Request) => Promise<void> | void;
+type NetworkResponseInterceptor = (res: Response) => Promise<void> | void;
+
 export class AppointmentNetworkClient extends NetworkClient {
+  interceptors = {
+    request: new Set<NetworkRequestInterceptor>(),
+    response: new Set<NetworkResponseInterceptor>(),
+  };
+
   async request<TData = undefined>(
     method: NetworkRequestMethod,
     resource: string,
@@ -43,13 +51,21 @@ export class AppointmentNetworkClient extends NetworkClient {
       }
     }
 
-    const headersInit = new Headers({ ...BASE_HEADERS, ...headers });
-
-    const response = await fetch(url, {
+    const request = new Request(url, {
       method,
       body: body ? JSON.stringify(body) : null,
-      headers: headersInit,
+      headers: new Headers({ ...BASE_HEADERS, ...headers }),
     });
+
+    for (const interceptor of this.interceptors.request) {
+      await interceptor(request);
+    }
+
+    const response = await fetch(request);
+
+    for (const interceptor of this.interceptors.response) {
+      await interceptor(response);
+    }
 
     if (response.ok) {
       const jsonResponse: JSONResponse<TData> = await response.json();
