@@ -1,4 +1,4 @@
-import uniqId from "uniqid";
+import { v4 as uniqId } from "uuid";
 import randomWords from "random-words";
 import { Position, Waypoint } from "../domain/waypoint";
 

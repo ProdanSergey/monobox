@@ -5,13 +5,16 @@
   "author": "Serhii Prodan",
   "license": "ISC",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "prebuild": "rm -rf ./dist",
     "build": "rollup -c"
   },
   "devDependencies": {
@@ -22,6 +25,7 @@
     "@types/uuid": "^8.3.4",
     "postcss": "^8.4.14",
     "rollup": "^3.0.0-2",
+    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.32.1",

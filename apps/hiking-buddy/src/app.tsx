@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useState } from "react";
-import uniqid from "uniqid";
+import { v4 as uniqid } from "uuid";
 import randomWords from "random-words";
 import { Waypoint } from "./shared/domain/waypoint";
 import { Content } from "./templates/content/content";

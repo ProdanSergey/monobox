@@ -1,10 +1,10 @@
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      API_SERVICE_URL: string;
-      AUTH_SERVICE_URL: string;
-    }
-  }
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_API_SERVICE_URL: string;
+  readonly VITE_AUTH_SERVICE_URL: string;
 }
 
-export {};
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

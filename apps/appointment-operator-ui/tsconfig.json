@@ -5,8 +5,9 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
-    "target": "es6",
-    "jsx": "react"
+    "target": "esnext",
+    "jsx": "react",
+    "types": ["vite/client"]
   },
   "include": ["./src"]
 }

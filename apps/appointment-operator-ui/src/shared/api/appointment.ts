@@ -14,7 +14,7 @@ import { AuthorizationStore, LocalStore } from "../../types/local-store";
 
 const RESOURCE = "appointment";
 
-const networkClient = new AppointmentNetworkClient(process.env.API_SERVICE_URL);
+const networkClient = new AppointmentNetworkClient(import.meta.env.VITE_API_SERVICE_URL);
 const authStore = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
 
 const getAuthToken = (): string => {

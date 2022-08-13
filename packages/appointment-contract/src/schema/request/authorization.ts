@@ -1,4 +1,4 @@
-import yup from "yup";
+import * as yup from "yup";
 
 export const signUpSchema = yup.object().shape({
   fullName: yup.string().required(),

@@ -9,7 +9,7 @@ import { AppointmentNetworkClient } from "@monobox/appointment-library";
 
 const RESOURCE = "authorization";
 
-const networkClient = new AppointmentNetworkClient(process.env.API_SERVICE_URL);
+const networkClient = new AppointmentNetworkClient(import.meta.env.VITE_AUTH_SERVICE_URL);
 
 export const signUpOperator = async ({ fullName, email }: AuthorizationSignUpBody) => {
   return networkClient.post<undefined>(`${RESOURCE}/sign-up`, {

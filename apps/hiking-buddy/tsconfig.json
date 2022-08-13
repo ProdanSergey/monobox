@@ -5,10 +5,10 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "esnext",
     "jsx": "react",
     "allowJs": true,
-    "types": ["jest"],
+    "types": ["jest", "vite/client"]
   },
   "include": ["jest-setup.ts", "./src"]
 }

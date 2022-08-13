@@ -9,7 +9,7 @@ import { AppointmentNetworkClient } from "@monobox/appointment-library";
 
 const RESOURCE = "appointment";
 
-const networkClient = new AppointmentNetworkClient(process.env.API_SERVICE_URL);
+const networkClient = new AppointmentNetworkClient(import.meta.env.VITE_API_SERVICE_URL);
 
 export const createAppointment = async ({ fullName, email }: AppointmentCreateBody) => {
   return networkClient.post<AppointmentCreateResponseData>(RESOURCE, {
