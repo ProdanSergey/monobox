@@ -4458,6 +4458,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.6":
+  version: 1.11.6
+  resolution: "dayjs@npm:1.11.6"
+  checksum: 18bdfd927009b68eab08dca578e421d4a581cefcbe9337f54c5d9e0d941ffb6b221c4b2c1cab15cdd9d419940e768ac4c984531461a90bbe1c158b75fe160580
+  languageName: node
+  linkType: hard
+
 "debug@npm:2.6.9, debug@npm:^2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -7846,6 +7853,7 @@ __metadata:
     "@swc/jest": ^0.2.22
     "@typescript-eslint/eslint-plugin": ^5.25.0
     "@typescript-eslint/parser": ^5.25.0
+    dayjs: ^1.11.6
     eslint: ^8.15.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^4.0.0
@@ -7853,6 +7861,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     jest: ^28.1.3
     prettier: ^2.5.1
+    ts-node: ^10.9.1
   languageName: unknown
   linkType: soft
 
@@ -10269,7 +10278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.8.1":
+"ts-node@npm:^10.8.1, ts-node@npm:^10.9.1":
   version: 10.9.1
   resolution: "ts-node@npm:10.9.1"
   dependencies:
