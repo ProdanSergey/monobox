@@ -1,4 +1,4 @@
 export * from "./adapters";
 export * from "./components";
 export * from "./hooks";
-export * from "./mocks";
+export * from "./builders";

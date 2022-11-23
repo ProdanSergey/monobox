@@ -5,18 +5,18 @@ import {
   AppointmentGetResponseData,
   X_USER_TOKEN,
 } from "@monobox/appointment-contract";
-import { apiNetworkClient } from "./client";
+import { networkService } from "../services/network.service";
 
 const RESOURCE = "appointment";
 
 export const createAppointment = async ({ fullName, email }: AppointmentCreateBody) => {
-  return apiNetworkClient.post<AppointmentCreateResponseData>(RESOURCE, {
+  return networkService.post<AppointmentCreateResponseData>(RESOURCE, {
     body: { fullName, email },
   });
 };
 
 export const getAppointment = async ({ id }: AppointmentGetParams, token: string) => {
-  return apiNetworkClient.get<AppointmentGetResponseData>(`${RESOURCE}/${encodeURIComponent(id)}`, {
+  return networkService.get<AppointmentGetResponseData>(`${RESOURCE}/${encodeURIComponent(id)}`, {
     headers: {
       [X_USER_TOKEN]: token,
     },

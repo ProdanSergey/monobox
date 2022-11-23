@@ -5,16 +5,9 @@ import {
   NetworkRequestMethod,
   NetworkRequestOptionsWithBody,
   NetworkClientError,
+  NetworkClientQuery,
+  NetworkClientHeaders,
 } from "@monobox/toolkit";
-
-const BASE_HEADERS = (() => {
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  };
-
-  return headers;
-})();
 
 export class AppointmentNetworkClientError extends Error {
   name = "AppointmentNetworkClientError";
@@ -27,14 +20,36 @@ export class AppointmentNetworkClientError extends Error {
   }
 }
 
-type NetworkRequestInterceptor = (req: Request) => Promise<void> | void;
-type NetworkResponseInterceptor = (res: Response) => Promise<void> | void;
+export type NetworkRequestInterceptor = (req: Request) => Promise<Request> | Request;
+export type NetworkResponseInterceptor = (res: Response) => Promise<Response> | Response;
 
 export class AppointmentNetworkClient extends NetworkClient {
   interceptors = {
     request: new Set<NetworkRequestInterceptor>(),
     response: new Set<NetworkResponseInterceptor>(),
   };
+
+  private withQuery(url: URL, query: NetworkClientQuery): void {
+    for (const param of Object.keys(query)) {
+      url.searchParams.append(param, query[param]);
+    }
+  }
+
+  private withHeaders(request: Request, headers: NetworkClientHeaders): void {
+    for (const header of Object.keys(headers)) {
+      request.headers.set(header, headers[header]);
+    }
+  }
+
+  private async serialize<TData = undefined>(response: Response): Promise<TData> {
+    const jsonResponse: JSONResponse<TData> = await response.json();
+
+    if ("message" in jsonResponse) {
+      throw new NetworkClientError(jsonResponse.message);
+    }
+
+    return jsonResponse.data;
+  }
 
   async request<TData = undefined>(
     method: NetworkRequestMethod,
@@ -46,35 +61,36 @@ export class AppointmentNetworkClient extends NetworkClient {
     const url = new URL(this.host, resource);
 
     if (query) {
-      for (const param of Object.keys(query)) {
-        url.searchParams.append(param, query[param]);
-      }
+      this.withQuery(url, query);
     }
 
-    const request = new Request(url, {
+    let request = new Request(url, {
       method,
       body: body ? JSON.stringify(body) : null,
-      headers: new Headers({ ...BASE_HEADERS, ...headers }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     });
 
-    for (const interceptor of this.interceptors.request) {
-      await interceptor(request);
+    if (headers) {
+      this.withHeaders(request, headers);
     }
 
-    const response = await fetch(request);
+    for (const interceptor of this.interceptors.request) {
+      request = await interceptor(request);
+    }
+
+    console.log(fetch);
+
+    let response = await fetch(request);
 
     for (const interceptor of this.interceptors.response) {
-      await interceptor(response);
+      response = await interceptor(response);
     }
 
     if (response.ok) {
-      const jsonResponse: JSONResponse<TData> = await response.json();
-
-      if ("message" in jsonResponse) {
-        throw new NetworkClientError(jsonResponse.message);
-      }
-
-      return jsonResponse.data;
+      return this.serialize(response);
     }
 
     throw new NetworkClientError(response.statusText);

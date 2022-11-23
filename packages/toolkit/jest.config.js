@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-const baseConfig = require("../../jest.base.config");
-
 module.exports = {
-  ...baseConfig,
+  verbose: true,
+  clearMocks: true,
   testEnvironment: "node",
   transform: {
     "^.+\\.ts?$": ["@swc/jest"],

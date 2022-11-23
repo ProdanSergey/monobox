@@ -3,7 +3,7 @@ import { AppointmentNetworkClient, AppointmentNetworkClientError } from "@monobo
 import { LocalStorage } from "@monobox/toolkit";
 import { AuthorizationStore, LocalStore } from "../../types/local-store";
 
-export const authNetworkClient = new AppointmentNetworkClient(import.meta.env.VITE_AUTH_SERVICE_URL);
+export const authNetworkService = new AppointmentNetworkClient(import.meta.env.VITE_AUTH_SERVICE_URL);
 
 const getAuthToken = (() => {
   const authStore = new LocalStorage<AuthorizationStore>(LocalStore.AUTHORIZATION);
@@ -19,7 +19,8 @@ const getAuthToken = (() => {
   };
 })();
 
-export const apiNetworkClient = new AppointmentNetworkClient(import.meta.env.VITE_API_SERVICE_URL);
-apiNetworkClient.interceptors.request.add((request) => {
+export const networkService = new AppointmentNetworkClient(import.meta.env.VITE_API_SERVICE_URL);
+networkService.interceptors.request.add((request) => {
   request.headers.append(X_AUTH_TOKEN, getAuthToken());
+  return request;
 });

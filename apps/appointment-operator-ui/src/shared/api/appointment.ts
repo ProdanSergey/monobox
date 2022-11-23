@@ -8,24 +8,24 @@ import {
 } from "@monobox/appointment-contract";
 import { isUndefined } from "@monobox/toolkit";
 
-import { apiNetworkClient } from "./client";
+import { networkService } from "../services/network.service";
 
 const RESOURCE = "appointment";
 
 export const getAppointment = async ({ id }: AppointmentGetParams) => {
-  return apiNetworkClient.get<AppointmentGetResponseData>(`${RESOURCE}/${encodeURIComponent(id)}`);
+  return networkService.get<AppointmentGetResponseData>(`${RESOURCE}/${encodeURIComponent(id)}`);
 };
 
 export const pickAppointment = async ({ id }: AppointmentPickParams) => {
-  return apiNetworkClient.post<undefined>(`${RESOURCE}/${encodeURIComponent(id)}/pick`);
+  return networkService.post<undefined>(`${RESOURCE}/${encodeURIComponent(id)}/pick`);
 };
 
 export const completeAppointment = async ({ id }: AppointmentCompleteParams) => {
-  return apiNetworkClient.post<undefined>(`${RESOURCE}/${encodeURIComponent(id)}/complete`);
+  return networkService.post<undefined>(`${RESOURCE}/${encodeURIComponent(id)}/complete`);
 };
 
 export const getAppointments = async ({ completed }: AppointmentListQuery) => {
-  return apiNetworkClient.get<AppointmentListResponseData>(RESOURCE, {
+  return networkService.get<AppointmentListResponseData>(RESOURCE, {
     query: isUndefined(completed) ? {} : { completed: String(completed) },
   });
 };
