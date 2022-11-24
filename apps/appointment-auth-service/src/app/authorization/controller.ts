@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { ExpressController } from "@monobox/infra";
-import { serialize, validate } from "@monobox/infra/dist/express/middlewares";
+import { serialize, validate, ExpressController } from "@monobox/backend";
 import {
   AuthorizationSignUpBody,
   AuthorizationSignInBody,

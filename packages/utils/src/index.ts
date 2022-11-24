@@ -1,3 +1,3 @@
 export * from "./object";
 export * from "./string";
-export * from "./general";
+export * from "./core";

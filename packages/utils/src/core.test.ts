@@ -1,6 +1,6 @@
-import * as F from "./general";
+import * as F from "./core";
 
-describe("General Functions", () => {
+describe("Core Functions", () => {
   describe("isUndefined", () => {
     it("should test when target is undefined", () => {
       expect(F.isUndefined(1)).toBe(false);

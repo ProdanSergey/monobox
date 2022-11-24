@@ -1,7 +1,7 @@
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import type { Jwt, JwtPayload, SignOptions, VerifyOptions, DecodeOptions } from "jsonwebtoken";
 
-import { AnyObject, isObject } from "@monobox/toolkit";
+import { AnyObject, isObject } from "@monobox/utils";
 
 import { Token } from "../ports/token";
 

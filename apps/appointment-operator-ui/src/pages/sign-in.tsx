@@ -9,7 +9,7 @@ import {
   StyledSection,
   StyledSpacer,
   useDataHandler,
-} from "@monobox/appointment-library";
+} from "@monobox/appointment-frontend";
 
 import { signInOperator } from "../shared/api/authorization";
 import { SignInForm } from "../templates/authorization/form/sign-in-form";

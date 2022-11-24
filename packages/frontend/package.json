@@ -1,10 +1,9 @@
 {
-  "name": "@monobox/toolkit",
+  "name": "@monobox/frontend",
   "version": "0.1.0",
-  "description": "Monobox toolkit package",
+  "description": "Monobox frontend package",
   "author": "Serhii Prodan",
   "license": "ISC",
-  "private": true,
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",

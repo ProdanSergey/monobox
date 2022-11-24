@@ -8,7 +8,7 @@ import {
   StyledSection,
   StyledSpacer,
   useDataHandler,
-} from "@monobox/appointment-library";
+} from "@monobox/appointment-frontend";
 
 import { createAppointment } from "../shared/api/appointment";
 import { AppointmentForm } from "../templates/create-appointment/form/form";

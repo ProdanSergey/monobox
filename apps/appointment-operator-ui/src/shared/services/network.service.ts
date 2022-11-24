@@ -1,6 +1,6 @@
 import { X_AUTH_TOKEN } from "@monobox/appointment-contract";
-import { AppointmentNetworkClient, AppointmentNetworkClientError } from "@monobox/appointment-library";
-import { LocalStorage } from "@monobox/toolkit";
+import { AppointmentNetworkClient, AppointmentNetworkClientError } from "@monobox/appointment-frontend";
+import { LocalStorage } from "@monobox/frontend";
 import { AuthorizationStore, LocalStore } from "../../types/local-store";
 
 export const authNetworkService = new AppointmentNetworkClient(import.meta.env.VITE_AUTH_SERVICE_URL);

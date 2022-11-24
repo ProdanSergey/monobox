@@ -2,7 +2,12 @@ import React, { FunctionComponent } from "react";
 import { Navigate } from "react-router-dom";
 
 import { Appointment } from "@monobox/appointment-contract";
-import { AppointmentNetworkClientError, StyledAlert, StyledButton, useDataHandler } from "@monobox/appointment-library";
+import {
+  AppointmentNetworkClientError,
+  StyledAlert,
+  StyledButton,
+  useDataHandler,
+} from "@monobox/appointment-frontend";
 
 import { AppointmentCard } from "../../../components/appointment-card";
 import { pickAppointment } from "../../../shared/api/appointment";

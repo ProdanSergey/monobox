@@ -1,4 +1,4 @@
-import { AnyObject } from "@monobox/toolkit";
+import { AnyObject } from "@monobox/utils";
 
 export interface Token {
   sign<Payload extends AnyObject>(payload: Payload): Promise<string>;

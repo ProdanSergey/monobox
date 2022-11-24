@@ -1,4 +1,4 @@
-import { isUndefined } from "@monobox/toolkit";
+import { isUndefined } from "@monobox/utils";
 import { Appointment } from "../../domain/appointment";
 import { NotFoundError } from "../../domain/error";
 import { File } from "../../ports/file";

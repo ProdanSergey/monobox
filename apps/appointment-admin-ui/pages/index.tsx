@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
 
-import { StyledAlert } from "@monobox/appointment-library";
+import { StyledAlert } from "@monobox/appointment-frontend";
 
 import styles from "../styles/Home.module.css";
 

@@ -9,7 +9,7 @@ import {
   StyledSection,
   StyledSpacer,
   useDataHandler,
-} from "@monobox/appointment-library";
+} from "@monobox/appointment-frontend";
 import { LocalStorage } from "@monobox/toolkit";
 
 import { AuthorizationStore, LocalStore } from "../types/local-store";

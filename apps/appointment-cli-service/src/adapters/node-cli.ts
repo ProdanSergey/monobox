@@ -1,7 +1,7 @@
-import { isUndefined } from "@monobox/toolkit";
+import { isUndefined } from "@monobox/utils";
+import { Logger } from "@monobox/appointment-core";
 import { DomainError } from "../domain/error";
 import { CLI, CLICommand } from "../ports/cli";
-import { Logger } from "@monobox/appointment-core";
 
 export class NodeCLI implements CLI {
   constructor(private readonly logger: Logger) {}

@@ -1,4 +1,4 @@
-import { BadRequestError, NotFoundError } from "@monobox/infra";
+import { BadRequestError, NotFoundError } from "@monobox/backend";
 
 import { AppointmentId } from "../domain/appointment";
 import { AppointmentRepository } from "../ports/repository/appointment";

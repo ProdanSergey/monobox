@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
 
-import { StyledAlert, StyledContainer, StyledSection } from "@monobox/appointment-library";
+import { StyledAlert, StyledContainer, StyledSection } from "@monobox/appointment-frontend";
 
 export const NotFoundPage: FunctionComponent = () => {
   return (

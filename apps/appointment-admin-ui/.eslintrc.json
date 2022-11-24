@@ -1,5 +1,5 @@
 {
-  "extends": "next",
+  "extends": ["next", "next/core-web-vitals"],
   "settings": {
     "next": {
       "rootDir": "apps/appointment-admin-ui"

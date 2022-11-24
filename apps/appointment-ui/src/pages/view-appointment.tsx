@@ -8,7 +8,7 @@ import {
   StyledContainer,
   StyledSection,
   useDataPuller,
-} from "@monobox/appointment-library";
+} from "@monobox/appointment-frontend";
 
 import { getAppointment } from "../shared/api/appointment";
 import { QueuedAppointment } from "../templates/view-appointment/queued-appointment/queued-appointment";

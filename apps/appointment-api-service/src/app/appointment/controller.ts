@@ -12,7 +12,7 @@ import {
   AppointmentPickParams,
 } from "@monobox/appointment-contract";
 import { Mailer } from "@monobox/appointment-core";
-import { ExpressController, serialize, validate, UnauthorizedError } from "@monobox/infra";
+import { ExpressController, serialize, validate, UnauthorizedError } from "@monobox/backend";
 
 import { Appointment, AppointmentRecord } from "../../domain/appointment";
 import { AppointmentRepository } from "../../ports/repository/appointment";

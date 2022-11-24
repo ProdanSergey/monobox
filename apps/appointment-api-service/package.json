@@ -1,6 +1,7 @@
 {
   "name": "@appointment/api-service",
   "version": "1.0.0",
+  "private": true,
   "description": "Appointment API Service",
   "author": "Serhii Prodan",
   "license": "ISC",
@@ -15,7 +16,8 @@
   "dependencies": {
     "@monobox/appointment-contract": "workspace:^",
     "@monobox/appointment-core": "workspace:^",
-    "@monobox/infra": "workspace:^",
+    "@monobox/backend": "workspace:^",
+    "@monobox/utils": "workspace:^",
     "cors": "^2.8.5",
     "dayjs": "^1.11.2",
     "express": "^4.17.2",
@@ -33,6 +35,7 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/lodash": "^4.14.182",
     "@types/node": "^18.0.3",
+    "@types/uniqid": "^5.3.2",
     "typescript": "4.7.4"
   }
 }

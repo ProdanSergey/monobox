@@ -8,7 +8,7 @@ import {
   StyledSection,
   StyledSpacer,
   useDataHandler,
-} from "@monobox/appointment-library";
+} from "@monobox/appointment-frontend";
 
 import { signUpOperator } from "../shared/api/authorization";
 import { SignUpForm } from "../templates/authorization/form/sign-up-form";

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import { ButtonCSS, StyledButton } from "@monobox/appointment-library";
+import { ButtonCSS, StyledButton } from "@monobox/appointment-frontend";
 
 export const StyledWrapper = styled.output`
   display: flex;

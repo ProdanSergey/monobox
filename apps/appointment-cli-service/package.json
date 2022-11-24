@@ -2,6 +2,7 @@
   "name": "@appointment/cli-service",
   "version": "1.0.0",
   "description": "Just get your appointment ticket!",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "start": "node ./dist/index.js",
@@ -21,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@monobox/appointment-core": "workspace:^",
-    "@monobox/toolkit": "workspace:^",
+    "@monobox/utils": "workspace:^",
     "dayjs": "^1.11.2"
   },
   "devDependencies": {

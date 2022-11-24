@@ -1,5 +1,5 @@
 import { Mailer } from "@monobox/appointment-core";
-import { NotFoundError } from "@monobox/infra";
+import { NotFoundError } from "@monobox/backend";
 import { Otp } from "../domain/otp";
 import { OperatorRepository } from "../ports/repository/operator";
 import { OtpRepository } from "../ports/repository/otp";

@@ -1,7 +1,7 @@
 {
-  "name": "@monobox/appointment-library",
+  "name": "@monobox/appointment-frontend",
   "version": "0.3.0",
-  "description": "@appointment app library",
+  "description": "@appointment app frontend package",
   "author": "Serhii Prodan",
   "license": "ISC",
   "private": true,
@@ -15,7 +15,8 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "jest"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
@@ -43,7 +44,8 @@
   },
   "dependencies": {
     "@monobox/appointment-contract": "workspace:^",
-    "@monobox/toolkit": "workspace:^",
+    "@monobox/frontend": "workspace:^",
+    "@monobox/utils": "workspace:^",
     "uuid": "^8.3.2"
   }
 }

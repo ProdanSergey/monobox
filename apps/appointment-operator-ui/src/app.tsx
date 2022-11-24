@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 
-import { capitalize } from "@monobox/toolkit";
+import { capitalize } from "@monobox/utils";
 
 import { AuthorizedRoute, DeAuthorizedRoute } from "./components/route";
 import { UserContext } from "./context/user";

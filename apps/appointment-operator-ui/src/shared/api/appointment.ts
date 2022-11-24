@@ -6,7 +6,7 @@ import {
   AppointmentListQuery,
   AppointmentListResponseData,
 } from "@monobox/appointment-contract";
-import { isUndefined } from "@monobox/toolkit";
+import { isUndefined } from "@monobox/utils";
 
 import { networkService } from "../services/network.service";
 

@@ -6,7 +6,7 @@ import cors from "cors";
 import { queryParser } from "express-query-parser";
 
 import { ConsoleLogger, FakeMailer } from "@monobox/appointment-core";
-import { errorHandling } from "@monobox/infra";
+import { errorHandling } from "@monobox/backend";
 
 import { connect } from "./infra/mongo";
 import { MongoDBAppointmentRepository } from "./adapters/mongo/appointment-repository";

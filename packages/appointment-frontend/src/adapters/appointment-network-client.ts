@@ -7,7 +7,7 @@ import {
   NetworkClientError,
   NetworkClientQuery,
   NetworkClientHeaders,
-} from "@monobox/toolkit";
+} from "@monobox/frontend";
 
 export class AppointmentNetworkClientError extends Error {
   name = "AppointmentNetworkClientError";

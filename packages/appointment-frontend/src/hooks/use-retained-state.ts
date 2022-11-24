@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { LocalStorage, StorageEventDetailMap, StorageEventHandler } from "@monobox/toolkit";
+import { LocalStorage, StorageEventDetailMap, StorageEventHandler } from "@monobox/frontend";
 
 export type useRetainedStateResult<TValue> = {
   value: TValue | undefined;
